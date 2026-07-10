@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "convert": "node scripts/convert.mjs"
+    "convert": "node scripts/convert.mjs",
+    "convert:home": "node scripts/html-to-tsx.mjs"
   },
   "dependencies": {
     "next": "^15.3.0",

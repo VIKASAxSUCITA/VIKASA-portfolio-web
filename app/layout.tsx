@@ -1,7 +1,9 @@
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import type { ReactNode } from "react";
 import GlobalHeader from "./components/GlobalHeader";
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL("https://vikasa.example.com"),
   title: {
     default: "VIKASA",
@@ -32,13 +34,17 @@ export const metadata = {
   },
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   themeColor: "#5e3123",
   width: "device-width",
   initialScale: 1,
 };
 
-export default function RootLayout({ children }) {
+type RootLayoutProps = {
+  children: ReactNode;
+};
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className="no-js" suppressHydrationWarning>
       <head>
