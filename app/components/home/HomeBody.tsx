@@ -41,8 +41,8 @@ export default function HomeBody() {
                       <div className="buttons" data-aos="fade-up" data-aos-delay="300">
                         <a
                           href="/contact"
-                          className="button button--secondary"
-                          aria-label="hero button"
+                          className="button button--primary"
+                          aria-label="Book Strategy Call"
                         >
                           Free Consultation
                           <span className="svg-wrapper">

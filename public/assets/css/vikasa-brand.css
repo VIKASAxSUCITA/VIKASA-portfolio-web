@@ -96,6 +96,23 @@
   color: var(--vikasa-white);
 }
 
+.hero-slider .button--primary {
+  --color-primary-button-text: var(--vikasa-white);
+  --color-primary-button-background: var(--vikasa-brown);
+  --color-primary-button-border: var(--vikasa-brown);
+  --color-primary-button-icon: var(--vikasa-brown);
+  --color-primary-button-icon-background: var(--vikasa-white);
+}
+
+.hero-slider .button--primary:focus,
+.hero-slider .button--primary:hover {
+  --color-primary-button-hover-text: var(--vikasa-brown);
+  --color-primary-button-hover-background: var(--vikasa-white);
+  --color-primary-button-hover-border: var(--vikasa-brown);
+  --color-primary-button-hover-icon: var(--vikasa-white);
+  --color-primary-button-hover-icon-background: var(--vikasa-brown);
+}
+
 .hero-slider .swiper-button-prev,
 .hero-slider .swiper-button-next {
   --swiper-navigation-color: var(--vikasa-white);
