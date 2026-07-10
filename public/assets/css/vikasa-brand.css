@@ -1,0 +1,247 @@
+/* VIKASA brand palette */
+:root {
+  --vikasa-brown: #5e3123;
+  --vikasa-gold: #bb9759;
+  --vikasa-white: #ffffff;
+  --vikasa-black: #000000;
+}
+
+/* Header 1 (index-3 home) */
+.header-1 {
+  --color-background: rgba(255, 255, 255, 0.5);
+  --color-foreground: var(--vikasa-brown);
+  --color-primary-hover: var(--vikasa-gold);
+  --color-border: rgba(94, 49, 35, 0.12);
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* One background layer only — avoid double-stacking on .header-grid */
+.header-1 .container-fluid,
+.header-1 .header-grid {
+  background: transparent;
+}
+
+.header-1 .menu-link:focus,
+.header-1 .menu-link:hover {
+  color: var(--vikasa-gold);
+}
+
+.header-1 .header-search,
+.header-1 modal-search {
+  display: none !important;
+}
+
+.header-1 .button--secondary {
+  --color-secondary-button-text: var(--vikasa-brown);
+  --color-secondary-button-background: transparent;
+  --color-secondary-button-border: var(--vikasa-brown);
+  --color-secondary-button-icon: var(--vikasa-white);
+  --color-secondary-button-icon-background: var(--vikasa-brown);
+}
+
+.header-1 .button--secondary:focus,
+.header-1 .button--secondary:hover {
+  --color-secondary-button-hover-text: var(--vikasa-white);
+  --color-secondary-button-hover-background: var(--vikasa-brown);
+  --color-secondary-button-hover-border: var(--vikasa-brown);
+}
+
+.header-1.header-floating:hover,
+.header-1.header-sticky.scrolled-past-header {
+  --color-background: var(--vikasa-white);
+  --color-foreground: var(--vikasa-brown);
+  --color-secondary-button-hover-border: var(--vikasa-brown);
+  background: var(--vikasa-white);
+  border-bottom-color: rgba(94, 49, 35, 0.1);
+  box-shadow: 0 4px 20px rgba(94, 49, 35, 0.08);
+}
+
+/* Header 2 (index-2) */
+.header-2 {
+  --color-background: var(--vikasa-white);
+  --color-foreground: var(--vikasa-brown);
+  --color-primary-hover: var(--vikasa-gold);
+  --color-border: rgba(94, 49, 35, 0.12);
+}
+
+.header-2 .menu-link:focus,
+.header-2 .menu-link:hover {
+  color: var(--vikasa-gold);
+}
+
+/* Hero slider (index-3 home) */
+.hero-slider {
+  --color-foreground: var(--vikasa-white);
+  --color-foreground-heading: var(--vikasa-white);
+  --color-foreground-subheading: var(--vikasa-white);
+}
+
+.hero-slider .overlay::before,
+.hero-slider .slider-card.overlay::before,
+.hero-slider .slider-card.overlay::after {
+  background: rgba(94, 49, 35, 0.5) !important;
+}
+
+.hero-slider .subheading-bg {
+  color: var(--vikasa-white);
+  background: rgba(187, 151, 89, 0.25);
+  border-color: rgba(187, 151, 89, 0.55);
+}
+
+.hero-slider .heading,
+.hero-slider .text {
+  color: var(--vikasa-white);
+}
+
+.hero-slider .swiper-button-prev,
+.hero-slider .swiper-button-next {
+  --swiper-navigation-color: var(--vikasa-white);
+  --swiper-navigation-hover-background-color: var(--vikasa-gold);
+}
+
+.hero-slider .swiper-pagination-bullet-active {
+  background: var(--vikasa-gold) !important;
+}
+
+/* Hero banner (index-2) */
+.hero-banner {
+  --color-foreground: var(--vikasa-black);
+  --color-foreground-heading: var(--vikasa-brown);
+  --color-foreground-subheading: var(--vikasa-brown);
+}
+
+.hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(187, 151, 89, 0.14) 55%,
+    rgba(94, 49, 35, 0.08) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-banner .container-fluid,
+.hero-banner .thumb-slider {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-banner .swiper-button-prev,
+.hero-banner .swiper-button-next {
+  --swiper-navigation-color: var(--vikasa-brown);
+  --swiper-navigation-background-color: var(--vikasa-white);
+  --swiper-navigation-hover-color: var(--vikasa-white);
+  --swiper-navigation-hover-background-color: var(--vikasa-gold);
+}
+
+/* Section badges */
+.subheading-bg {
+  color: var(--vikasa-brown);
+}
+
+.decorated-text {
+  outline-color: var(--vikasa-gold);
+}
+
+.decorated-text::before,
+.decorated-text::after,
+.decorated-text span::before,
+.decorated-text span::after {
+  background: var(--vikasa-gold);
+}
+
+/* Why choose us */
+.why-choose-us {
+  --color-background: rgba(187, 151, 89, 0.12);
+  --color-foreground: var(--vikasa-black);
+  --color-foreground-heading: var(--vikasa-brown);
+  --color-foreground-subheading: var(--vikasa-brown);
+  --color-background-subheading: rgba(187, 151, 89, 0.15);
+  --color-border-subheading-bg: rgba(94, 49, 35, 0.2);
+}
+
+/* Pricing */
+.card-pricing {
+  --color-card-background: rgba(187, 151, 89, 0.15);
+  --color-background: var(--vikasa-white);
+  --color-foreground: var(--vikasa-black);
+  --color-foreground-heading: var(--vikasa-brown);
+  --color-border: rgba(94, 49, 35, 0.12);
+}
+
+.card-pricing.active {
+  --color-card-background: var(--vikasa-brown);
+  --color-background: var(--vikasa-brown);
+  --color-foreground: var(--vikasa-white);
+  --color-foreground-heading: var(--vikasa-white);
+  --color-foreground-subheading: var(--vikasa-gold);
+  --color-border: rgba(187, 151, 89, 0.45);
+}
+
+/* Testimonial cards */
+.card-testimonial {
+  --color-foreground: var(--vikasa-black);
+  --color-foreground-heading: var(--vikasa-brown);
+}
+
+/* Testimonials section */
+.testimonial {
+  --color-background: rgba(94, 49, 35, 0.06);
+}
+
+/* Footer */
+.footer-main {
+  --color-background: var(--vikasa-brown);
+  --color-foreground: var(--vikasa-white);
+  --color-foreground-heading: var(--vikasa-white);
+  --color-primary-hover: var(--vikasa-gold);
+  background-color: var(--vikasa-brown) !important;
+  background-image: none !important;
+}
+
+.footer-main .social-link:focus,
+.footer-main .social-link:hover {
+  color: var(--vikasa-gold);
+}
+
+/* Drawer panel */
+.drawer-additional {
+  --color-background: var(--vikasa-white);
+  --color-foreground: var(--vikasa-brown);
+  --color-foreground-heading: var(--vikasa-brown);
+  --color-primary-hover: var(--vikasa-gold);
+}
+
+.drawer-menu {
+  --color-foreground: var(--vikasa-brown);
+  --color-foreground-heading: var(--vikasa-brown);
+}
+
+/* Scroll to top */
+.scroll-to-top {
+  background: var(--vikasa-brown);
+  color: var(--vikasa-white);
+  border: 1px solid var(--vikasa-gold);
+}
+
+.scroll-to-top:focus,
+.scroll-to-top:hover {
+  background: var(--vikasa-gold);
+  color: var(--vikasa-white);
+}
+
+/* Submenu */
+.submenu-color {
+  --color-foreground: var(--vikasa-brown);
+  --color-foreground-heading: var(--vikasa-brown);
+  --color-primary: var(--vikasa-brown);
+  --color-primary-hover: var(--vikasa-gold);
+  --color-primary-background-hover: rgba(187, 151, 89, 0.15);
+}

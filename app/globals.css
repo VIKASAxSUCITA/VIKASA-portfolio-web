@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-vikasa-brown: #5e3123;
+  --color-vikasa-gold: #bb9759;
+  --color-vikasa-white: #ffffff;
+  --color-vikasa-black: #000000;
+
+  --font-family-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-family-heading: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
