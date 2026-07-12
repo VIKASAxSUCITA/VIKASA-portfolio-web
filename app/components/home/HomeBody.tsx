@@ -301,7 +301,7 @@ export default function HomeBody() {
                       </svg>
                     </div>
                     <h2 className="heading text-80" data-aos="fade-up">
-                      Thriving on consistent, subscription-based revenue.
+                      Call-to-action: Book Strategy Call
                     </h2>
                     <p className="text text-24" data-aos="fade-up">
                       You've done the hard part—creating a great product, building
@@ -310,11 +310,11 @@ export default function HomeBody() {
                     </p>
                     <div className="buttons" data-aos="fade-up">
                       <a
-                        href="/services"
+                        href="/contact"
                         className="button button--secondary"
                         aria-label="See More Services"
                       >
-                        Learn More
+                        CONTACT US
                         <span className="svg-wrapper">
                           <svg
                             className="icon-20"
