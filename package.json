@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "convert": "node scripts/convert.mjs",
-    "convert:home": "node scripts/html-to-tsx.mjs"
+    "convert:home": "node scripts/html-to-tsx.mjs home",
+    "convert:contact": "node scripts/html-to-tsx.mjs contact"
   },
   "dependencies": {
     "next": "^15.3.0",

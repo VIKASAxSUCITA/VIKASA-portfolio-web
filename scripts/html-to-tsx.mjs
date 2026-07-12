@@ -182,8 +182,8 @@ function extractSection(html, startPattern, endPattern) {
   return slice.slice(0, end).trim();
 }
 
-function writeComponent(filePath, componentName, jsxBody) {
-  const source = `/* Auto-generated from content.html. Run \`node scripts/html-to-tsx.mjs\` to regenerate. */
+function writeComponent(filePath, componentName, jsxBody, sourceNote) {
+  const source = `/* Auto-generated from ${sourceNote}. Run \`npm run convert:contact\` to regenerate. */
 
 export default function ${componentName}() {
   return (
@@ -200,7 +200,7 @@ ${jsxBody
   fs.writeFileSync(filePath, source, "utf8");
 }
 
-function main() {
+function generateHome() {
   const inputPath = path.join(ROOT, "app", "content.html");
   const outputDir = path.join(ROOT, "app", "components", "home");
   const html = fs.readFileSync(inputPath, "utf8");
@@ -219,11 +219,26 @@ function main() {
   const headerJsx = htmlToJsx(headerBlock);
   const bodyJsx = htmlToJsx(bodyBlock);
 
-  writeComponent(path.join(outputDir, "HomePageStyles.tsx"), "HomePageStyles", styleJsx);
-  writeComponent(path.join(outputDir, "HomeHeader.tsx"), "HomeHeader", headerJsx);
-  writeComponent(path.join(outputDir, "HomeBody.tsx"), "HomeBody", bodyJsx);
+  writeComponent(
+    path.join(outputDir, "HomePageStyles.tsx"),
+    "HomePageStyles",
+    styleJsx,
+    "content.html"
+  );
+  writeComponent(
+    path.join(outputDir, "HomeHeader.tsx"),
+    "HomeHeader",
+    headerJsx,
+    "content.html"
+  );
+  writeComponent(
+    path.join(outputDir, "HomeBody.tsx"),
+    "HomeBody",
+    bodyJsx,
+    "content.html"
+  );
 
-  const indexSource = `/* Auto-generated from content.html. Run \`node scripts/html-to-tsx.mjs\` to regenerate. */
+  const indexSource = `/* Auto-generated from content.html. Run \`npm run convert:home\` to regenerate. */
 
 import HomeBody from "./HomeBody";
 import HomePageStyles from "./HomePageStyles";
@@ -244,11 +259,82 @@ export default function HomeContent() {
 
   fs.writeFileSync(path.join(outputDir, "index.tsx"), indexSource, "utf8");
 
-  console.log("Generated TypeScript components:");
+  console.log("Generated home TypeScript components:");
   console.log(`  ${path.relative(ROOT, outputDir)}/HomePageStyles.tsx`);
   console.log(`  ${path.relative(ROOT, outputDir)}/HomeHeader.tsx`);
   console.log(`  ${path.relative(ROOT, outputDir)}/HomeBody.tsx`);
   console.log(`  ${path.relative(ROOT, outputDir)}/index.tsx`);
+}
+
+function generateContact() {
+  const inputPath = path.join(ROOT, "app", "contact", "content.html");
+  const outputDir = path.join(ROOT, "app", "components", "contact");
+  const html = fs.readFileSync(inputPath, "utf8");
+
+  const formBlock = extractSection(
+    html,
+    /<!-- Contact Form -->/i,
+    /<!-- Google Map -->/i
+  );
+  const tailBlock = extractSection(
+    html,
+    /<!-- Footer -->/i,
+    /<!-- all js -->/i
+  );
+
+  fs.mkdirSync(outputDir, { recursive: true });
+
+  const formJsx = htmlToJsx(formBlock);
+  const tailJsx = htmlToJsx(tailBlock);
+
+  writeComponent(
+    path.join(outputDir, "ContactForm.tsx"),
+    "ContactForm",
+    formJsx,
+    "contact/content.html"
+  );
+  writeComponent(
+    path.join(outputDir, "ContactFooter.tsx"),
+    "ContactFooter",
+    tailJsx,
+    "contact/content.html"
+  );
+
+  const indexSource = `/* Auto-generated from contact/content.html. Run \`npm run convert:contact\` to regenerate. */
+
+import ContactFooter from "./ContactFooter";
+import ContactForm from "./ContactForm";
+
+export { default as ContactForm } from "./ContactForm";
+export { default as ContactFooter } from "./ContactFooter";
+
+export default function ContactContent() {
+  return (
+    <main>
+      <ContactForm />
+      <ContactFooter />
+    </main>
+  );
+}
+`;
+
+  fs.writeFileSync(path.join(outputDir, "index.tsx"), indexSource, "utf8");
+
+  console.log("Generated contact TypeScript components:");
+  console.log(`  ${path.relative(ROOT, outputDir)}/ContactForm.tsx`);
+  console.log(`  ${path.relative(ROOT, outputDir)}/ContactFooter.tsx`);
+  console.log(`  ${path.relative(ROOT, outputDir)}/index.tsx`);
+}
+
+function main() {
+  const page = process.argv[2] || "home";
+
+  if (page === "contact") {
+    generateContact();
+    return;
+  }
+
+  generateHome();
 }
 
 main();
