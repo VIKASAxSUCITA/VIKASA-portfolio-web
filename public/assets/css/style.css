@@ -802,11 +802,17 @@ drawer-opener * {
   right: 20px;
   opacity: 0;
   pointer-events: none;
-  -webkit-transition: opacity 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
-  -o-transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
+  -webkit-transition: opacity 0.3s ease-in-out,
+ -webkit-transform 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out,
+ -webkit-transform 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out,
+ transform 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out,
+ transform 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out,
+ transform 0.3s ease-in-out,
+ -webkit-transform 0.3s ease-in-out;
   z-index: 10;
   cursor: pointer;
   display: -webkit-inline-box;
@@ -1393,7 +1399,7 @@ hero-slider {
     -ms-grid-columns: 240px 1fr 240px;
     grid-template-columns: 240px 1fr 240px; }
   .header-2 .header-grid {
-    -ms-grid-columns: (auto)[3];
+    -ms-grid-columns: auto auto auto;
     grid-template-columns: repeat(3, auto); }
   .header-actions {
     gap: 20px; }
@@ -1407,7 +1413,7 @@ hero-slider {
     -ms-grid-columns: 200px 1fr 200px;
     grid-template-columns: 200px 1fr 200px; }
   .header-2 .header-grid {
-    -ms-grid-columns: (auto)[3];
+    -ms-grid-columns: auto auto auto;
     grid-template-columns: repeat(3, auto); }
   .header-actions .header-search {
     min-width: 36px;

@@ -158,6 +158,11 @@
   --swiper-navigation-hover-background-color: var(--vikasa-gold);
 }
 
+/* Home services anchor — clear sticky header on scroll */
+#services {
+  scroll-margin-top: calc(var(--header-height, 60px) + 24px);
+}
+
 /* Section badges */
 .subheading-bg {
   color: var(--vikasa-brown);
