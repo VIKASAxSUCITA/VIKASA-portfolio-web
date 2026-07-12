@@ -131,6 +131,15 @@ export default function ContactFooter() {
                         <ul className="footer-menu list-unstyled">
                           <li>
                             <a
+                              href="/"
+                              className="text text-16 link"
+                              aria-label="Home"
+                            >
+                              Home
+                            </a>
+                          </li>
+                          <li>
+                            <a
                               href="/about"
                               className="text text-16 link"
                               aria-label="About Us"
@@ -140,38 +149,29 @@ export default function ContactFooter() {
                           </li>
                           <li>
                             <a
-                              href="/team"
+                              href="/#services"
                               className="text text-16 link"
-                              aria-label="Our Team"
+                              aria-label="Services"
                             >
-                              Our Team
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="/pricing-plan"
-                              className="text text-16 link"
-                              aria-label="Pricing Plans"
-                            >
-                              Pricing Plans
+                              Services
                             </a>
                           </li>
                           <li>
                             <a
                               href="/blog"
                               className="text text-16 link"
-                              aria-label="Blogs"
+                              aria-label="Insights"
                             >
-                              Blogs
+                              Insights
                             </a>
                           </li>
                           <li>
                             <a
                               href="/contact"
                               className="text text-16 link"
-                              aria-label="Blogs"
+                              aria-label="Contact"
                             >
-                              Contact Us
+                              Contact
                             </a>
                           </li>
                         </ul>
@@ -253,9 +253,9 @@ export default function ContactFooter() {
                             <a
                               href="/privacy-policy"
                               className="text text-16 link"
-                              aria-label="Privacy Policy"
+                              aria-label=""
                             >
-                              Privacy Policy
+                              
                             </a>
                           </li>
                           <li>
@@ -297,9 +297,9 @@ export default function ContactFooter() {
                           <a
                             href="/privacy-policy"
                             className="text text-16 link"
-                            aria-label="Privacy Policy"
+                            aria-label=""
                           >
-                            Privacy Policy
+                            
                           </a>
                         </li>
                         <li>

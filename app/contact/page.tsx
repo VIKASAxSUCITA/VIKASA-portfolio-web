@@ -3,9 +3,9 @@ import ContactFooter from "../components/contact/ContactFooter";
 import ContactForm from "../components/contact/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact / Get Proposal",
   description:
-    "Get in touch with VIKASA. Request a proposal or book a strategy consultation.",
+    "Request a VIKASA proposal or book a consultation by form, WhatsApp, or email.",
 };
 
 export default function Page() {

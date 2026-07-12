@@ -228,9 +228,86 @@
   background-image: none !important;
 }
 
+.footer-bottom {
+  --color-background: var(--vikasa-brown);
+  --color-foreground: var(--vikasa-white);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--vikasa-white);
+}
+
+.footer-copyright,
+.footer-bottom .link {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.footer-bottom .link:focus,
+.footer-bottom .link:hover {
+  color: var(--vikasa-gold);
+}
+
 .footer-main .social-link:focus,
 .footer-main .social-link:hover {
   color: var(--vikasa-gold);
+}
+
+/* Contact / Get Proposal */
+.section-contact-form .contact-form-wrap {
+  --color-background: var(--vikasa-brown);
+  --color-foreground: var(--vikasa-white);
+  --color-foreground-heading: var(--vikasa-white);
+  background: var(--vikasa-brown) !important;
+  color: var(--vikasa-white);
+}
+
+.section-contact-form .contact-form-headings .heading,
+.section-contact-form .contact-form-headings .text {
+  color: var(--vikasa-white);
+}
+
+.section-contact-form .contact-channel {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  margin-block-start: 28px;
+  transition: opacity 0.2s ease;
+}
+
+.section-contact-form .contact-channel:focus,
+.section-contact-form .contact-channel:hover {
+  opacity: 0.85;
+}
+
+.section-contact-form .contact-channel .heading {
+  color: var(--vikasa-brown);
+}
+
+.section-contact-form .contact-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.section-contact-form .contact-form-actions .button--secondary {
+  --color-secondary-button-text: var(--vikasa-brown);
+  --color-secondary-button-background: var(--vikasa-gold);
+  --color-secondary-button-border: var(--vikasa-gold);
+  --color-secondary-button-icon: var(--vikasa-gold);
+  --color-secondary-button-icon-background: var(--vikasa-brown);
+}
+
+.section-contact-form .contact-form-actions .button--secondary:focus,
+.section-contact-form .contact-form-actions .button--secondary:hover {
+  --color-secondary-button-hover-text: var(--vikasa-white);
+  --color-secondary-button-hover-background: var(--vikasa-brown);
+  --color-secondary-button-hover-border: var(--vikasa-gold);
+  --color-secondary-button-hover-icon: var(--vikasa-brown);
+  --color-secondary-button-hover-icon-background: var(--vikasa-gold);
+}
+
+.section-contact-form .contact-form-note {
+  margin-block-start: 12px;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Drawer panel */
