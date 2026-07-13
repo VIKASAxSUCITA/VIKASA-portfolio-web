@@ -17,11 +17,21 @@ function stripLegacyWhatWeDo(html: string) {
   );
 }
 
+/** HomeFooter is rendered as a React component — remove the HTML dump footer. */
+function stripFooter(html: string) {
+  return html
+    .replace(/\s*<!--\s*Main\s*-->[\s\S]*$/i, "\n")
+    .replace(/\s*<!--\s*Footer\s*-->[\s\S]*$/i, "\n")
+    .replace(/\s*<footer\b[\s\S]*$/i, "\n");
+}
+
 export default function Page() {
-  const restHtml = stripLegacyWhatWeDo(
-    fs.readFileSync(
-      path.join(process.cwd(), "app", "about", "content.html"),
-      "utf8"
+  const restHtml = stripFooter(
+    stripLegacyWhatWeDo(
+      fs.readFileSync(
+        path.join(process.cwd(), "app", "about", "content.html"),
+        "utf8"
+      )
     )
   );
 

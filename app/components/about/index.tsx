@@ -1,3 +1,4 @@
+import HomeFooter from "../home/HomeFooter";
 import AboutHero from "./AboutHero";
 import AboutWhatWeDo from "./AboutWhatWeDo";
 import AboutStory from "./AboutStory";
@@ -17,12 +18,15 @@ type AboutBodyProps = {
 export default function AboutBody({ restHtml }: AboutBodyProps) {
   return (
     <>
-      <AboutHero />
-      <AboutWhatWeDo />
-      <AboutStory />
-      <AboutVisionMission />
-      <AboutCoreValues />
-      <div dangerouslySetInnerHTML={{ __html: restHtml }} />
+      <main>
+        <AboutHero />
+        <AboutWhatWeDo />
+        <AboutStory />
+        <AboutVisionMission />
+        <AboutCoreValues />
+        <div dangerouslySetInnerHTML={{ __html: restHtml }} />
+      </main>
+      <HomeFooter />
     </>
   );
 }

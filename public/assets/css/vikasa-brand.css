@@ -657,9 +657,6 @@
 }
 
 /* About — Vision & Mission */
-.about-vm {
-  padding-block-start: 0;
-}
 
 .about-vm-grid {
   display: grid;
