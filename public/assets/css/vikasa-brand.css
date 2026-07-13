@@ -523,6 +523,144 @@
   color: var(--vikasa-white) !important;
 }
 
+/* About page hero — title + description instead of breadcrumbs */
+.about-hero {
+  --height: 100vh;
+  --height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+}
+
+.about-hero .page-banner-content {
+  padding-block: 120px;
+}
+
+.about-hero-title {
+  margin: 0;
+}
+
+.about-hero-desc {
+  max-width: 40rem;
+  margin: 1.25rem auto 0;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+@media (max-width: 991px) {
+  .about-hero .page-banner-content {
+    padding-block: 96px;
+  }
+}
+
+@media (max-width: 575px) {
+  .about-hero .page-banner-content {
+    padding-block: 80px;
+  }
+
+  .about-hero-desc {
+    font-size: 16px;
+    margin-block-start: 1rem;
+    padding-inline: 4px;
+  }
+}
+
+/* About — Our Story */
+.about-story {
+  background: linear-gradient(
+    180deg,
+    rgba(94, 49, 35, 0.05) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.about-story-inner {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+.about-story-badge {
+  margin-inline: auto;
+  margin-block-end: 1rem;
+}
+
+.about-story-title {
+  color: var(--vikasa-brown);
+  margin: 0 0 1.25rem;
+}
+
+.about-story-desc {
+  margin: 0;
+  line-height: 1.75;
+  color: rgba(0, 0, 0, 0.78);
+}
+
+@media (max-width: 767px) {
+  .about-story-desc {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+}
+
+/* About — Vision & Mission */
+.about-vm {
+  padding-block-start: 0;
+}
+
+.about-vm-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 64px;
+  align-items: start;
+}
+
+.about-vm-item {
+  position: relative;
+  padding-block-start: 1.25rem;
+}
+
+.about-vm-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 3px;
+  background: var(--vikasa-gold);
+}
+
+.about-vm-title {
+  color: var(--vikasa-brown);
+  margin: 0 0 1rem;
+}
+
+.about-vm-desc {
+  margin: 0;
+  line-height: 1.75;
+  color: rgba(0, 0, 0, 0.78);
+}
+
+@media (max-width: 991px) {
+  .about-vm-grid {
+    gap: 40px 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-vm-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about-vm-desc {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+}
+
 /* Insights / blog cards — VIKASA instead of navy */
 .card-blog-list-horizontal,
 .card-blog-list,
