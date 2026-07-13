@@ -568,6 +568,57 @@
   }
 }
 
+/* About — What We Do (text only, after banner) */
+.about-what-inner {
+  max-width: 42rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.about-what-badge {
+  margin-inline: auto;
+  margin-block-end: 1rem;
+}
+
+.about-what-title {
+  color: var(--vikasa-brown);
+  margin: 0 0 1rem;
+}
+
+.about-what-desc {
+  margin: 0 0 1.75rem;
+  line-height: 1.75;
+  color: rgba(0, 0, 0, 0.78);
+}
+
+.about-what-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  text-align: left;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.about-what-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: var(--vikasa-brown);
+  margin: 0;
+}
+
+.about-what-list-item svg {
+  flex-shrink: 0;
+  margin-block-start: 0.1rem;
+}
+
+@media (max-width: 767px) {
+  .about-what-desc {
+    font-size: 16px;
+  }
+}
+
 /* About — Our Story */
 .about-story {
   background: linear-gradient(
@@ -658,6 +709,94 @@
   .about-vm-desc {
     font-size: 16px;
     line-height: 1.7;
+  }
+}
+
+/* About — Core Values (5 Re's) */
+.about-values {
+  background: rgba(94, 49, 35, 0.04);
+}
+
+.about-values-head {
+  margin-block-end: 48px;
+}
+
+.about-values-badge {
+  margin-inline: auto;
+  margin-block-end: 1rem;
+}
+
+.about-values-title {
+  color: var(--vikasa-brown);
+  margin: 0;
+}
+
+.about-values-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 28px 24px;
+}
+
+.about-values-item {
+  text-align: center;
+}
+
+.about-values-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--vikasa-brown);
+  background: var(--vikasa-white);
+  border: 1px solid rgba(187, 151, 89, 0.45);
+  box-shadow: 0 8px 24px rgba(94, 49, 35, 0.06);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.about-values-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.about-values-item:hover .about-values-icon {
+  background: var(--vikasa-brown);
+  color: var(--vikasa-white);
+  border-color: var(--vikasa-brown);
+}
+
+.about-values-item-title {
+  color: var(--vikasa-brown);
+  margin: 0 0 0.65rem;
+}
+
+.about-values-item-desc {
+  margin: 0;
+  line-height: 1.65;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+@media (max-width: 1199px) {
+  .about-values-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .about-values-head {
+    margin-block-end: 36px;
+  }
+
+  .about-values-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+
+  .about-values-item-desc {
+    font-size: 15px;
   }
 }
 
