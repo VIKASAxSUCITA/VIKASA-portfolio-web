@@ -200,7 +200,7 @@ export default function HomeServices() {
               >
                 <a
                   className="multicolumn-card"
-                  href="/contact"
+                  href="/#contact"
                   aria-label={service.title}
                 >
                   <div className="card-icon">

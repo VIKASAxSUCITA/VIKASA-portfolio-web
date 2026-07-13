@@ -1,18 +1,6 @@
-import type { Metadata } from "next";
-import ContactFooter from "../components/contact/ContactFooter";
-import ContactForm from "../components/contact/ContactForm";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Contact / Get Proposal",
-  description:
-    "Request a VIKASA proposal or book a consultation by form, WhatsApp, or email.",
-};
-
+/** Contact lives on the home page at #contact. */
 export default function Page() {
-  return (
-    <main>
-      <ContactForm />
-      <ContactFooter />
-    </main>
-  );
+  redirect("/#contact");
 }

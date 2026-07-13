@@ -3,7 +3,7 @@ const navLinks = [
   { href: "/about", label: "About Us" },
   { href: "/#services", label: "Services" },
   { href: "/blog", label: "Insights" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#contact", label: "Contact" },
 ] as const;
 
 export default function HomeHeader() {

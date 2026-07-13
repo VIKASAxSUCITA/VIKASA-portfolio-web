@@ -1,6 +1,7 @@
 /* Auto-generated from content.html. Run `node scripts/html-to-tsx.mjs` to regenerate. */
 
 import HomeServices from "./HomeServices";
+import ContactForm from "../contact/ContactForm";
 
 export default function HomeBody() {
   return (
@@ -42,7 +43,7 @@ export default function HomeBody() {
                       </div>
                       <div className="buttons" data-aos="fade-up" data-aos-delay="300">
                         <a
-                          href="/contact"
+                          href="/#contact"
                           className="button button--primary"
                           aria-label="Book Strategy Call"
                         >
@@ -249,11 +250,8 @@ export default function HomeBody() {
               </div>
             </div>
       
-            {/* Services */}
-            <HomeServices />
-
             {/* Text Banner */}
-            <div className="text-banner">
+            <div className="text-banner mt-100">
               <div className="container-fluid">
                 <div className="text-banner-inner radius18">
                   <div className="section-headings">
@@ -310,7 +308,7 @@ export default function HomeBody() {
                     </p>
                     <div className="buttons" data-aos="fade-up">
                       <a
-                        href="/contact"
+                        href="/#contact"
                         className="button button--secondary"
                         aria-label="See More Services"
                       >
@@ -339,451 +337,11 @@ export default function HomeBody() {
                 </div>
               </div>
             </div>
-      
-            {/* Testimonial */}
-            <testi-slider className="testi-slider team-slider mt-100">
-              <div className="container">
-                <div className="section-headings headings-width text-center">
-                  <div className="subheading text-20 subheading-bg" data-aos="fade-up">
-                    <svg
-                      className="icon icon-14"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={14}
-                      height={14}
-                      viewBox="0 0 14 14"
-                      fill="none"
-                    >
-                      <g clipPath="url(#clip0_9088_4143)">
-                        <path
-                          d="M8.71401 5.28599C11.7514 5.4205 14 5.9412 14 7C14 8.0588 11.7514 8.5795 8.71401 8.71401C8.5795 11.7514 8.0588 14 7 14C5.9412 14 5.4205 11.7514 5.28599 8.71401C2.2486 8.5795 -1.33117e-07 8.0588 0 7C4.62818e-08 5.94119 2.2486 5.4205 5.28599 5.28599C5.4205 2.2486 5.9412 0 7 0C8.0588 0 8.5795 2.2486 8.71401 5.28599Z"
-                          fill="CurrentColor"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath>
-                          <rect width={14} height={14} fill="CurrentColor" />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                    <span>Testimonial</span>
-                    <svg
-                      className="icon icon-14"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={14}
-                      height={14}
-                      viewBox="0 0 14 14"
-                      fill="none"
-                    >
-                      <g clipPath="url(#clip0_9088_4143)">
-                        <path
-                          d="M8.71401 5.28599C11.7514 5.4205 14 5.9412 14 7C14 8.0588 11.7514 8.5795 8.71401 8.71401C8.5795 11.7514 8.0588 14 7 14C5.9412 14 5.4205 11.7514 5.28599 8.71401C2.2486 8.5795 -1.33117e-07 8.0588 0 7C4.62818e-08 5.94119 2.2486 5.4205 5.28599 5.28599C5.4205 2.2486 5.9412 0 7 0C8.0588 0 8.5795 2.2486 8.71401 5.28599Z"
-                          fill="CurrentColor"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath>
-                          <rect width={14} height={14} fill="CurrentColor" />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                  </div>
-                  <h2 className="heading text-50" data-aos="fade-up">
-                    See what our customers have to say about us
-                  </h2>
-                </div>
-              </div>
-      
-              <div className="section-content" data-aos="fade-up">
-                <div className="container">
-                  <div className="swiper">
-                    <div className="swiper-wrapper">
-                      <div className="swiper-slide">
-                        <div
-                          className="card-testimonial radius18"
-                          data-aos="fade-up"
-                          data-aos-delay="10"
-                        >
-                          <ul className="rating-list list-unstyled">
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                          </ul>
-                          <p className="text text-24">
-                            “ Working with several word themes and templates the last
-                            years only can say this is best in every level use it for
-                            my reviews that I have already are company and the reviews
-                            that I have already are all excellent. Not only the design
-                            but the are company and the reviews code ”
-                          </p>
-                          <div className="user-info-wrap">
-                            <div className="user-info">
-                              <div className="user-img">
-                                <img
-                                  src="/assets/img/testimonial/1.jpg"
-                                  width={80}
-                                  height={80}
-                                  loading="lazy"
-                                  alt="image"
-                                />
-                              </div>
-                              <div className="user-name-desig">
-                                <h2 className="user-name heading text-24">
-                                  Marvin Kinney
-                                </h2>
-                                <div className="user-desig text text-18">
-                                  Product Manager
-                                </div>
-                              </div>
-                            </div>
-                            <div className="icon-quote">
-                              <svg
-                                className="icon icon-62"
-                                width={62}
-                                height={62}
-                                viewBox="0 0 62 62"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M14.5312 9.41406C6.51702 9.41406 0 15.9329 0 23.9453C0 31.2606 5.43154 37.3306 12.4771 38.3311C11.9131 42.4287 10.3486 46.3275 7.90415 49.7085C7.42874 50.3683 7.44654 51.2624 7.9538 51.9009C8.4515 52.5292 9.31635 52.7674 10.0754 52.4473C21.6088 47.6332 29.0625 36.4438 29.0625 23.9453C29.0625 15.9329 22.5455 9.41406 14.5312 9.41406ZM47.4688 9.41406C39.4545 9.41406 32.9375 15.9329 32.9375 23.9453C32.9375 31.2606 38.369 37.3306 45.4146 38.3311C44.8506 42.4287 43.2861 46.3275 40.8417 49.7085C40.3662 50.3683 40.384 51.2624 40.8913 51.9009C41.389 52.5292 42.2538 52.7674 43.0129 52.4473C54.5463 47.6332 62 36.4438 62 23.9453C62 15.9329 55.483 9.41406 47.4688 9.41406Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="swiper-slide">
-                        <div
-                          className="card-testimonial radius18"
-                          data-aos="fade-up"
-                          data-aos-delay="150"
-                        >
-                          <ul className="rating-list list-unstyled">
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                          </ul>
-                          <p className="text text-24">
-                            “ Working with several word themes and templates the last
-                            years only can say this is best in every level use it for
-                            my reviews that I have already are company and the reviews
-                            that I have already are all excellent. Not only the design
-                            but the are company and the reviews code ”
-                          </p>
-                          <div className="user-info-wrap">
-                            <div className="user-info">
-                              <div className="user-img">
-                                <img
-                                  src="/assets/img/testimonial/2.jpg"
-                                  width={80}
-                                  height={80}
-                                  loading="lazy"
-                                  alt="image"
-                                />
-                              </div>
-                              <div className="user-name-desig">
-                                <h2 className="user-name heading text-24">
-                                  Charlize Theron
-                                </h2>
-                                <div className="user-desig text text-18">
-                                  Product Manager
-                                </div>
-                              </div>
-                            </div>
-                            <div className="icon-quote">
-                              <svg
-                                className="icon icon-62"
-                                width={62}
-                                height={62}
-                                viewBox="0 0 62 62"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M14.5312 9.41406C6.51702 9.41406 0 15.9329 0 23.9453C0 31.2606 5.43154 37.3306 12.4771 38.3311C11.9131 42.4287 10.3486 46.3275 7.90415 49.7085C7.42874 50.3683 7.44654 51.2624 7.9538 51.9009C8.4515 52.5292 9.31635 52.7674 10.0754 52.4473C21.6088 47.6332 29.0625 36.4438 29.0625 23.9453C29.0625 15.9329 22.5455 9.41406 14.5312 9.41406ZM47.4688 9.41406C39.4545 9.41406 32.9375 15.9329 32.9375 23.9453C32.9375 31.2606 38.369 37.3306 45.4146 38.3311C44.8506 42.4287 43.2861 46.3275 40.8417 49.7085C40.3662 50.3683 40.384 51.2624 40.8913 51.9009C41.389 52.5292 42.2538 52.7674 43.0129 52.4473C54.5463 47.6332 62 36.4438 62 23.9453C62 15.9329 55.483 9.41406 47.4688 9.41406Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="swiper-slide">
-                        <div
-                          className="card-testimonial radius18"
-                          data-aos="fade-up"
-                          data-aos-delay="300"
-                        >
-                          <ul className="rating-list list-unstyled">
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                            <li className="rating-icon">
-                              <svg
-                                className="icon icon-24"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M11.9998 17L6.12197 20.5902L7.72007 13.8906L2.48926 9.40983L9.35479 8.85942L11.9998 2.5L14.6449 8.85942L21.5104 9.40983L16.2796 13.8906L17.8777 20.5902L11.9998 17Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </li>
-                          </ul>
-                          <p className="text text-24">
-                            “ Working with several word themes and templates the last
-                            years only can say this is best in every level use it for
-                            my reviews that I have already are company and the reviews
-                            that I have already are all excellent. Not only the design
-                            but the are company and the reviews code ”
-                          </p>
-                          <div className="user-info-wrap">
-                            <div className="user-info">
-                              <div className="user-img">
-                                <img
-                                  src="/assets/img/testimonial/3.jpg"
-                                  width={80}
-                                  height={80}
-                                  loading="lazy"
-                                  alt="image"
-                                />
-                              </div>
-                              <div className="user-name-desig">
-                                <h2 className="user-name heading text-24">Tondu Hosen</h2>
-                                <div className="user-desig text text-18">Ceo & Owner</div>
-                              </div>
-                            </div>
-                            <div className="icon-quote">
-                              <svg
-                                className="icon icon-62"
-                                width={62}
-                                height={62}
-                                viewBox="0 0 62 62"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M14.5312 9.41406C6.51702 9.41406 0 15.9329 0 23.9453C0 31.2606 5.43154 37.3306 12.4771 38.3311C11.9131 42.4287 10.3486 46.3275 7.90415 49.7085C7.42874 50.3683 7.44654 51.2624 7.9538 51.9009C8.4515 52.5292 9.31635 52.7674 10.0754 52.4473C21.6088 47.6332 29.0625 36.4438 29.0625 23.9453C29.0625 15.9329 22.5455 9.41406 14.5312 9.41406ZM47.4688 9.41406C39.4545 9.41406 32.9375 15.9329 32.9375 23.9453C32.9375 31.2606 38.369 37.3306 45.4146 38.3311C44.8506 42.4287 43.2861 46.3275 40.8417 49.7085C40.3662 50.3683 40.384 51.2624 40.8913 51.9009C41.389 52.5292 42.2538 52.7674 43.0129 52.4473C54.5463 47.6332 62 36.4438 62 23.9453C62 15.9329 55.483 9.41406 47.4688 9.41406Z"
-                                  fill="CurrentColor"
-                                />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="swiper-pagination"></div>
-                </div>
-              </div>
-            </testi-slider>
-      
+    
+
+            {/* Services */}
+            <HomeServices />
+
             {/* Featured Blog */}
             <div className="featured-blog blog-style-3 mt-100 section-padding">
               <div className="container">
@@ -1064,276 +622,11 @@ export default function HomeBody() {
                 </div>
               </div>
             </div>
+
+            <ContactForm />
       
-            {/* Contact Form */}
-            <div className="section-contact-form without-box-shadow section-padding">
-              <div className="container">
-                <div className="contact-box radius18">
-                  <div className="row product-grid justify-content-between">
-                    <div className="col-12 col-lg-6 col-contact-content">
-                      <div className="section-headings">
-                        <div
-                          className="subheading text-20 subheading-bg"
-                          data-aos="fade-up"
-                        >
-                          <svg
-                            className="icon icon-14"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={14}
-                            height={14}
-                            viewBox="0 0 14 14"
-                            fill="none"
-                          >
-                            <g clipPath="url(#clip0_9088_4143)">
-                              <path
-                                d="M8.71401 5.28599C11.7514 5.4205 14 5.9412 14 7C14 8.0588 11.7514 8.5795 8.71401 8.71401C8.5795 11.7514 8.0588 14 7 14C5.9412 14 5.4205 11.7514 5.28599 8.71401C2.2486 8.5795 -1.33117e-07 8.0588 0 7C4.62818e-08 5.94119 2.2486 5.4205 5.28599 5.28599C5.4205 2.2486 5.9412 0 7 0C8.0588 0 8.5795 2.2486 8.71401 5.28599Z"
-                                fill="CurrentColor"
-                              />
-                            </g>
-                            <defs>
-                              <clipPath>
-                                <rect width={14} height={14} fill="CurrentColor" />
-                              </clipPath>
-                            </defs>
-                          </svg>
-                          <span>Contact Us</span>
-                          <svg
-                            className="icon icon-14"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={14}
-                            height={14}
-                            viewBox="0 0 14 14"
-                            fill="none"
-                          >
-                            <g clipPath="url(#clip0_9088_4143)">
-                              <path
-                                d="M8.71401 5.28599C11.7514 5.4205 14 5.9412 14 7C14 8.0588 11.7514 8.5795 8.71401 8.71401C8.5795 11.7514 8.0588 14 7 14C5.9412 14 5.4205 11.7514 5.28599 8.71401C2.2486 8.5795 -1.33117e-07 8.0588 0 7C4.62818e-08 5.94119 2.2486 5.4205 5.28599 5.28599C5.4205 2.2486 5.9412 0 7 0C8.0588 0 8.5795 2.2486 8.71401 5.28599Z"
-                                fill="CurrentColor"
-                              />
-                            </g>
-                            <defs>
-                              <clipPath>
-                                <rect width={14} height={14} fill="CurrentColor" />
-                              </clipPath>
-                            </defs>
-                          </svg>
-                        </div>
-                        <h2 className="heading text-50" data-aos="fade-up">
-                          Let's Build an Awesome Project Together
-                        </h2>
-                        <p className="text text-18" data-aos="fade-up">
-                          Each demo built with Teba will look different. You can
-                          customize almost anything in the appearance of your website
-                          with only a few clicks. Each demo built with Teba will look
-                          different.
-                        </p>
-      
-                        <div className="card-icon-text card-icon-text-horizontal">
-                          <div className="svg-wrapper" data-aos="fade-up">
-                            <svg
-                              viewBox="0 0 80 80"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <rect width={80} height={80} rx="10" fill="#20282D" />
-                              <path
-                                d="M47.7344 18C47.2598 18 46.875 18.3848 46.875 18.8594V22.8125C46.875 23.287 47.2598 23.6719 47.7344 23.6719C48.2089 23.6719 48.5938 23.287 48.5938 22.8125V18.8594C48.5938 18.3848 48.2089 18 47.7344 18Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M27.9688 44.8125C27.4944 44.8125 27.1094 45.1975 27.1094 45.6719C27.1094 46.1463 27.4944 46.5312 27.9688 46.5312C28.4431 46.5312 28.8281 46.1463 28.8281 45.6719C28.8281 45.1975 28.4431 44.8125 27.9688 44.8125Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M59.7656 43.0938C59.7656 41.1983 58.2236 39.6562 56.3281 39.6562H49.9127C50.9059 37.1122 51.3079 34.1178 51.2304 31.4523C51.2156 30.9436 51.1961 30.6495 51.1697 30.4643C51.1253 28.6074 49.6006 27.1094 47.7344 27.1094C45.8389 27.1094 44.2969 28.6514 44.2969 30.5469V31.4062C44.2969 36.8415 37.3175 39.8952 32.0504 41.2048C31.6522 40.2943 30.7432 39.6562 29.6875 39.6562H21.0938C20.6192 39.6562 20.2344 40.0411 20.2344 40.5156V61.1406C20.2344 61.6152 20.6192 62 21.0938 62H29.6875C30.7361 62 31.6399 61.3703 32.0423 60.4695C32.4784 60.5814 32.8833 60.6871 33.257 60.7848C36.2575 61.5684 37.9103 62 41.9302 62H51.1719C53.0673 62 54.6094 60.4579 54.6094 58.5625C54.6094 57.8557 54.3948 57.1983 54.0276 56.6514C55.3551 56.1871 56.3281 54.9187 56.3281 53.4062C56.3281 52.7021 56.1188 52.0425 55.7527 51.4931C57.0744 51.028 58.0469 49.7625 58.0469 48.25C58.0469 47.5432 57.8323 46.8858 57.4651 46.3389C58.7926 45.8746 59.7656 44.6062 59.7656 43.0938ZM30.5469 59.4219C30.5469 59.8957 30.1614 60.2812 29.6875 60.2812H21.9531V41.375H29.6875C30.1614 41.375 30.5469 41.7605 30.5469 42.2344V59.4219ZM56.3281 44.8125C54.4849 44.8125 54.0455 44.8125 52.0312 44.8125C51.5567 44.8125 51.1719 45.1973 51.1719 45.6719C51.1719 46.1464 51.5567 46.5312 52.0312 46.5312H54.6094C55.5571 46.5312 56.3281 47.3023 56.3281 48.25C56.3281 49.1993 55.5586 49.9688 54.6094 49.9688H50.3125C49.838 49.9688 49.4531 50.3536 49.4531 50.8281C49.4531 51.3027 49.838 51.6875 50.3125 51.6875H52.8906C53.8271 51.6875 54.6094 52.4356 54.6094 53.4062C54.6094 54.3555 53.8399 55.125 52.8906 55.125C51.0474 55.125 50.608 55.125 48.5938 55.125C48.1192 55.125 47.7344 55.5098 47.7344 55.9844C47.7344 56.4589 48.1192 56.8438 48.5938 56.8438H51.1719C52.1196 56.8438 52.8906 57.6148 52.8906 58.5625C52.8906 59.5102 52.1196 60.2812 51.1719 60.2812H41.9302C38.1311 60.2812 36.6473 59.8938 33.6913 59.1218C33.2583 59.0087 32.7833 58.8847 32.2656 58.7527V42.924C38.4847 41.4426 46.0156 37.8267 46.0156 31.4062V30.5469C46.0156 29.5992 46.7867 28.8281 47.7344 28.8281C48.6804 28.8281 49.4513 29.598 49.4531 30.5442V30.5469C49.4531 30.9204 49.9193 35.504 48.0501 39.6562H45.1562C44.6817 39.6562 44.2969 40.0411 44.2969 40.5156C44.2969 40.9902 44.6817 41.375 45.1562 41.375C45.7564 41.375 55.3486 41.375 56.3281 41.375C57.2758 41.375 58.0469 42.146 58.0469 43.0938C58.0469 44.043 57.2774 44.8125 56.3281 44.8125Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M27.9688 48.25C27.4942 48.25 27.1094 48.6348 27.1094 49.1094V55.9844C27.1094 56.4589 27.4942 56.8438 27.9688 56.8438C28.4433 56.8438 28.8281 56.4589 28.8281 55.9844V49.1094C28.8281 48.6348 28.4433 48.25 27.9688 48.25Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M40.8594 28.8281H37.4219C36.9473 28.8281 36.5625 29.213 36.5625 29.6875C36.5625 30.162 36.9473 30.5469 37.4219 30.5469H40.8594C41.3339 30.5469 41.7188 30.162 41.7188 29.6875C41.7188 29.213 41.3339 28.8281 40.8594 28.8281Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M58.0469 28.8281H54.6094C54.1348 28.8281 53.75 29.213 53.75 29.6875C53.75 30.162 54.1348 30.5469 54.6094 30.5469H58.0469C58.5214 30.5469 58.9062 30.162 58.9062 29.6875C58.9062 29.213 58.5214 28.8281 58.0469 28.8281Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M55.6337 21.7907C55.298 21.4552 54.754 21.4552 54.4182 21.7907L51.988 24.2209C51.6524 24.5565 51.6524 25.1007 51.988 25.4363C52.3238 25.7719 52.8677 25.7718 53.2034 25.4363L55.6337 23.0061C55.9692 22.6705 55.9692 22.1264 55.6337 21.7907Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M43.4813 24.2209L41.0511 21.7907C40.7154 21.4552 40.1714 21.4552 39.8357 21.7907C39.5001 22.1263 39.5001 22.6704 39.8357 23.0061L42.2659 25.4363C42.6017 25.7719 43.1456 25.7718 43.4813 25.4363C43.8169 25.1007 43.8169 24.5566 43.4813 24.2209Z"
-                                fill="white"
-                              />
-                            </svg>
-                          </div>
-                          <div className="content">
-                            <h2 className="heading text-24 fw-700" data-aos="fade-up">
-                              350+ Projects Done
-                            </h2>
-                            <p className="text text-16" data-aos="fade-up">
-                              From banking and insurance to wealth the management and
-                              security on there
-                            </p>
-                          </div>
-                        </div>
-                        <div className="card-icon-text card-icon-text-horizontal">
-                          <div className="svg-wrapper" data-aos="fade-up">
-                            <svg
-                              viewBox="0 0 80 80"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <rect width={80} height={80} rx="10" fill="#20282D" />
-                              <path
-                                d="M40.7812 51.7188C40.7812 52.1503 40.4315 52.5 40 52.5C39.5685 52.5 39.2188 52.1503 39.2188 51.7188C39.2188 51.2872 39.5685 50.9375 40 50.9375C40.4315 50.9375 40.7812 51.2872 40.7812 51.7188Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M57.4219 44.6875C57.4219 42.1027 55.3192 40 52.7344 40C50.1495 40 48.0469 42.1027 48.0469 44.6875C48.0469 47.2723 50.1495 49.375 52.7344 49.375C55.3192 49.375 57.4219 47.2723 57.4219 44.6875ZM52.7344 47.8125C51.0114 47.8125 49.6094 46.4105 49.6094 44.6875C49.6094 42.9645 51.0114 41.5625 52.7344 41.5625C54.4574 41.5625 55.8594 42.9645 55.8594 44.6875C55.8594 46.4105 54.4574 47.8125 52.7344 47.8125Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M52.7344 49.375C50.7657 49.375 48.8025 50.1923 47.4652 51.5173C45.705 49.2041 42.9907 47.8125 40 47.8125C37.1359 47.8125 34.3607 49.1193 32.5351 51.5173C31.1975 50.1926 29.2346 49.375 27.2656 49.375C23.3273 49.375 20 52.5949 20 56.4062V57.9688C20 58.4003 20.3497 58.75 20.7812 58.75H59.2188C59.6503 58.75 60 58.4003 60 57.9688V56.4062C60 52.5949 56.6727 49.375 52.7344 49.375ZM21.5625 56.4062C21.5625 53.4418 24.1742 50.9375 27.2656 50.9375C28.9572 50.9375 30.6348 51.687 31.6733 52.8784C30.9866 54.2047 30.625 55.683 30.625 57.1875H21.5625V56.4062ZM40 49.375C44.3472 49.375 47.8125 52.9022 47.8125 57.1875H32.1875C32.1875 52.8452 35.7236 49.375 40 49.375ZM58.4375 57.1875H49.375C49.375 55.683 49.0134 54.2047 48.3267 52.8784C49.3652 51.687 51.0428 50.9375 52.7344 50.9375C55.8258 50.9375 58.4375 53.4418 58.4375 56.4062V57.1875Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M31.9531 44.6875C31.9531 42.1027 29.8505 40 27.2656 40C24.6808 40 22.5781 42.1027 22.5781 44.6875C22.5781 47.2723 24.6808 49.375 27.2656 49.375C29.8505 49.375 31.9531 47.2723 31.9531 44.6875ZM27.2656 47.8125C25.5426 47.8125 24.1406 46.4105 24.1406 44.6875C24.1406 42.9645 25.5426 41.5625 27.2656 41.5625C28.9886 41.5625 30.3906 42.9645 30.3906 44.6875C30.3906 46.4105 28.9886 47.8125 27.2656 47.8125Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M46.25 41.5625C46.25 38.1161 43.4464 35.3125 40 35.3125C36.5536 35.3125 33.75 38.1161 33.75 41.5625C33.75 45.0089 36.5536 47.8125 40 47.8125C43.4464 47.8125 46.25 45.0089 46.25 41.5625ZM40 46.25C37.4152 46.25 35.3125 44.1473 35.3125 41.5625C35.3125 38.9777 37.4152 36.875 40 36.875C42.5848 36.875 44.6875 38.9777 44.6875 41.5625C44.6875 44.1473 42.5848 46.25 40 46.25Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M46.1828 25.7938C46.0909 25.5109 45.8465 25.3049 45.552 25.2621L42.1822 24.7729L40.6734 21.6882C40.5425 21.42 40.2703 21.25 39.9718 21.25C39.6734 21.25 39.4012 21.42 39.2699 21.6879L37.7614 24.7729L34.3917 25.2618C34.0972 25.3046 33.8528 25.5109 33.7609 25.7938C33.669 26.0767 33.7456 26.387 33.9587 26.5945L36.3988 28.9728L35.823 32.3312C35.7726 32.6242 35.8932 32.9205 36.1339 33.0951C36.3732 33.269 36.6918 33.2938 36.9567 33.1546L39.9718 31.5692L42.9882 33.1546C43.2513 33.2932 43.5702 33.27 43.8109 33.0951C44.0514 32.9202 44.172 32.6242 44.1216 32.3309L43.5451 28.9728L45.985 26.5945C46.198 26.387 46.2746 26.0767 46.1828 25.7938ZM42.1599 28.1406C41.9759 28.32 41.8917 28.5788 41.9353 28.8321L42.3135 31.0352L40.3353 29.9951C40.1076 29.8755 39.8357 29.8755 39.6081 29.9951L37.6305 31.0352L38.0083 28.8321C38.0517 28.5785 37.9674 28.32 37.7834 28.1406L36.1831 26.5808L38.3941 26.2598C38.6498 26.2228 38.8705 26.0617 38.9837 25.8298L39.9718 23.8095L40.9597 25.8298C41.0732 26.062 41.2939 26.2228 41.5493 26.2598L43.7606 26.5808L42.1599 28.1406Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M57.8602 31.6492C57.7683 31.3663 57.5238 31.1603 57.2294 31.1176L54.9463 30.7858L53.9255 28.7167C53.794 28.45 53.5227 28.2812 53.2251 28.2812C53.2251 28.2812 53.2251 28.2812 53.2248 28.2812C52.9276 28.2812 52.656 28.45 52.5245 28.7167L51.503 30.7858L49.2197 31.1176C48.9255 31.1603 48.6811 31.3663 48.5892 31.6492C48.4971 31.9321 48.5737 32.2424 48.7867 32.45L50.4386 34.061L50.0486 36.3345C49.9985 36.6275 50.1188 36.9235 50.3595 37.0984C50.6 37.2733 50.9189 37.2964 51.182 37.1582L53.2248 36.0849L55.2671 37.1582C55.5301 37.2964 55.8493 37.2733 56.0898 37.0984C56.3303 36.9238 56.4505 36.6275 56.4005 36.3345L56.0105 34.061L57.6627 32.45C57.8757 32.2424 57.952 31.9321 57.8602 31.6492ZM54.6259 33.2291C54.4416 33.4085 54.3576 33.667 54.4013 33.9203L54.5929 35.0385L53.5886 34.5108C53.3609 34.3912 53.089 34.3912 52.8617 34.5108L51.8564 35.0388L52.0484 33.9203C52.0917 33.667 52.0078 33.4085 51.8238 33.2291L51.0108 32.4362L52.1341 32.2733C52.3887 32.2363 52.6087 32.0764 52.7225 31.846L53.2248 30.8282L53.7268 31.8457C53.8407 32.0764 54.0607 32.2363 54.3152 32.2733L55.4386 32.4362L54.6259 33.2291Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M31.2977 31.6492C31.2058 31.3663 30.9613 31.1603 30.6669 31.1176L28.3838 30.7858L27.363 28.7167C27.2315 28.45 26.9602 28.2812 26.6626 28.2812C26.3651 28.2812 26.0935 28.45 25.962 28.7167L24.9405 30.7858L22.6572 31.1176C22.363 31.1603 22.1186 31.3663 22.0267 31.6492C21.9346 31.9321 22.0112 32.2424 22.2242 32.45L23.8761 34.061L23.4864 36.3345C23.436 36.6275 23.5566 36.9235 23.797 37.0984C24.0375 37.2733 24.3564 37.2964 24.6198 37.1582L26.6623 36.0849L28.7046 37.1582C28.9695 37.2974 29.2881 37.2723 29.5273 37.0984C29.7678 36.9238 29.8883 36.6275 29.838 36.3345L29.448 34.061L31.1002 32.45C31.3132 32.2424 31.3895 31.9321 31.2977 31.6492ZM28.0631 33.2291C27.8791 33.4085 27.7951 33.667 27.8385 33.9203L28.0304 35.0385L27.0258 34.5108C26.7984 34.3912 26.5265 34.3912 26.2992 34.5108L25.2936 35.0388L25.4856 33.9203C25.5292 33.667 25.445 33.4085 25.261 33.2291L24.448 32.4362L25.5716 32.2733C25.8258 32.2363 26.0459 32.0764 26.1597 31.846L26.662 30.8282L27.164 31.8457C27.2779 32.0764 27.4979 32.2363 27.7524 32.2733L28.8758 32.4362L28.0631 33.2291Z"
-                                fill="white"
-                              />
-                              <path
-                                d="M43.4232 51.9566C43.0625 51.7195 42.5782 51.8199 42.3414 52.1806C42.1043 52.541 42.2047 53.0254 42.5654 53.2625C43.2877 53.737 43.8651 54.3986 44.235 55.1756C44.4199 55.5647 44.8856 55.731 45.276 55.5452C45.6657 55.36 45.8311 54.8936 45.6458 54.5042C45.1533 53.4691 44.3845 52.588 43.4232 51.9566Z"
-                                fill="white"
-                              />
-                            </svg>
-                          </div>
-                          <div className="content">
-                            <h2 className="heading text-24 fw-700" data-aos="fade-up">
-                              500+ Happy Clients
-                            </h2>
-                            <p className="text text-16" data-aos="fade-up">
-                              From banking and insurance to wealth the management and
-                              security on there
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6 col-contact-form">
-                      <div className="contact-form-wrap radius18">
-                        <div className="contact-form-headings">
-                          <h2 className="heading text-32" data-aos="fade-up">
-                            Make an Appointment
-                          </h2>
-                          <p className="text text-16" data-aos="fade-up">
-                            Feel free to contact with us, we don't spam your email
-                          </p>
-                        </div>
-                        <form action="#" className="form contact-form" data-aos="fade-up">
-                          <div className="field">
-                            <label htmlFor="ContactForm-name" className="visually-hidden">
-                              Your Name
-                            </label>
-                            <input
-                              id="ContactForm-name"
-                              className="text text-16"
-                              type="text"
-                              placeholder="Your Name *"
-                              name="name"
-                              required
-                            />
-                          </div>
-                          <div className="field">
-                            <label htmlFor="ContactForm-email" className="visually-hidden">
-                              Email Here
-                            </label>
-                            <input
-                              id="ContactForm-email"
-                              className="text text-16"
-                              type="text"
-                              placeholder="Email Here *"
-                              name="email"
-                              required
-                            />
-                          </div>
-                          <div className="field">
-                            <label htmlFor="ContactForm-service" className="visually-hidden">
-                              Service Type
-                            </label>
-                            <input
-                              id="ContactForm-service"
-                              className="text text-16"
-                              type="text"
-                              placeholder="Service Type *"
-                              name="service"
-                              required
-                            />
-                          </div>
-                          <div className="field">
-                            <label htmlFor="ContactForm-body" className="visually-hidden">
-                              Your Comment
-                            </label>
-                            <textarea
-                              id="ContactForm-body"
-                              className="text text-16"
-                              rows={4}
-                              placeholder="Your Comment *"
-                              name="message"
-                              required
-                            ></textarea>
-                          </div>
-                          <div className="form-button">
-                            <button
-                              type="submit"
-                              className="button button--secondary"
-                              aria-label="Send Message"
-                            >
-                              Send Message
-                              <span className="svg-wrapper">
-                                <svg
-                                  className="icon-20"
-                                  width={20}
-                                  height={20}
-                                  viewBox="0 0 20 20"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M13.3365 7.84518L6.16435 15.0173L4.98584 13.8388L12.158 6.66667H5.83652V5H15.0032V14.1667H13.3365V7.84518Z"
-                                    fill="currentColor"
-                                  ></path>
-                                </svg>
-                              </span>
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </main>
-      
+
           {/* Footer */}
           <footer>
             {/* Footer Main */}
@@ -1498,7 +791,7 @@ export default function HomeBody() {
                           </li>
                           <li>
                             <a
-                              href="/contact"
+                              href="/#contact"
                               className="text text-16 link"
                               aria-label="Contact"
                             >
@@ -1553,7 +846,7 @@ export default function HomeBody() {
                           </li>
                           <li>
                             <a
-                              href="/contact"
+                              href="/#contact"
                               className="text text-16 link"
                               aria-label="Cyber Security"
                             >
@@ -1635,7 +928,7 @@ export default function HomeBody() {
                         </li>
                         <li>
                           <a
-                            href="/contact"
+                            href="/#contact"
                             className="text text-16 link"
                             aria-label="FAQ"
                           >

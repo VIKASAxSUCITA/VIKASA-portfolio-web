@@ -167,7 +167,7 @@ export default function ContactFooter() {
                           </li>
                           <li>
                             <a
-                              href="/contact"
+                              href="/#contact"
                               className="text text-16 link"
                               aria-label="Contact"
                             >

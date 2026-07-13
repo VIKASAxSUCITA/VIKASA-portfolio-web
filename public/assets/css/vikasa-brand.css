@@ -158,8 +158,9 @@
   --swiper-navigation-hover-background-color: var(--vikasa-gold);
 }
 
-/* Home services anchor — clear sticky header on scroll */
-#services {
+/* Home services / contact anchors — clear sticky header on scroll */
+#services,
+#contact {
   scroll-margin-top: calc(var(--header-height, 60px) + 24px);
 }
 
