@@ -158,18 +158,32 @@
   --swiper-navigation-hover-background-color: var(--vikasa-gold);
 }
 
-/* Home About image — keep display size within the column */
+/* Home About image — fixed frame so any source size displays consistently */
 #about .media-wrap {
+  position: relative;
   width: 100%;
-  max-width: 560px;
+  max-width: 360px;
+  aspect-ratio: 4 / 5;
+  height: auto;
+  overflow: hidden;
+  margin-inline: auto;
 }
 
 #about .home-about-image {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  max-width: 100%;
-  height: auto;
+  height: 100%;
+  max-width: none;
   object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 991px) {
+  #about .media-wrap {
+    max-width: 300px;
+  }
 }
 
 /* Home section anchors — clear sticky header on scroll */
@@ -490,6 +504,81 @@
 .scroll-to-top:hover {
   background: var(--vikasa-gold);
   color: var(--vikasa-white);
+}
+
+/* Page banners (About, Insights, etc.) — replace navy overlay */
+.page-banner {
+  --color-overlay: linear-gradient(
+    184.15deg,
+    rgba(94, 49, 35, 0) -187.51%,
+    var(--vikasa-brown) 96.62%
+  );
+  --color-foreground: var(--vikasa-white);
+  --color-foreground-heading: var(--vikasa-white);
+}
+
+.page-banner .heading,
+.page-banner .text,
+.page-banner .breadcrumb a {
+  color: var(--vikasa-white) !important;
+}
+
+/* Insights / blog cards — VIKASA instead of navy */
+.card-blog-list-horizontal,
+.card-blog-list,
+.card-blog {
+  --color-foreground: rgba(93, 102, 111, 1);
+  --color-foreground-heading: var(--vikasa-brown);
+  --color-icon: var(--vikasa-brown);
+  --color-primary-button-hover-text: var(--vikasa-white);
+  --color-primary-button-hover-background: var(--vikasa-brown);
+  --color-foreground-subheading: var(--vikasa-white);
+  --color-background-subheading: var(--vikasa-brown);
+  --color-border-subheading-bg: var(--vikasa-brown);
+  --color-primary-hover: rgba(94, 49, 35, 0.75);
+}
+
+.card-blog:hover,
+.card-blog:focus {
+  --color-foreground-subheading: var(--vikasa-brown);
+  --color-background-subheading: var(--vikasa-white);
+  --color-border-subheading-bg: var(--vikasa-white);
+}
+
+/* Dark category pills: white text (global .subheading-bg is brown) */
+.card-blog .blog-tag.subheading-bg,
+.card-blog .subheading-bg {
+  color: var(--vikasa-white) !important;
+  background-color: var(--vikasa-brown);
+  border-color: var(--vikasa-brown);
+}
+
+.card-blog:hover .blog-tag.subheading-bg,
+.card-blog:focus .blog-tag.subheading-bg,
+.card-blog:hover .subheading-bg,
+.card-blog:focus .subheading-bg {
+  color: var(--vikasa-brown) !important;
+  background-color: var(--vikasa-white);
+  border-color: var(--vikasa-white);
+}
+
+.card-blog-heading a,
+.card-blog-list .card-blog-heading a {
+  color: var(--vikasa-brown);
+}
+
+.card-blog-meta-item {
+  color: var(--vikasa-brown);
+}
+
+.card-blog-meta-item svg {
+  color: var(--vikasa-brown);
+}
+
+/* Blog details leftovers */
+.blog-share-item .subheading-bg:focus,
+.blog-share-item .subheading-bg:hover {
+  --color-border-subheading-bg: var(--vikasa-brown);
 }
 
 /* Submenu */

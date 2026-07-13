@@ -6,9 +6,9 @@ export default function HomeAbout() {
           <div className="col-lg-6 col-12">
             <div className="media-wrap" data-aos="zoom-in-up">
               <img
-                src="/assets/img/image-text/img1.png"
-                width={992}
-                height={863}
+                src="/assets/img/vikasa/aboutUs_image.png"
+                width={360}
+                height={450}
                 loading="lazy"
                 alt="What we do"
                 className="home-about-image"

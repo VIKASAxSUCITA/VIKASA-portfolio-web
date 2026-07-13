@@ -10,14 +10,14 @@ import HomeServices from "./HomeServices";
 export default function HomeBody() {
   return (
     <>
-      <main>
+          <main>
         <HomeHero />
         <HomeAbout />
         <HomeCta />
         <HomeServices />
         <HomeInsights />
         <HomeContact />
-      </main>
+          </main>
       <HomeFooter />
     </>
   );

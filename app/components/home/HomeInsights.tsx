@@ -216,7 +216,7 @@ export default function HomeInsights() {
             data-aos-delay="100"
           >
             <a
-              href="/blog"
+              href="/insights"
               className="button button--primary"
               aria-label="Discover more Insights"
             >

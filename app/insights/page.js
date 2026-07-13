@@ -2,13 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 
 const html = fs.readFileSync(
-  path.join(process.cwd(), "app", "blog", "content.html"),
+  path.join(process.cwd(), "app", "insights", "content.html"),
   "utf8"
 );
 
 export const metadata = {
-  title: "VIKASA VIKASA",
-  description: "VIKASA is a creative business consulting Bootstrap 5 template designed for corporate entities and professional businesses.",
+  title: "Insights",
+  description:
+    "Latest insights and articles from VIKASA — creative business consulting.",
 };
 
 export default function Page() {

@@ -36,7 +36,7 @@ export default function HomeHero() {
                   className="button button--primary"
                   aria-label="Book Strategy Call"
                 >
-                  Free Consultation
+                  CONTACT US
                   <span className="svg-wrapper">
                     <svg
                       className="icon-20"

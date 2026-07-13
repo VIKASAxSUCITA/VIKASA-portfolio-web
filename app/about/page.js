@@ -7,8 +7,9 @@ const html = fs.readFileSync(
 );
 
 export const metadata = {
-  title: "VIKASA VIKASA",
-  description: "VIKASA is a creative business consulting Bootstrap 5 template designed for corporate entities and professional businesses.",
+  title: "About Us",
+  description:
+    "Learn about VIKASA — creative business consulting for corporate entities and professional businesses.",
 };
 
 export default function Page() {
