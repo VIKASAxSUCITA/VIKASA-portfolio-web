@@ -1,12 +1,50 @@
+"use client";
+
+import { MouseEvent } from "react";
+
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About Us" },
+  { href: "/#about", label: "About Us" },
   { href: "/#services", label: "Services" },
-  { href: "/blog", label: "Insights" },
+  { href: "/#insights", label: "Insights" },
   { href: "/#contact", label: "Contact" },
 ] as const;
 
+function scrollToHash(hash: string) {
+  const id = hash.replace(/^#/, "");
+  if (!id) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
 export default function HomeHeader() {
+  function handleNavClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
+    const isHomeHash =
+      href === "/" || href.startsWith("/#") || href.startsWith("#");
+    if (!isHomeHash) return;
+
+    const hash =
+      href === "/" ? "" : href.includes("#") ? `#${href.split("#")[1]}` : "";
+    const onHome = window.location.pathname === "/";
+
+    if (onHome) {
+      event.preventDefault();
+      if (hash) {
+        history.pushState(null, "", hash);
+        scrollToHash(hash);
+      } else {
+        history.pushState(null, "", "/");
+        scrollToHash("");
+      }
+    }
+    // From other pages, let the browser navigate to /#section normally
+  }
+
   return (
     <sticky-header data-sticky-type="always">
       <header className="header-1 header-floating">
@@ -61,7 +99,11 @@ export default function HomeHeader() {
                 <ul className="header-menu list-unstyled">
                   {navLinks.map(({ href, label }) => (
                     <li key={href} className="nav-item">
-                      <a className="menu-link menu-link-main" href={href}>
+                      <a
+                        className="menu-link menu-link-main"
+                        href={href}
+                        onClick={(event) => handleNavClick(event, href)}
+                      >
                         {label}
                       </a>
                     </li>

@@ -63,9 +63,9 @@ export default function ContactForm() {
   }
 
   return (
-    <div id="contact" className="section-contact-form section-padding">
+    <div className="section-contact-form section-padding">
       <div className="container">
-        <div className="contact-box radius18">
+        <div id="contact" className="contact-box radius18">
           <div className="row product-grid justify-content-between">
             <div className="col-12 col-lg-6 col-contact-content">
               <div className="section-headings">
