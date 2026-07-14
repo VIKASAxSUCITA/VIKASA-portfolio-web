@@ -1,6 +1,8 @@
 import HomeBody from "./HomeBody";
 import HomeHashScroll from "./HomeHashScroll";
 import HomePageStyles from "./HomePageStyles";
+import FooterSection from "./FooterSection";
+import type { HomeContent } from "@/lib/content/types";
 
 export { default as HomePageStyles } from "./HomePageStyles";
 export { default as HomeHeader } from "./HomeHeader";
@@ -14,12 +16,17 @@ export { default as HomeContact } from "./HomeContact";
 export { default as HomeFooter } from "./HomeFooter";
 export { default as HomeHashScroll } from "./HomeHashScroll";
 
-export default function HomeContent() {
+type HomeContentProps = {
+  content: HomeContent;
+};
+
+export default function HomeContent({ content }: HomeContentProps) {
   return (
     <>
       <HomePageStyles />
       <HomeHashScroll />
-      <HomeBody />
+      <HomeBody content={content} />
+      <FooterSection />
     </>
   );
 }

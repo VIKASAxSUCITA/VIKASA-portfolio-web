@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import HomeContent from "./components/home";
+import { loadPageContent } from "@/lib/content/firestore";
 
 export const metadata: Metadata = {
   title: "VIKASA",
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return <HomeContent />;
+export default async function Page() {
+  const content = await loadPageContent("home");
+  return <HomeContent content={content} />;
 }

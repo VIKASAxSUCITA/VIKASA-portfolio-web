@@ -1,9 +1,15 @@
-export default function AboutHero() {
+import type { AboutContent } from "@/lib/content/types";
+
+type AboutHeroProps = {
+  content: AboutContent["hero"];
+};
+
+export default function AboutHero({ content }: AboutHeroProps) {
   return (
     <section className="page-banner overlay about-hero" aria-label="About VIKASA">
       <picture className="media media-bg">
         <img
-          src="/assets/img/vikasa/aboutUS_Banner_Page.png"
+          src={content.image}
           width={1920}
           height={520}
           loading="eager"
@@ -16,16 +22,14 @@ export default function AboutHero() {
             className="heading text-80 fw-700 about-hero-title"
             data-aos="fade-up"
           >
-            About VIKASA
+            {content.title}
           </h1>
           <p
             className="text text-18 about-hero-desc"
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            Vikasa helps businesses grow through strategic consulting,
-            innovation, and accountable solutions that create sustainable
-            transformation.
+            {content.text}
           </p>
         </div>
       </div>

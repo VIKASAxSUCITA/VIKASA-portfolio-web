@@ -1,4 +1,10 @@
-export default function InsightsHero() {
+import type { InsightsContent } from "@/lib/content/types";
+
+type InsightsHeroProps = {
+  heroTitle: InsightsContent["heroTitle"];
+};
+
+export default function InsightsHero({ heroTitle }: InsightsHeroProps) {
   return (
     <section className="page-banner overlay" aria-label="Insights">
       <picture className="media media-bg">
@@ -13,7 +19,7 @@ export default function InsightsHero() {
       <div className="page-banner-content">
         <div className="container text-center">
           <h1 className="heading text-80 fw-700" data-aos="fade-up">
-            Insights
+            {heroTitle}
           </h1>
           <ul
             className="breadcrumb list-unstyled"

@@ -1,10 +1,16 @@
-export default function HomeHero() {
+import type { HomeContent } from "@/lib/content/types";
+
+type HomeHeroProps = {
+  content: HomeContent["hero"];
+};
+
+export default function HomeHero({ content }: HomeHeroProps) {
   return (
     <div className="hero-slider with-floating-header with-fixed-bg">
       <div className="slider-card overlay">
         <picture className="slider-media">
           <img
-            src="/assets/img/vikasa/home_page_banner.png"
+            src={content.image}
             width={1920}
             height={1000}
             loading="eager"
@@ -19,16 +25,14 @@ export default function HomeHero() {
                 data-aos="fade-up"
                 data-aos-delay="100"
               >
-                VIKASA
+                {content.title}
               </h2>
               <div
                 className="text text-18"
                 data-aos="fade-up"
                 data-aos-delay="200"
               >
-                Transform your business with expert consultancy services our
-                team of seasoned consultants unparalleled. Transform your
-                business.
+                {content.text}
               </div>
               <div className="buttons" data-aos="fade-up" data-aos-delay="300">
                 <a
@@ -36,7 +40,7 @@ export default function HomeHero() {
                   className="button button--primary"
                   aria-label="Book Strategy Call"
                 >
-                  CONTACT US
+                  {content.ctaLabel}
                   <span className="svg-wrapper">
                     <svg
                       className="icon-20"

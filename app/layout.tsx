@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import type { ReactNode } from "react";
-import GlobalHeader from "./components/GlobalHeader";
+import SiteChrome from "./components/SiteChrome";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vikasa.example.com"),
@@ -66,8 +66,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <link rel="stylesheet" href="/assets/css/vikasa-brand.css" />
       </head>
       <body suppressHydrationWarning>
-        <GlobalHeader />
-        <div className="page-content">{children}</div>
+        <SiteChrome>{children}</SiteChrome>
 
         <Script src="/assets/js/vendor.js" strategy="beforeInteractive" />
         <Script src="/assets/js/main.js" strategy="afterInteractive" />

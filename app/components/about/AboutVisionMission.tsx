@@ -1,17 +1,19 @@
-const items = [
-  {
-    id: "vision",
-    label: "Our Vision",
-    text: "To empower businesses by reshaping the future, refining excellence, and reimagining possibilities through accountable and innovative strategies that drive sustainable growth and transformation.",
-  },
-  {
-    id: "mission",
-    label: "Our Mission",
-    text: "Our mission is to provide businesses with actionable insights and transformative solutions by reinforcing accountability, driving continuous improvement, and fostering innovative strategies that unlock growth and reimagine new possibilities for success.",
-  },
-] as const;
+import type { AboutContent } from "@/lib/content/types";
 
-export default function AboutVisionMission() {
+type AboutVisionMissionProps = {
+  vision: AboutContent["vision"];
+  mission: AboutContent["mission"];
+};
+
+export default function AboutVisionMission({
+  vision,
+  mission,
+}: AboutVisionMissionProps) {
+  const items = [
+    { id: "vision", label: vision.title, text: vision.text },
+    { id: "mission", label: mission.title, text: mission.text },
+  ] as const;
+
   return (
     <section
       className="about-vm section-padding"

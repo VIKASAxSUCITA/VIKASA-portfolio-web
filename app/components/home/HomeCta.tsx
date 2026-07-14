@@ -1,4 +1,10 @@
-export default function HomeCta() {
+import type { HomeContent } from "@/lib/content/types";
+
+type HomeCtaProps = {
+  content: HomeContent["cta"];
+};
+
+export default function HomeCta({ content }: HomeCtaProps) {
   return (
     <div className="text-banner mt-100">
       <div className="container-fluid">
@@ -28,7 +34,7 @@ export default function HomeCta() {
                   </clipPath>
                 </defs>
               </svg>
-              <span>Recurring Earnings</span>
+              <span>{content.badge}</span>
               <svg
                 className="icon icon-14"
                 xmlns="http://www.w3.org/2000/svg"
@@ -51,12 +57,10 @@ export default function HomeCta() {
               </svg>
             </div>
             <h2 className="heading text-80" data-aos="fade-up">
-              Call-to-action: Book Strategy Call
+              {content.title}
             </h2>
             <p className="text text-24" data-aos="fade-up">
-              You've done the hard part—creating a great product, building your
-              brand, and winning customers. Now, we make it effortless to keep
-              them coming back again and again.
+              {content.text}
             </p>
             <div className="buttons" data-aos="fade-up">
               <a
@@ -64,7 +68,7 @@ export default function HomeCta() {
                 className="button button--secondary"
                 aria-label="See More Services"
               >
-                CONTACT US
+                {content.buttonLabel}
                 <span className="svg-wrapper">
                   <svg
                     className="icon-20"

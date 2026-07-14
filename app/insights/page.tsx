@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import InsightsBody from "../components/insights";
+import { loadPageContent } from "@/lib/content/firestore";
 
 export const metadata: Metadata = {
   title: "Insights",
@@ -7,6 +8,9 @@ export const metadata: Metadata = {
     "Latest insights and articles from VIKASA — creative business consulting.",
 };
 
-export default function Page() {
-  return <InsightsBody />;
+export const dynamic = "force-dynamic";
+
+export default async function Page() {
+  const content = await loadPageContent("insights");
+  return <InsightsBody content={content} />;
 }

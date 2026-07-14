@@ -1,39 +1,10 @@
-const SERVICES = [
-  {
-    title: "Investment",
-    description:
-      "Support investment decisions with clear valuation and structured deal readiness.",
-    items: ["Valuation Service", "Investment Landing Service"],
-    delay: null,
-    iconKey: 0,
-  },
-  {
-    title: "Business Enhancement",
-    description:
-      "Strengthen strategy, models, and investor materials that drive growth.",
-    items: [
-      "Market Intelligence & Advisory",
-      "Business Model",
-      "Financial Model",
-      "Business Plan",
-      "Pitch Deck",
-    ],
-    delay: 200,
-    iconKey: 1,
-  },
-  {
-    title: "Business Academy",
-    description:
-      "Build leadership capability and enterprise skills through practical learning.",
-    items: [
-      "Strategic Growth & Performance for Owner & Top-Management",
-      "Corporate Training Development",
-      "Customized Course for Enterprise",
-    ],
-    delay: 300,
-    iconKey: 2,
-  },
-] as const;
+import type { HomeContent } from "@/lib/content/types";
+
+const SERVICE_DELAYS = [null, 200, 300] as const;
+
+type HomeServicesProps = {
+  content: HomeContent["services"];
+};
 
 function PlusIcon() {
   return (
@@ -176,25 +147,25 @@ function ServiceIcon({ index }: { index: number }) {
   }
 }
 
-export default function HomeServices() {
+export default function HomeServices({ content }: HomeServicesProps) {
   return (
     <div className="multicolumn multicolumn-page section-padding">
       <div className="container">
         <div className="multicolumn-header section-headings">
           <h2 id="services" className="heading text-50" data-aos="fade-up">
-            SERVICES
+            {content.heading}
           </h2>
         </div>
         <div className="multicolumn-inner section-content">
           <div className="row product-grid">
-            {SERVICES.map((service, index) => (
+            {content.cards.map((service, index) => {
+              const delay = SERVICE_DELAYS[index] ?? null;
+              return (
               <div
                 key={service.title}
                 className="col-xl-4 col-md-6 col-12"
                 data-aos="fade-up"
-                {...(service.delay
-                  ? { "data-aos-delay": String(service.delay) }
-                  : {})}
+                {...(delay ? { "data-aos-delay": String(delay) } : {})}
               >
                 <a
                   className="multicolumn-card"
@@ -216,7 +187,8 @@ export default function HomeServices() {
                   </ul>
                 </a>
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       </div>

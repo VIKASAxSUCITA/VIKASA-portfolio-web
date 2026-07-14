@@ -1,43 +1,11 @@
-const POSTS = [
-  {
-    id: "1",
-    image: "/assets/img/blog/1.jpg",
-    title: "Empowering entrepreneu fueling growth knowledge",
-    href: "/blog-details",
-  },
-  {
-    id: "2",
-    image: "/assets/img/blog/2.jpg",
-    title: "Empowering entrepreneu fueling growth knowledge",
-    href: "/blog-details",
-  },
-  {
-    id: "3",
-    image: "/assets/img/blog/3.jpg",
-    title: "Empowering entrepreneu fueling growth knowledge",
-    href: "/blog-details",
-  },
-  {
-    id: "4",
-    image: "/assets/img/blog/1.jpg",
-    title: "Empowering entrepreneu fueling growth knowledge",
-    href: "/blog-details",
-  },
-  {
-    id: "5",
-    image: "/assets/img/blog/2.jpg",
-    title: "Empowering entrepreneu fueling growth knowledge",
-    href: "/blog-details",
-  },
-  {
-    id: "6",
-    image: "/assets/img/blog/3.jpg",
-    title: "Empowering entrepreneu fueling growth knowledge",
-    href: "/blog-details",
-  },
-] as const;
+import type { InsightsContent } from "@/lib/content/types";
 
-export default function InsightsList() {
+type InsightsListProps = {
+  heading: InsightsContent["heading"];
+  posts: InsightsContent["posts"];
+};
+
+export default function InsightsList({ heading, posts }: InsightsListProps) {
   return (
     <div className="featured-blog blog-style-3 section-padding">
       <div className="container">
@@ -47,12 +15,12 @@ export default function InsightsList() {
             data-aos="fade-up"
             data-aos-delay="50"
           >
-            Latest Insights From Us
+            {heading}
           </h2>
         </div>
         <div className="section-content">
           <div className="row product-grid justify-content-center">
-            {POSTS.map((post, index) => (
+            {posts.map((post, index) => (
               <div
                 key={post.id}
                 className="col-12 col-md-6 col-lg-4"
@@ -72,7 +40,7 @@ export default function InsightsList() {
                     </div>
                   </div>
                   <h2 className="card-blog-heading heading text-22">
-                    <a href={post.href} className="heading text-22">
+                    <a href="/blog-details" className="heading text-22">
                       {post.title}
                     </a>
                   </h2>

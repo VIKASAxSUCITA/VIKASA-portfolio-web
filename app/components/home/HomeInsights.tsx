@@ -1,4 +1,10 @@
-export default function HomeInsights() {
+import type { HomeContent } from "@/lib/content/types";
+
+type HomeInsightsProps = {
+  content: HomeContent["insights"];
+};
+
+export default function HomeInsights({ content }: HomeInsightsProps) {
   return (
     <div className="featured-blog blog-style-3 section-padding">
       <div className="container">
@@ -9,81 +15,38 @@ export default function HomeInsights() {
             data-aos="fade-up"
             data-aos-delay="50"
           >
-            Latest Insights From Us
+            {content.heading}
           </h2>
         </div>
         <div className="section-content">
           <div className="row product-grid justify-content-center">
-            <div className="col-12 col-md-6 col-lg-4" data-aos="fade-up">
-              <div className="card-blog-list" data-aos="fade-up">
-                <div className="card-blog-list-media radius18">
-                  <div className="media">
-                    <img
-                      src="/assets/img/blog/1.jpg"
-                      alt="blog image"
-                      width={1000}
-                      height={707}
-                      loading="lazy"
-                    />
+            {content.posts.map((post, index) => (
+              <div
+                key={`${post.title}-${index}`}
+                className="col-12 col-md-6 col-lg-4"
+                data-aos="fade-up"
+                {...(index > 0 ? { "data-aos-delay": String(index * 100) } : {})}
+              >
+                <div className="card-blog-list" data-aos="fade-up">
+                  <div className="card-blog-list-media radius18">
+                    <div className="media">
+                      <img
+                        src={post.image}
+                        alt="blog image"
+                        width={1000}
+                        height={707}
+                        loading="lazy"
+                      />
+                    </div>
                   </div>
+                  <h2 className="card-blog-heading heading text-22">
+                    <a href="/blog-details" className="heading text-22">
+                      {post.title}
+                    </a>
+                  </h2>
                 </div>
-                <h2 className="card-blog-heading heading text-22">
-                  <a href="/blog-details" className="heading text-22">
-                    Empowering entrepreneu fueling growth knowledge
-                  </a>
-                </h2>
               </div>
-            </div>
-            <div
-              className="col-12 col-md-6 col-lg-4"
-              data-aos="fade-up"
-              data-aos-delay="100"
-            >
-              <div className="card-blog-list" data-aos="fade-up">
-                <div className="card-blog-list-media radius18">
-                  <div className="media">
-                    <img
-                      src="/assets/img/blog/2.jpg"
-                      alt="blog image"
-                      width={1000}
-                      height={707}
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-
-                <h2 className="card-blog-heading heading text-22">
-                  <a href="/blog-details" className="heading text-22">
-                    Empowering entrepreneu fueling growth knowledge
-                  </a>
-                </h2>
-              </div>
-            </div>
-            <div
-              className="col-12 col-md-6 col-lg-4"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <div className="card-blog-list" data-aos="fade-up">
-                <div className="card-blog-list-media radius18">
-                  <div className="media">
-                    <img
-                      src="/assets/img/blog/3.jpg"
-                      alt="blog image"
-                      width={1000}
-                      height={707}
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-
-                <h2 className="card-blog-heading heading text-22">
-                  <a href="/blog-details" className="heading text-22">
-                    Empowering entrepreneu fueling growth knowledge
-                  </a>
-                </h2>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div

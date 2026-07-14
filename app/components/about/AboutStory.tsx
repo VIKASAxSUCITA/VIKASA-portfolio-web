@@ -1,16 +1,21 @@
-export default function AboutStory() {
+import type { AboutContent } from "@/lib/content/types";
+
+type AboutStoryProps = {
+  content: AboutContent["story"];
+};
+
+export default function AboutStory({ content }: AboutStoryProps) {
   return (
     <section className="mt-100" aria-labelledby="about-story-heading">
       <div className="container">
         <div className="about-story-inner text-center">
-
           <h2
             id="about-story-heading"
             className="heading text-50 about-story-title"
             data-aos="fade-up"
             data-aos-delay="50"
           >
-            Why Vikasa Exists
+            {content.title}
           </h2>
 
           <p
@@ -18,11 +23,7 @@ export default function AboutStory() {
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            Vikasa was founded to help businesses overcome challenges, embrace
-            innovation, and achieve sustainable growth. We believe that
-            accountability, continuous improvement, and strategic thinking
-            enable organizations to transform today while preparing for
-            tomorrow.
+            {content.text}
           </p>
         </div>
       </div>

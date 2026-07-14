@@ -2,6 +2,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.pnpm-store/
 
 # next.js
 /.next/
@@ -20,6 +21,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # env files
+.env
 .env*.local
 
 # vercel
