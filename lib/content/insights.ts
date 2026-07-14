@@ -22,6 +22,10 @@ export function createEmptyInsight(): InsightPost {
     id: `new_insight_${stamp}`,
     title: "New Insight",
     image: "/assets/img/blog/1.jpg",
+    category: "Insight",
+    author: "VIKASA",
+    quote: "",
+    sectionTitle: "",
     paragraphs: ["", "", "", ""] as InsightPost["paragraphs"],
     pairedImages: [...defaultInsightPairedImages] as InsightPost["pairedImages"],
     createdAt: new Date().toISOString(),
@@ -47,9 +51,12 @@ export function normalizeInsightPost(
     id: post.id,
     title: post.title ?? "New Insight",
     image: post.image ?? "/assets/img/blog/1.jpg",
+    category: post.category?.trim() || "Insight",
+    author: post.author?.trim() || "VIKASA",
+    quote: post.quote ?? "",
+    sectionTitle: post.sectionTitle ?? "",
     paragraphs,
     pairedImages,
-    // Missing dates sort as oldest so newly created posts stay on top.
     createdAt: post.createdAt ?? "1970-01-01T00:00:00.000Z",
   };
 }
@@ -91,4 +98,22 @@ export function findInsightById(
   id: string
 ): InsightPost | undefined {
   return posts.find((post) => post.id === id);
+}
+
+export function formatInsightDate(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime()) || date.getFullYear() < 1971) {
+    return "";
+  }
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+export function insightExcerpt(post: InsightPost, max = 140): string {
+  const text = post.paragraphs[0]?.trim() || "";
+  if (text.length <= max) return text;
+  return `${text.slice(0, max).trim()}…`;
 }

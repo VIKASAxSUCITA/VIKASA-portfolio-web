@@ -80,6 +80,10 @@ export type InsightPost = {
   id: string;
   title: string;
   image: string;
+  category: string;
+  author: string;
+  quote: string;
+  sectionTitle: string;
   paragraphs: [string, string, string, string];
   pairedImages: [string, string];
   createdAt: string;

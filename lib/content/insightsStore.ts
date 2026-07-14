@@ -60,6 +60,10 @@ function insightDocPayload(post: InsightPost) {
   return {
     title: post.title,
     image: post.image,
+    category: post.category,
+    author: post.author,
+    quote: post.quote,
+    sectionTitle: post.sectionTitle,
     paragraphs: post.paragraphs,
     pairedImages: post.pairedImages,
     createdAt: post.createdAt,

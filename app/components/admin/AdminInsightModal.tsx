@@ -94,6 +94,44 @@ export default function AdminInsightModal({
             />
           </div>
 
+          <div className="admin-insight-modal-field">
+            <span className="text text-14 admin-insight-modal-label">
+              Category
+            </span>
+            <EditableText
+              className="text text-16"
+              value={post.category}
+              onChange={(category) =>
+                onChange((prev) => ({ ...prev, category }))
+              }
+              label="Category"
+            />
+          </div>
+
+          <div className="admin-insight-modal-field">
+            <span className="text text-14 admin-insight-modal-label">Author</span>
+            <EditableText
+              className="text text-16"
+              value={post.author}
+              onChange={(author) => onChange((prev) => ({ ...prev, author }))}
+              label="Author"
+            />
+          </div>
+
+          <div className="admin-insight-modal-field">
+            <span className="text text-14 admin-insight-modal-label">
+              Section title (optional)
+            </span>
+            <EditableText
+              className="heading text-22"
+              value={post.sectionTitle}
+              onChange={(sectionTitle) =>
+                onChange((prev) => ({ ...prev, sectionTitle }))
+              }
+              label="Section title"
+            />
+          </div>
+
           {post.paragraphs.map((paragraph, index) => (
             <div key={index} className="admin-insight-modal-field">
               <span className="text text-14 admin-insight-modal-label">
@@ -116,6 +154,19 @@ export default function AdminInsightModal({
               />
             </div>
           ))}
+
+          <div className="admin-insight-modal-field">
+            <span className="text text-14 admin-insight-modal-label">
+              Pull quote (optional)
+            </span>
+            <EditableText
+              multiline
+              className="text text-18"
+              value={post.quote}
+              onChange={(quote) => onChange((prev) => ({ ...prev, quote }))}
+              label="Quote"
+            />
+          </div>
 
           <div className="admin-insight-modal-field">
             <span className="text text-14 admin-insight-modal-label">

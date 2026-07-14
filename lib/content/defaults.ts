@@ -28,6 +28,11 @@ function insightDefaults(
     id,
     title,
     image,
+    category: "Insight",
+    author: "VIKASA",
+    quote:
+      "Accountability and continuous improvement unlock growth that lasts.",
+    sectionTitle: "Creative approach to every project",
     paragraphs: [...defaultInsightParagraphs] as InsightPost["paragraphs"],
     pairedImages: [...defaultInsightPairedImages] as InsightPost["pairedImages"],
     createdAt,
