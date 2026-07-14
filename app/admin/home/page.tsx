@@ -5,6 +5,10 @@ import AdminShell from "@/app/components/admin/AdminShell";
 import AdminSitePreview from "@/app/components/admin/AdminSitePreview";
 import EditableImage from "@/app/components/admin/EditableImage";
 import EditableText from "@/app/components/admin/EditableText";
+import {
+  EmailIcon,
+  WhatsAppIcon,
+} from "@/app/components/contact/ContactForm";
 import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
 
 export default function AdminHomeEditorPage() {
@@ -392,6 +396,176 @@ export default function AdminHomeEditorPage() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contact */}
+            <div className="section-contact-form section-padding">
+              <div className="container">
+                <div id="contact" className="contact-box radius18">
+                  <div className="row product-grid justify-content-between">
+                    <div className="col-12 col-lg-6 col-contact-content">
+                      <div className="section-headings">
+                        <div className="subheading text-20 subheading-bg">
+                          <EditableText
+                            value={content.contact.badge}
+                            onChange={(badge) =>
+                              update((prev) => ({
+                                ...prev,
+                                contact: { ...prev.contact, badge },
+                              }))
+                            }
+                            label="Contact badge"
+                          />
+                        </div>
+                        <EditableText
+                          className="heading text-50"
+                          value={content.contact.title}
+                          onChange={(title) =>
+                            update((prev) => ({
+                              ...prev,
+                              contact: { ...prev.contact, title },
+                            }))
+                          }
+                          label="Contact title"
+                        />
+                        <EditableText
+                          multiline
+                          className="text text-18"
+                          value={content.contact.text}
+                          onChange={(text) =>
+                            update((prev) => ({
+                              ...prev,
+                              contact: { ...prev.contact, text },
+                            }))
+                          }
+                          label="Contact description"
+                        />
+
+                        <div className="card-icon-text card-icon-text-horizontal contact-channel">
+                          <div className="svg-wrapper">
+                            <EmailIcon />
+                          </div>
+                          <div className="content">
+                            <h2 className="heading text-24 fw-700">Email</h2>
+                            <EditableText
+                              className="text text-16"
+                              value={content.contact.email}
+                              onChange={(email) =>
+                                update((prev) => ({
+                                  ...prev,
+                                  contact: { ...prev.contact, email },
+                                }))
+                              }
+                              label="Email address"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="card-icon-text card-icon-text-horizontal contact-channel">
+                          <div className="svg-wrapper">
+                            <WhatsAppIcon />
+                          </div>
+                          <div className="content">
+                            <h2 className="heading text-24 fw-700">WhatsApp</h2>
+                            <EditableText
+                              className="text text-16"
+                              value={content.contact.whatsappLabel}
+                              onChange={(whatsappLabel) =>
+                                update((prev) => ({
+                                  ...prev,
+                                  contact: { ...prev.contact, whatsappLabel },
+                                }))
+                              }
+                              label="WhatsApp label"
+                            />
+                            <EditableText
+                              className="text text-14"
+                              value={content.contact.whatsappNumber}
+                              onChange={(whatsappNumber) =>
+                                update((prev) => ({
+                                  ...prev,
+                                  contact: { ...prev.contact, whatsappNumber },
+                                }))
+                              }
+                              label="WhatsApp number (digits only)"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-12 col-lg-6 col-contact-form">
+                      <div className="contact-form-wrap radius18">
+                        <div className="contact-form-headings">
+                          <EditableText
+                            className="heading text-32"
+                            value={content.contact.formTitle}
+                            onChange={(formTitle) =>
+                              update((prev) => ({
+                                ...prev,
+                                contact: { ...prev.contact, formTitle },
+                              }))
+                            }
+                            label="Form title"
+                          />
+                          <EditableText
+                            multiline
+                            className="text text-16"
+                            value={content.contact.formText}
+                            onChange={(formText) =>
+                              update((prev) => ({
+                                ...prev,
+                                contact: { ...prev.contact, formText },
+                              }))
+                            }
+                            label="Form description"
+                          />
+                        </div>
+                        <div className="form contact-form">
+                          <div className="field">
+                            <input
+                              className="text text-16"
+                              type="text"
+                              placeholder="Your Name *"
+                              disabled
+                            />
+                          </div>
+                          <div className="field">
+                            <input
+                              className="text text-16"
+                              type="email"
+                              placeholder="Email *"
+                              disabled
+                            />
+                          </div>
+                          <div className="field">
+                            <textarea
+                              className="text text-16"
+                              rows={4}
+                              placeholder="Tell us about your project *"
+                              disabled
+                            />
+                          </div>
+                          <div className="form-button contact-form-actions">
+                            <span className="button button--secondary">
+                              <EditableText
+                                value={content.contact.buttonLabel}
+                                onChange={(buttonLabel) =>
+                                  update((prev) => ({
+                                    ...prev,
+                                    contact: { ...prev.contact, buttonLabel },
+                                  }))
+                                }
+                                label="Form button"
+                              />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

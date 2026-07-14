@@ -1,23 +1,9 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import type { HomeContent } from "@/lib/content/types";
 
-/** Update these with VIKASA’s real contact details. */
-const CONTACT = {
-  email: "hello@vikasa.com",
-  whatsappNumber: "855000000000",
-  whatsappDisplay: "Chat on WhatsApp",
-} as const;
-
-const WHATSAPP_HREF = `https://wa.me/${CONTACT.whatsappNumber}?text=${encodeURIComponent(
-  "Hello VIKASA, I would like to request a proposal."
-)}`;
-
-const MAILTO_HREF = `mailto:${CONTACT.email}?subject=${encodeURIComponent(
-  "VIKASA — Request Proposal"
-)}`;
-
-function EmailIcon() {
+export function EmailIcon() {
   return (
     <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
       <rect width={80} height={80} rx={10} fill="var(--vikasa-brown, #5e3123)" />
@@ -29,7 +15,7 @@ function EmailIcon() {
   );
 }
 
-function WhatsAppIcon() {
+export function WhatsAppIcon() {
   return (
     <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
       <rect width={80} height={80} rx={10} fill="var(--vikasa-brown, #5e3123)" />
@@ -41,8 +27,19 @@ function WhatsAppIcon() {
   );
 }
 
-export default function ContactForm() {
+type ContactFormProps = {
+  content: HomeContent["contact"];
+};
+
+export default function ContactForm({ content }: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "sent">("idle");
+
+  const whatsappHref = `https://wa.me/${content.whatsappNumber}?text=${encodeURIComponent(
+    "Hello VIKASA, I would like to request a proposal."
+  )}`;
+  const mailtoHref = `mailto:${content.email}?subject=${encodeURIComponent(
+    "VIKASA — Request Proposal"
+  )}`;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,7 +51,7 @@ export default function ContactForm() {
 
     const body = [`Name: ${name}`, `Email: ${email}`, "", message].join("\n");
 
-    window.location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent(
+    window.location.href = `mailto:${content.email}?subject=${encodeURIComponent(
       "VIKASA — Request Proposal"
     )}&body=${encodeURIComponent(body)}`;
 
@@ -73,33 +70,32 @@ export default function ContactForm() {
                   className="subheading text-20 subheading-bg"
                   data-aos="fade-up"
                 >
-                  <span>Get Proposal</span>
+                  <span>{content.badge}</span>
                 </div>
                 <h2 className="heading text-50" data-aos="fade-up">
-                  Contact / Get Proposal
+                  {content.title}
                 </h2>
                 <p className="text text-18" data-aos="fade-up">
-                  Tell us about your business goals. Request a proposal — reach us
-                  by form, WhatsApp, or email.
+                  {content.text}
                 </p>
 
                 <a
-                  href={MAILTO_HREF}
+                  href={mailtoHref}
                   className="card-icon-text card-icon-text-horizontal contact-channel"
                   data-aos="fade-up"
-                  aria-label={`Email ${CONTACT.email}`}
+                  aria-label={`Email ${content.email}`}
                 >
                   <div className="svg-wrapper">
                     <EmailIcon />
                   </div>
                   <div className="content">
                     <h2 className="heading text-24 fw-700">Email</h2>
-                    <p className="text text-16">{CONTACT.email}</p>
+                    <p className="text text-16">{content.email}</p>
                   </div>
                 </a>
 
                 <a
-                  href={WHATSAPP_HREF}
+                  href={whatsappHref}
                   className="card-icon-text card-icon-text-horizontal contact-channel"
                   data-aos="fade-up"
                   target="_blank"
@@ -111,7 +107,7 @@ export default function ContactForm() {
                   </div>
                   <div className="content">
                     <h2 className="heading text-24 fw-700">WhatsApp</h2>
-                    <p className="text text-16">{CONTACT.whatsappDisplay}</p>
+                    <p className="text text-16">{content.whatsappLabel}</p>
                   </div>
                 </a>
               </div>
@@ -121,11 +117,10 @@ export default function ContactForm() {
               <div className="contact-form-wrap radius18">
                 <div className="contact-form-headings">
                   <h2 className="heading text-32" data-aos="fade-up">
-                    Request Proposal
+                    {content.formTitle}
                   </h2>
                   <p className="text text-16" data-aos="fade-up">
-                    Share a few details and we will follow up with a tailored
-                    proposal.
+                    {content.formText}
                   </p>
                 </div>
                 <form
@@ -177,9 +172,9 @@ export default function ContactForm() {
                     <button
                       type="submit"
                       className="button button--secondary"
-                      aria-label="Request Proposal"
+                      aria-label={content.buttonLabel}
                     >
-                      Request Proposal
+                      {content.buttonLabel}
                       <span className="svg-wrapper">
                         <svg
                           className="icon-20"

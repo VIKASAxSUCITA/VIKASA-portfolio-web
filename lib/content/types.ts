@@ -40,6 +40,17 @@ export type HomeContent = {
     heading: string;
     posts: Array<{ title: string; image: string }>;
   };
+  contact: {
+    badge: string;
+    title: string;
+    text: string;
+    email: string;
+    whatsappNumber: string;
+    whatsappLabel: string;
+    formTitle: string;
+    formText: string;
+    buttonLabel: string;
+  };
 };
 
 export type AboutContent = {

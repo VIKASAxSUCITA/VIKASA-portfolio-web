@@ -20,7 +20,7 @@ export default function HomeBody({ content }: HomeBodyProps) {
         <HomeCta content={content.cta} />
         <HomeServices content={content.services} />
         <HomeInsights content={content.insights} />
-        <HomeContact />
+        <HomeContact content={content.contact} />
       </main>
     </>
   );

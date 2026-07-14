@@ -80,6 +80,18 @@ export const defaultHomeContent: HomeContent = {
       },
     ],
   },
+  contact: {
+    badge: "Get Proposal",
+    title: "Contact / Get Proposal",
+    text: "Tell us about your business goals. Request a proposal — reach us by form, WhatsApp, or email.",
+    email: "hello@vikasa.com",
+    whatsappNumber: "855000000000",
+    whatsappLabel: "Chat on WhatsApp",
+    formTitle: "Request Proposal",
+    formText:
+      "Share a few details and we will follow up with a tailored proposal.",
+    buttonLabel: "Request Proposal",
+  },
 };
 
 export const defaultAboutContent: AboutContent = {

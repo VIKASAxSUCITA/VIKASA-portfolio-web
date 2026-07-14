@@ -7,7 +7,21 @@ import {
   defaultHomeContent,
   defaultInsightsContent,
 } from "./defaults";
-import type { PageContentMap, PageId } from "./types";
+import type { HomeContent, PageContentMap, PageId } from "./types";
+
+function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
+  const defaults = defaultHomeContent;
+  return {
+    ...defaults,
+    ...saved,
+    hero: { ...defaults.hero, ...saved.hero },
+    about: { ...defaults.about, ...saved.about },
+    cta: { ...defaults.cta, ...saved.cta },
+    services: { ...defaults.services, ...saved.services },
+    insights: { ...defaults.insights, ...saved.insights },
+    contact: { ...defaults.contact, ...saved.contact },
+  };
+}
 
 const defaults: PageContentMap = {
   home: defaultHomeContent,
@@ -29,7 +43,11 @@ export async function loadPageContent<T extends PageId>(
     return getDefaultContent(pageId);
   }
   const data = snap.data()?.content as PageContentMap[T] | undefined;
-  return data ?? getDefaultContent(pageId);
+  if (!data) return getDefaultContent(pageId);
+  if (pageId === "home") {
+    return mergeHomeContent(data as Partial<HomeContent>) as PageContentMap[T];
+  }
+  return data;
 }
 
 export async function savePageContent<T extends PageId>(
