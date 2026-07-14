@@ -1,16 +1,15 @@
-import type { Metadata } from "next";
-import BlogDetailsContent from "../components/blog-details";
+import { redirect } from "next/navigation";
 import { loadPageContent } from "@/lib/content/firestore";
-
-export const metadata: Metadata = {
-  title: "Insight Details",
-  description:
-    "Read the latest insights from VIKASA — creative business consulting.",
-};
+import { sortInsightsByLatest } from "@/lib/content/insights";
 
 export const dynamic = "force-dynamic";
 
+/** Old blog-details URL → latest insight detail. */
 export default async function Page() {
-  const content = await loadPageContent("blog-details");
-  return <BlogDetailsContent content={content} />;
+  const insights = await loadPageContent("insights");
+  const latest = sortInsightsByLatest(insights.posts)[0];
+  if (latest) {
+    redirect(`/insights/${latest.id}`);
+  }
+  redirect("/insights");
 }

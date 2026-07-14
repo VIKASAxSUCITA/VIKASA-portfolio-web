@@ -1,13 +1,13 @@
-import type { BlogDetailsContent } from "@/lib/content/types";
+import type { InsightPost } from "@/lib/content/types";
 
-type BlogDetailsBodyProps = {
-  content: BlogDetailsContent;
+type InsightDetailsBodyProps = {
+  post: InsightPost;
 };
 
-export default function BlogDetailsBody({ content }: BlogDetailsBodyProps) {
+export default function InsightDetailsBody({ post }: InsightDetailsBodyProps) {
   return (
     <main>
-      <section className="page-banner overlay" aria-label="Blog Details">
+      <section className="page-banner overlay" aria-label="Insight details">
         <picture className="media media-bg">
           <img
             src="/assets/img/banner/page-banner.jpg"
@@ -19,7 +19,7 @@ export default function BlogDetailsBody({ content }: BlogDetailsBodyProps) {
         <div className="page-banner-content">
           <div className="container text-center">
             <h1 className="heading text-80 fw-700" data-aos="fade-up">
-              {content.bannerTitle}
+              Insight
             </h1>
           </div>
         </div>
@@ -34,8 +34,8 @@ export default function BlogDetailsBody({ content }: BlogDetailsBodyProps) {
                   <div className="card-blog-list-media radius18">
                     <div className="media">
                       <img
-                        src={content.heroImage}
-                        alt="blog image"
+                        src={post.image}
+                        alt=""
                         width={1000}
                         height={707}
                         loading="lazy"
@@ -45,20 +45,20 @@ export default function BlogDetailsBody({ content }: BlogDetailsBodyProps) {
 
                   <div className="card-blog-content">
                     <h2 className="card-blog-heading heading text-50">
-                      {content.title}
+                      {post.title}
                     </h2>
 
                     <div className="blog-description">
-                      {content.paragraphs.slice(0, 2).map((paragraph, index) => (
+                      {post.paragraphs.slice(0, 2).map((paragraph, index) => (
                         <p key={index}>{paragraph}</p>
                       ))}
 
                       <div className="blog-paired-image">
-                        {content.pairedImages.map((image, index) => (
+                        {post.pairedImages.map((image, index) => (
                           <img
                             key={index}
                             src={image}
-                            alt="blog image"
+                            alt=""
                             width={768}
                             height={700}
                             loading="lazy"
@@ -66,7 +66,7 @@ export default function BlogDetailsBody({ content }: BlogDetailsBodyProps) {
                         ))}
                       </div>
 
-                      {content.paragraphs.slice(2).map((paragraph, index) => (
+                      {post.paragraphs.slice(2).map((paragraph, index) => (
                         <p key={index + 2}>{paragraph}</p>
                       ))}
                     </div>

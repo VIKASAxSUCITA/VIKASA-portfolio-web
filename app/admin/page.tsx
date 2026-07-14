@@ -3,13 +3,16 @@ import AdminGuard from "@/app/components/admin/AdminGuard";
 import AdminShell from "@/app/components/admin/AdminShell";
 
 const pages = [
-  { href: "/admin/home", label: "Home", status: "Edit hero, about, services, insights" },
-  { href: "/admin/about", label: "About", status: "Edit story, vision, mission" },
-  { href: "/admin/insights", label: "Insights", status: "Edit listing cards" },
   {
-    href: "/admin/blog-details",
-    label: "Blog details",
-    status: "Edit article content",
+    href: "/admin/home",
+    label: "Home",
+    status: "Edit hero, about, services, contact",
+  },
+  { href: "/admin/about", label: "About", status: "Edit story, vision, mission" },
+  {
+    href: "/admin/insights",
+    label: "Insights",
+    status: "Add and edit full insight articles",
   },
   {
     href: "/admin/footer",
@@ -39,7 +42,7 @@ export default function AdminHomePage() {
                   </div>
                   <Link
                     href={page.href}
-                    className="button button--primary button--slim"
+                    className="button button--primary button--slim justify-center items-center"
                   >
                     Open editor
                   </Link>

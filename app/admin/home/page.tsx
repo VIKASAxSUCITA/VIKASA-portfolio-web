@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import AdminGuard from "@/app/components/admin/AdminGuard";
 import AdminShell from "@/app/components/admin/AdminShell";
 import AdminSitePreview from "@/app/components/admin/AdminSitePreview";
@@ -9,7 +10,10 @@ import {
   EmailIcon,
   WhatsAppIcon,
 } from "@/app/components/contact/ContactForm";
+import { usePageEditor } from "@/app/components/admin/usePageEditor";
 import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
+import { getLatestInsights } from "@/lib/content/insights";
+import type { InsightsContent } from "@/lib/content/types";
 
 export default function AdminHomeEditorPage() {
   const {
@@ -24,6 +28,17 @@ export default function AdminHomeEditorPage() {
     footerUpdate,
   } = usePageWithFooterEditor("home");
 
+  const insightsEditor = usePageEditor("insights");
+  const [insightsPreview, setInsightsPreview] = useState<InsightsContent | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (!insightsEditor.loading) {
+      setInsightsPreview(insightsEditor.content);
+    }
+  }, [insightsEditor.loading, insightsEditor.content]);
+
   const shellProps = {
     pageTitle: "Home",
     onSave: save,
@@ -32,7 +47,7 @@ export default function AdminHomeEditorPage() {
     message,
   };
 
-  if (loading) {
+  if (loading || insightsEditor.loading) {
     return (
       <AdminGuard>
         <AdminShell {...shellProps}>
@@ -41,6 +56,10 @@ export default function AdminHomeEditorPage() {
       </AdminGuard>
     );
   }
+
+  const latestInsights = getLatestInsights(insightsPreview?.posts ?? [], 3);
+  const insightsHeading =
+    insightsPreview?.heading ?? "Latest Insights From Us";
 
   return (
     <AdminGuard>
@@ -330,68 +349,33 @@ export default function AdminHomeEditorPage() {
               </div>
             </div>
 
-            {/* Insights */}
+            {/* Insights — latest 3 from Insights page (read-only here) */}
             <div className="featured-blog blog-style-3 section-padding">
               <div className="container">
                 <div className="section-headings text-center">
-                  <EditableText
-                    className="heading text-50"
-                    value={content.insights.heading}
-                    onChange={(heading) =>
-                      update((prev) => ({
-                        ...prev,
-                        insights: { ...prev.insights, heading },
-                      }))
-                    }
-                  />
+                  <h2 className="heading text-50">{insightsHeading}</h2>
+                  <p className="text text-14 admin-insights-preview-note">
+                    Showing the latest 3 insights automatically. Manage posts on
+                    the Insights page.
+                  </p>
                 </div>
                 <div className="section-content">
                   <div className="row product-grid justify-content-center">
-                    {content.insights.posts.map((post, index) => (
-                      <div
-                        key={index}
-                        className="col-12 col-md-6 col-lg-4"
-                      >
+                    {latestInsights.map((post) => (
+                      <div key={post.id} className="col-12 col-md-6 col-lg-4">
                         <div className="card-blog-list">
                           <div className="card-blog-list-media radius18">
                             <div className="media">
-                              <EditableImage
+                              <img
                                 src={post.image}
-                                onChange={(image) =>
-                                  update((prev) => {
-                                    const posts = [...prev.insights.posts];
-                                    posts[index] = {
-                                      ...posts[index],
-                                      image,
-                                    };
-                                    return {
-                                      ...prev,
-                                      insights: { ...prev.insights, posts },
-                                    };
-                                  })
-                                }
                                 alt=""
+                                width={1000}
+                                height={707}
                               />
                             </div>
                           </div>
                           <h2 className="card-blog-heading heading text-22">
-                            <EditableText
-                              className="heading text-22"
-                              value={post.title}
-                              onChange={(title) =>
-                                update((prev) => {
-                                  const posts = [...prev.insights.posts];
-                                  posts[index] = {
-                                    ...posts[index],
-                                    title,
-                                  };
-                                  return {
-                                    ...prev,
-                                    insights: { ...prev.insights, posts },
-                                  };
-                                })
-                              }
-                            />
+                            {post.title}
                           </h2>
                         </div>
                       </div>

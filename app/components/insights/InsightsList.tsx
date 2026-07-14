@@ -1,3 +1,4 @@
+import InsightCardLink from "@/app/components/insights/InsightCardLink";
 import type { InsightsContent } from "@/lib/content/types";
 
 type InsightsListProps = {
@@ -7,7 +8,7 @@ type InsightsListProps = {
 
 export default function InsightsList({ heading, posts }: InsightsListProps) {
   return (
-    <div className="featured-blog blog-style-3 section-padding">
+    <div className="insights-tiles-section section-padding">
       <div className="container">
         <div className="section-headings text-center">
           <h2
@@ -18,36 +19,26 @@ export default function InsightsList({ heading, posts }: InsightsListProps) {
             {heading}
           </h2>
         </div>
-        <div className="section-content">
-          <div className="row product-grid justify-content-center">
-            {posts.map((post, index) => (
-              <div
-                key={post.id}
-                className="col-12 col-md-6 col-lg-4"
-                data-aos="fade-up"
-                data-aos-delay={index % 3 === 0 ? undefined : (index % 3) * 100}
-              >
-                <div className="card-blog-list" data-aos="fade-up">
-                  <div className="card-blog-list-media radius18">
-                    <div className="media">
-                      <img
-                        src={post.image}
-                        alt=""
-                        width={1000}
-                        height={707}
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                  <h2 className="card-blog-heading heading text-22">
-                    <a href="/blog-details" className="heading text-22">
-                      {post.title}
-                    </a>
-                  </h2>
-                </div>
-              </div>
-            ))}
-          </div>
+      </div>
+
+      <div className="insights-tiles-band" data-aos="fade-up">
+        <div
+          className="insights-tiles-grid"
+          style={
+            posts.length > 0 && posts.length < 3
+              ? { gridTemplateColumns: `repeat(${posts.length}, minmax(0, 1fr))` }
+              : undefined
+          }
+        >
+          {posts.map((post, index) => (
+            <InsightCardLink
+              key={post.id}
+              href={`/insights/${post.id}`}
+              title={post.title}
+              image={post.image}
+              index={index}
+            />
+          ))}
         </div>
       </div>
     </div>

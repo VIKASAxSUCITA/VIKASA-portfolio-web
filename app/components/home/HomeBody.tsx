@@ -4,14 +4,20 @@ import HomeCta from "./HomeCta";
 import HomeHero from "./HomeHero";
 import HomeInsights from "./HomeInsights";
 import HomeServices from "./HomeServices";
-import type { HomeContent } from "@/lib/content/types";
+import type { HomeContent, InsightPost } from "@/lib/content/types";
 
 type HomeBodyProps = {
   content: HomeContent;
+  insightsHeading: string;
+  latestInsights: InsightPost[];
 };
 
-/** Home page composition — 7 sections as TSX components. */
-export default function HomeBody({ content }: HomeBodyProps) {
+/** Home page composition — sections as TSX components. */
+export default function HomeBody({
+  content,
+  insightsHeading,
+  latestInsights,
+}: HomeBodyProps) {
   return (
     <>
       <main>
@@ -19,7 +25,7 @@ export default function HomeBody({ content }: HomeBodyProps) {
         <HomeAbout content={content.about} />
         <HomeCta content={content.cta} />
         <HomeServices content={content.services} />
-        <HomeInsights content={content.insights} />
+        <HomeInsights heading={insightsHeading} posts={latestInsights} />
         <HomeContact content={content.contact} />
       </main>
     </>

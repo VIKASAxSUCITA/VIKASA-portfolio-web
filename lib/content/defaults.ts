@@ -1,10 +1,38 @@
 import type {
   AboutContent,
-  BlogDetailsContent,
   FooterContent,
   HomeContent,
+  InsightPost,
   InsightsContent,
 } from "./types";
+
+export const defaultInsightParagraphs: InsightPost["paragraphs"] = [
+  "Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore of magna aliqua. Ut enim ad minim veniam, made of owl the quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea dolor commodo consequat. Duis aute irure and dolor in reprehenderit.",
+  "Use both direct conversations and indirect observations to get visibility into employees challenges and concerns. Use every opportunity to make clear to employees that you support and care them. To facilitate regular conversations between managers and employees, provide.",
+  "The third Monday of January is supposed to be the most depressing day of the year. Whether you believe that or not, the long nights, cold weather, and trying to keep to new year resolutions are all probably getting to you a little by now. To make matters worse many will still be recovering from their Christmas spending. So how can you make today",
+  "Vast numbers of employees now work remotely, and it's too late to develop a set of remote-work policies if you didn't already have one. But there are ways to make the remote-work experience productive and engaging for employees",
+];
+
+export const defaultInsightPairedImages: InsightPost["pairedImages"] = [
+  "/assets/img/blog/d1.jpg",
+  "/assets/img/blog/d2.jpg",
+];
+
+function insightDefaults(
+  id: string,
+  title: string,
+  image: string,
+  createdAt: string
+): InsightPost {
+  return {
+    id,
+    title,
+    image,
+    paragraphs: [...defaultInsightParagraphs] as InsightPost["paragraphs"],
+    pairedImages: [...defaultInsightPairedImages] as InsightPost["pairedImages"],
+    createdAt,
+  };
+}
 
 export const defaultHomeContent: HomeContent = {
   hero: {
@@ -63,23 +91,6 @@ export const defaultHomeContent: HomeContent = {
       },
     ],
   },
-  insights: {
-    heading: "Latest Insights From Us",
-    posts: [
-      {
-        title: "Empowering entrepreneu fueling growth knowledge",
-        image: "/assets/img/blog/1.jpg",
-      },
-      {
-        title: "Empowering entrepreneu fueling growth knowledge",
-        image: "/assets/img/blog/2.jpg",
-      },
-      {
-        title: "Empowering entrepreneu fueling growth knowledge",
-        image: "/assets/img/blog/3.jpg",
-      },
-    ],
-  },
   contact: {
     badge: "Get Proposal",
     title: "Contact / Get Proposal",
@@ -129,50 +140,43 @@ export const defaultInsightsContent: InsightsContent = {
   heroTitle: "Insights",
   heading: "Latest Insights From Us",
   posts: [
-    {
-      id: "1",
-      title: "Empowering entrepreneu fueling growth knowledge",
-      image: "/assets/img/blog/1.jpg",
-    },
-    {
-      id: "2",
-      title: "Empowering entrepreneu fueling growth knowledge",
-      image: "/assets/img/blog/2.jpg",
-    },
-    {
-      id: "3",
-      title: "Empowering entrepreneu fueling growth knowledge",
-      image: "/assets/img/blog/3.jpg",
-    },
-    {
-      id: "4",
-      title: "Empowering entrepreneu fueling growth knowledge",
-      image: "/assets/img/blog/1.jpg",
-    },
-    {
-      id: "5",
-      title: "Empowering entrepreneu fueling growth knowledge",
-      image: "/assets/img/blog/2.jpg",
-    },
-    {
-      id: "6",
-      title: "Empowering entrepreneu fueling growth knowledge",
-      image: "/assets/img/blog/3.jpg",
-    },
+    insightDefaults(
+      "insight_1",
+      "Empowering entrepreneu fueling growth knowledge",
+      "/assets/img/blog/1.jpg",
+      "2026-07-14T12:00:06.000Z"
+    ),
+    insightDefaults(
+      "insight_2",
+      "Empowering entrepreneu fueling growth knowledge",
+      "/assets/img/blog/2.jpg",
+      "2026-07-14T12:00:05.000Z"
+    ),
+    insightDefaults(
+      "insight_3",
+      "Empowering entrepreneu fueling growth knowledge",
+      "/assets/img/blog/3.jpg",
+      "2026-07-14T12:00:04.000Z"
+    ),
+    insightDefaults(
+      "insight_4",
+      "Empowering entrepreneu fueling growth knowledge",
+      "/assets/img/blog/1.jpg",
+      "2026-07-14T12:00:03.000Z"
+    ),
+    insightDefaults(
+      "insight_5",
+      "Empowering entrepreneu fueling growth knowledge",
+      "/assets/img/blog/2.jpg",
+      "2026-07-14T12:00:02.000Z"
+    ),
+    insightDefaults(
+      "insight_6",
+      "Empowering entrepreneu fueling growth knowledge",
+      "/assets/img/blog/3.jpg",
+      "2026-07-14T12:00:01.000Z"
+    ),
   ],
-};
-
-export const defaultBlogDetailsContent: BlogDetailsContent = {
-  bannerTitle: "Blog Details",
-  heroImage: "/assets/img/blog/1.jpg",
-  title: "Empowering entrepreneu fueling growth knowledge",
-  paragraphs: [
-    "Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore of magna aliqua. Ut enim ad minim veniam, made of owl the quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea dolor commodo consequat. Duis aute irure and dolor in reprehenderit.",
-    "Use both direct conversations and indirect observations to get visibility into employees challenges and concerns. Use every opportunity to make clear to employees that you support and care them. To facilitate regular conversations between managers and employees, provide.",
-    "The third Monday of January is supposed to be the most depressing day of the year. Whether you believe that or not, the long nights, cold weather, and trying to keep to new year resolutions are all probably getting to you a little by now. To make matters worse many will still be recovering from their Christmas spending. So how can you make today",
-    "Vast numbers of employees now work remotely, and it's too late to develop a set of remote-work policies if you didn't already have one. But there are ways to make the remote-work experience productive and engaging for employees",
-  ],
-  pairedImages: ["/assets/img/blog/d1.jpg", "/assets/img/blog/d2.jpg"],
 };
 
 export const defaultFooterContent: FooterContent = {

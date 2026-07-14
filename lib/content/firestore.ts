@@ -2,11 +2,14 @@ import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { getFirebaseDb } from "@/lib/firebase";
 import {
   defaultAboutContent,
-  defaultBlogDetailsContent,
   defaultFooterContent,
   defaultHomeContent,
   defaultInsightsContent,
 } from "./defaults";
+import {
+  loadInsightsContent,
+  saveInsightsContent,
+} from "./insightsStore";
 import type { HomeContent, PageContentMap, PageId } from "./types";
 
 function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
@@ -18,7 +21,6 @@ function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
     about: { ...defaults.about, ...saved.about },
     cta: { ...defaults.cta, ...saved.cta },
     services: { ...defaults.services, ...saved.services },
-    insights: { ...defaults.insights, ...saved.insights },
     contact: { ...defaults.contact, ...saved.contact },
   };
 }
@@ -27,7 +29,6 @@ const defaults: PageContentMap = {
   home: defaultHomeContent,
   about: defaultAboutContent,
   insights: defaultInsightsContent,
-  "blog-details": defaultBlogDetailsContent,
   footer: defaultFooterContent,
 };
 
@@ -38,6 +39,10 @@ export function getDefaultContent<T extends PageId>(pageId: T): PageContentMap[T
 export async function loadPageContent<T extends PageId>(
   pageId: T
 ): Promise<PageContentMap[T]> {
+  if (pageId === "insights") {
+    return (await loadInsightsContent()) as PageContentMap[T];
+  }
+
   const snap = await getDoc(doc(getFirebaseDb(), "pages", pageId));
   if (!snap.exists()) {
     return getDefaultContent(pageId);
@@ -54,6 +59,11 @@ export async function savePageContent<T extends PageId>(
   pageId: T,
   content: PageContentMap[T]
 ) {
+  if (pageId === "insights") {
+    await saveInsightsContent(content as PageContentMap["insights"]);
+    return;
+  }
+
   await setDoc(
     doc(getFirebaseDb(), "pages", pageId),
     {

@@ -29,6 +29,16 @@ export function usePageWithFooterEditor<T extends PageWithFooterId>(pageId: T) {
     footerEditor.save,
   ]);
 
+  const saveSnapshot = useCallback(
+    async (snapshot: PageContentMap[T]) => {
+      await pageEditor.saveSnapshot(snapshot);
+      if (footerEditor.dirty) {
+        await footerEditor.save();
+      }
+    },
+    [pageEditor.saveSnapshot, footerEditor.dirty, footerEditor.save]
+  );
+
   return {
     content: pageEditor.content as PageContentMap[T],
     update: pageEditor.update,
@@ -39,5 +49,6 @@ export function usePageWithFooterEditor<T extends PageWithFooterId>(pageId: T) {
     dirty,
     message,
     save,
+    saveSnapshot,
   };
 }

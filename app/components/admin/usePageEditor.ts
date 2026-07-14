@@ -55,26 +55,44 @@ export function usePageEditor<T extends PageId>(pageId: T) {
     []
   );
 
-  const save = useCallback(async () => {
-    setSaving(true);
-    setMessage("");
-    try {
-      const resolved = await resolvePendingImages(content);
-      await deleteRemovedBlobs(savedRef.current, resolved);
-      setContent(resolved);
-      await savePageContent(pageId, resolved);
-      savedRef.current = resolved;
-      setDirty(false);
-      setMessage("Saved.");
-    } catch (error) {
-      console.error(error);
-      const text =
-        error instanceof Error ? error.message : "Save failed.";
-      setMessage(text);
-    } finally {
-      setSaving(false);
-    }
-  }, [pageId, content]);
+  const saveSnapshot = useCallback(
+    async (snapshot: PageContentMap[T]) => {
+      setSaving(true);
+      setMessage("");
+      try {
+        const resolved = await resolvePendingImages(snapshot);
+        await deleteRemovedBlobs(savedRef.current, resolved);
+        setContent(resolved);
+        await savePageContent(pageId, resolved);
+        savedRef.current = resolved;
+        setDirty(false);
+        setMessage("Saved.");
+        return resolved;
+      } catch (error) {
+        console.error(error);
+        const text =
+          error instanceof Error ? error.message : "Save failed.";
+        setMessage(text);
+        throw error;
+      } finally {
+        setSaving(false);
+      }
+    },
+    [pageId]
+  );
 
-  return { content, loading, saving, dirty, message, update, save };
+  const save = useCallback(async () => {
+    await saveSnapshot(content);
+  }, [content, saveSnapshot]);
+
+  return {
+    content,
+    loading,
+    saving,
+    dirty,
+    message,
+    update,
+    save,
+    saveSnapshot,
+  };
 }

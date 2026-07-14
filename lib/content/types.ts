@@ -36,10 +36,6 @@ export type HomeContent = {
       items: string[];
     }>;
   };
-  insights: {
-    heading: string;
-    posts: Array<{ title: string; image: string }>;
-  };
   contact: {
     badge: string;
     title: string;
@@ -80,26 +76,26 @@ export type AboutContent = {
   };
 };
 
+export type InsightPost = {
+  id: string;
+  title: string;
+  image: string;
+  paragraphs: [string, string, string, string];
+  pairedImages: [string, string];
+  createdAt: string;
+};
+
 export type InsightsContent = {
   heroTitle: string;
   heading: string;
-  posts: Array<{ id: string; title: string; image: string }>;
+  posts: InsightPost[];
 };
 
-export type BlogDetailsContent = {
-  bannerTitle: string;
-  heroImage: string;
-  title: string;
-  paragraphs: [string, string, string, string];
-  pairedImages: [string, string];
-};
-
-export type PageId = "home" | "about" | "insights" | "blog-details" | "footer";
+export type PageId = "home" | "about" | "insights" | "footer";
 
 export type PageContentMap = {
   home: HomeContent;
   about: AboutContent;
   insights: InsightsContent;
-  "blog-details": BlogDetailsContent;
   footer: FooterContent;
 };
