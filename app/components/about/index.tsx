@@ -1,4 +1,5 @@
 import HomeFooter from "../home/HomeFooter";
+import HomePageStyles from "../home/HomePageStyles";
 import AboutHero from "./AboutHero";
 import AboutWhatWeDo from "./AboutWhatWeDo";
 import AboutStory from "./AboutStory";
@@ -11,20 +12,16 @@ export { default as AboutStory } from "./AboutStory";
 export { default as AboutVisionMission } from "./AboutVisionMission";
 export { default as AboutCoreValues } from "./AboutCoreValues";
 
-type AboutBodyProps = {
-  restHtml: string;
-};
-
-export default function AboutBody({ restHtml }: AboutBodyProps) {
+export default function AboutBody() {
   return (
     <>
+      <HomePageStyles />
       <main>
         <AboutHero />
         <AboutWhatWeDo />
         <AboutStory />
         <AboutVisionMission />
         <AboutCoreValues />
-        <div dangerouslySetInnerHTML={{ __html: restHtml }} />
       </main>
       <HomeFooter />
     </>

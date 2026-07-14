@@ -1,11 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
+import type { Metadata } from "next";
 import HomeFooter from "../components/home/HomeFooter";
+import HomePageStyles from "../components/home/HomePageStyles";
 
-export const metadata = {
-  title: "VIKASA VIKASA",
+export const metadata: Metadata = {
+  title: "Insight Details",
   description:
-    "VIKASA is a creative business consulting Bootstrap 5 template designed for corporate entities and professional businesses.",
+    "Read the latest insights from VIKASA — creative business consulting.",
 };
 
 export const dynamic = "force-dynamic";
@@ -18,6 +20,7 @@ export default function Page() {
 
   return (
     <>
+      <HomePageStyles />
       <div dangerouslySetInnerHTML={{ __html: html }} />
       <div className="mt-100">
         <HomeFooter />

@@ -187,27 +187,27 @@ export default function HomeFooter() {
                     <ul className="footer-menu list-unstyled">
                       <li>
                         <a
-                          href="/project"
+                          href="/#services"
                           className="text text-16 link"
-                          aria-label="UI/UX Design"
+                          aria-label="Investment"
                         >
                           Investment
                         </a>
                       </li>
                       <li>
                         <a
-                          href="/team"
+                          href="/#services"
                           className="text text-16 link"
-                          aria-label="App Development"
+                          aria-label="Business Enhancement"
                         >
                           Business Enhancement
                         </a>
                       </li>
                       <li>
                         <a
-                          href="/services"
+                          href="/#services"
                           className="text text-16 link"
-                          aria-label="Digital Marketing"
+                          aria-label="Business Academy"
                         >
                           Business Academy
                         </a>
