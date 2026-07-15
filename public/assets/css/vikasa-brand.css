@@ -901,6 +901,64 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
+/*
+  Contact inputs must NOT use `.text` (it inherits white from the brown wrap).
+  Keep the same cream field color for idle / hover / focus so blur doesn't flash white.
+*/
+.section-contact-form .contact-form-wrap {
+  --color-input-text: var(--vikasa-brown);
+  --color-input-background: #f4ede6;
+  --color-input-border: rgba(255, 255, 255, 0.28);
+  --color-input-hover-text: var(--vikasa-brown);
+  --color-input-hover-background: #f4ede6;
+  --color-input-hover-border: var(--vikasa-gold);
+}
+
+.section-contact-form .contact-form .contact-form-control,
+.section-contact-form .contact-form input,
+.section-contact-form .contact-form textarea {
+  color: var(--vikasa-brown) !important;
+  background-color: #f4ede6 !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  caret-color: var(--vikasa-brown);
+  -webkit-text-fill-color: var(--vikasa-brown);
+  font-size: 16px;
+  font-family: var(--font-body--family, inherit);
+}
+
+.section-contact-form .contact-form .contact-form-control::placeholder,
+.section-contact-form .contact-form input::placeholder,
+.section-contact-form .contact-form textarea::placeholder {
+  color: rgba(94, 49, 35, 0.5) !important;
+  -webkit-text-fill-color: rgba(94, 49, 35, 0.5) !important;
+  opacity: 1;
+}
+
+.section-contact-form .contact-form .contact-form-control:hover,
+.section-contact-form .contact-form .contact-form-control:focus,
+.section-contact-form .contact-form input:hover,
+.section-contact-form .contact-form input:focus,
+.section-contact-form .contact-form textarea:hover,
+.section-contact-form .contact-form textarea:focus {
+  color: var(--vikasa-brown) !important;
+  background-color: #f4ede6 !important;
+  border-color: var(--vikasa-gold) !important;
+  -webkit-text-fill-color: var(--vikasa-brown) !important;
+  outline: none;
+}
+
+.section-contact-form .contact-form input:-webkit-autofill,
+.section-contact-form .contact-form input:-webkit-autofill:hover,
+.section-contact-form .contact-form input:-webkit-autofill:focus,
+.section-contact-form .contact-form textarea:-webkit-autofill,
+.section-contact-form .contact-form textarea:-webkit-autofill:hover,
+.section-contact-form .contact-form textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--vikasa-brown) !important;
+  caret-color: var(--vikasa-brown);
+  box-shadow: 0 0 0 1000px #f4ede6 inset !important;
+  transition: background-color 99999s ease-out;
+}
+
 /* Services cards — VIKASA hover (replace old navy) */
 .multicolumn .multicolumn-card:focus,
 .multicolumn .multicolumn-card:hover {

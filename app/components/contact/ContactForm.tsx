@@ -135,11 +135,12 @@ export default function ContactForm({ content }: ContactFormProps) {
                     </label>
                     <input
                       id="ContactForm-name"
-                      className="text text-16"
+                      className="contact-form-control"
                       type="text"
                       placeholder="Your Name *"
                       name="name"
                       required
+                      autoComplete="name"
                     />
                   </div>
                   <div className="field">
@@ -148,11 +149,12 @@ export default function ContactForm({ content }: ContactFormProps) {
                     </label>
                     <input
                       id="ContactForm-email"
-                      className="text text-16"
+                      className="contact-form-control"
                       type="email"
                       placeholder="Email *"
                       name="email"
                       required
+                      autoComplete="email"
                     />
                   </div>
                   <div className="field">
@@ -161,7 +163,7 @@ export default function ContactForm({ content }: ContactFormProps) {
                     </label>
                     <textarea
                       id="ContactForm-body"
-                      className="text text-16"
+                      className="contact-form-control"
                       rows={4}
                       placeholder="Tell us about your project *"
                       name="message"
