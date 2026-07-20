@@ -19,20 +19,15 @@ export default function HomeCta({ content }: HomeCtaProps) {
                 xmlns="http://www.w3.org/2000/svg"
                 width={14}
                 height={14}
-                viewBox="0 0 14 14"
+                viewBox="0 0 24 24"
                 fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
               >
-                <g clipPath="url(#clip0_9088_4143)">
-                  <path
-                    d="M8.71401 5.28599C11.7514 5.4205 14 5.9412 14 7C14 8.0588 11.7514 8.5795 8.71401 8.71401C8.5795 11.7514 8.0588 14 7 14C5.9412 14 5.4205 11.7514 5.28599 8.71401C2.2486 8.5795 -1.33117e-07 8.0588 0 7C4.62818e-08 5.94119 2.2486 5.4205 5.28599 5.28599C5.4205 2.2486 5.9412 0 7 0C8.0588 0 8.5795 2.2486 8.71401 5.28599Z"
-                    fill="CurrentColor"
-                  />
-                </g>
-                <defs>
-                  <clipPath>
-                    <rect width={14} height={14} fill="CurrentColor" />
-                  </clipPath>
-                </defs>
+                <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
               </svg>
               <span>{content.badge}</span>
               <svg
@@ -40,20 +35,15 @@ export default function HomeCta({ content }: HomeCtaProps) {
                 xmlns="http://www.w3.org/2000/svg"
                 width={14}
                 height={14}
-                viewBox="0 0 14 14"
+                viewBox="0 0 24 24"
                 fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
               >
-                <g clipPath="url(#clip0_9088_4143)">
-                  <path
-                    d="M8.71401 5.28599C11.7514 5.4205 14 5.9412 14 7C14 8.0588 11.7514 8.5795 8.71401 8.71401C8.5795 11.7514 8.0588 14 7 14C5.9412 14 5.4205 11.7514 5.28599 8.71401C2.2486 8.5795 -1.33117e-07 8.0588 0 7C4.62818e-08 5.94119 2.2486 5.4205 5.28599 5.28599C5.4205 2.2486 5.9412 0 7 0C8.0588 0 8.5795 2.2486 8.71401 5.28599Z"
-                    fill="CurrentColor"
-                  />
-                </g>
-                <defs>
-                  <clipPath>
-                    <rect width={14} height={14} fill="CurrentColor" />
-                  </clipPath>
-                </defs>
+                <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
               </svg>
             </div>
             <h2 className="heading text-80" data-aos="fade-up">

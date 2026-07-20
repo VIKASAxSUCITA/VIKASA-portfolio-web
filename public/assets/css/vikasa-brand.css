@@ -745,6 +745,17 @@
   background-image: none !important;
 }
 
+.footer-logo {
+  max-width: 240px;
+}
+
+.footer-logo img {
+  width: 220px;
+  height: auto;
+  max-width: 100%;
+  display: block;
+}
+
 .footer-bottom {
   --color-background: var(--vikasa-brown);
   --color-foreground: var(--vikasa-white);
@@ -774,6 +785,21 @@
   color: var(--vikasa-white);
 }
 
+.footer-contact-list {
+  max-width: 280px;
+}
+
+.footer-contact-list > li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-contact-label {
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 500;
+}
+
 /* Text banner CTA */
 .text-banner {
   --color-background: var(--vikasa-brown);
@@ -784,6 +810,10 @@
 
 .text-banner-inner {
   background-color: var(--vikasa-brown) !important;
+}
+
+.text-banner .section-headings .text {
+  max-width: none;
 }
 
 .text-banner .subheading-bg {

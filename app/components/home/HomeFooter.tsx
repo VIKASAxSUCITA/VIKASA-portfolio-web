@@ -80,10 +80,10 @@ export default function HomeFooter({
                   <div className="footer-widget footer-widget-brand">
                     <a className="footer-logo" href="/" aria-label="VIKASA">
                       <img
-                        src="/assets/img/vikasa/vikasa_logo.png"
+                        src="/assets/img/vikasa/white_log_vikasa.jpg"
                         alt="VIKASA"
-                        width={108}
-                        height={40}
+                        width={220}
+                        height={86}
                         loading="lazy"
                       />
                     </a>
@@ -159,6 +159,45 @@ export default function HomeFooter({
                       <li>
                         <a href="/#services" className="text text-16 link">
                           Business Academy
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-12 col-md-6">
+                  <div className="footer-widget footer-widget-contact">
+                    <div className="widget-heading heading text-22">
+                      Contact Info
+                    </div>
+                    <ul className="footer-menu footer-contact-list list-unstyled">
+                      <li>
+                        <span className="footer-contact-label text text-14">
+                          Address
+                        </span>
+                        <span className="text text-16">
+                          {content.contact.address}
+                        </span>
+                      </li>
+                      <li>
+                        <span className="footer-contact-label text text-14">
+                          Phone Number
+                        </span>
+                        <a
+                          href={`tel:${content.contact.phone.replace(/\s+/g, "")}`}
+                          className="text text-16 link"
+                        >
+                          {content.contact.phone}
+                        </a>
+                      </li>
+                      <li>
+                        <span className="footer-contact-label text text-14">
+                          Email
+                        </span>
+                        <a
+                          href={`mailto:${content.contact.email}`}
+                          className="text text-16 link"
+                        >
+                          {content.contact.email}
                         </a>
                       </li>
                     </ul>

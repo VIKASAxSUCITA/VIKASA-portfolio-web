@@ -77,7 +77,7 @@ export const defaultHomeContent: HomeContent = {
         description:
           "Strengthen strategy, models, and investor materials that drive growth.",
         items: [
-          "Market Intelligence & Advisory",
+          "Market Intelligence",
           "Business Model",
           "Financial Model",
           "Business Plan",
@@ -190,6 +190,12 @@ export const defaultFooterContent: FooterContent = {
     linkedin: "https://www.linkedin.com/",
     twitter: "https://x.com/",
     instagram: "https://www.instagram.com/",
+  },
+  contact: {
+    address:
+      "Connexion, Koh Pich, Corner of Koh Pich Street, and Park Ave, Phnom Penh",
+    phone: "+855 00 000 0000",
+    email: "hello@vikasa.com",
   },
   copyright: "VIKASA. All rights reserved.",
 };

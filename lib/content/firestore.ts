@@ -10,17 +10,47 @@ import {
   loadInsightsContent,
   saveInsightsContent,
 } from "./insightsStore";
-import type { HomeContent, PageContentMap, PageId } from "./types";
+import type { FooterContent, HomeContent, PageContentMap, PageId } from "./types";
 
 function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
   const defaults = defaultHomeContent;
-  return {
+  const merged: HomeContent = {
     ...defaults,
     ...saved,
     hero: { ...defaults.hero, ...saved.hero },
     about: { ...defaults.about, ...saved.about },
     cta: { ...defaults.cta, ...saved.cta },
     services: { ...defaults.services, ...saved.services },
+    contact: { ...defaults.contact, ...saved.contact },
+  };
+
+  // Prefer current defaults for service card labels when CMS still has older copy.
+  if (merged.services?.cards) {
+    merged.services = {
+      ...merged.services,
+      cards: merged.services.cards.map((card) => {
+        if (card.title !== "Business Enhancement" || !card.items) return card;
+        return {
+          ...card,
+          items: card.items.map((item) =>
+            item === "Market Intelligence & Advisory"
+              ? "Market Intelligence"
+              : item
+          ),
+        };
+      }),
+    };
+  }
+
+  return merged;
+}
+
+function mergeFooterContent(saved: Partial<FooterContent>): FooterContent {
+  const defaults = defaultFooterContent;
+  return {
+    ...defaults,
+    ...saved,
+    social: { ...defaults.social, ...saved.social },
     contact: { ...defaults.contact, ...saved.contact },
   };
 }
@@ -51,6 +81,9 @@ export async function loadPageContent<T extends PageId>(
   if (!data) return getDefaultContent(pageId);
   if (pageId === "home") {
     return mergeHomeContent(data as Partial<HomeContent>) as PageContentMap[T];
+  }
+  if (pageId === "footer") {
+    return mergeFooterContent(data as Partial<FooterContent>) as PageContentMap[T];
   }
   return data;
 }

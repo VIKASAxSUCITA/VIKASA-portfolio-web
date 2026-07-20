@@ -5,6 +5,11 @@ export type FooterContent = {
     twitter: string;
     instagram: string;
   };
+  contact: {
+    address: string;
+    phone: string;
+    email: string;
+  };
   copyright: string;
 };
 
