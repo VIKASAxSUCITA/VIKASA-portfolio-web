@@ -100,8 +100,6 @@ export type InsightsContent = {
   posts: InsightPost[];
 };
 
-export type EventKind = "event" | "announcement";
-
 export type EventPost = {
   id: string;
   title: string;
@@ -109,7 +107,8 @@ export type EventPost = {
   coverImage: string;
   /** Detail page content image. */
   image: string;
-  kind: EventKind;
+  /** Freeform category, e.g. Event, Announcement, Workshop. */
+  kind: string;
   /** ISO datetime for when the event/announcement is scheduled. */
   startsAt: string;
   /** Optional ISO end datetime. Empty string when not set. */

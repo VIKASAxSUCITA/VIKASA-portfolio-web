@@ -1,4 +1,4 @@
-import type { EventKind, EventPost, EventsContent } from "./types";
+import type { EventPost, EventsContent } from "./types";
 
 export function createEmptyEvent(): EventPost {
   const stamp = Date.now().toString(36);
@@ -10,7 +10,7 @@ export function createEmptyEvent(): EventPost {
     title: "New Event",
     coverImage: "/assets/img/blog/1.jpg",
     image: "/assets/img/blog/2.jpg",
-    kind: "event",
+    kind: "Event",
     startsAt: startsAt.toISOString(),
     endsAt: "",
     location: "",
@@ -20,8 +20,15 @@ export function createEmptyEvent(): EventPost {
   };
 }
 
-export function normalizeEventKind(value: unknown): EventKind {
-  return value === "announcement" ? "announcement" : "event";
+export function normalizeEventKind(value: unknown): string {
+  if (typeof value !== "string") return "Event";
+  const trimmed = value.trim();
+  if (!trimmed) return "Event";
+
+  const key = trimmed.toLowerCase();
+  if (key === "event") return "Event";
+  if (key === "announcement") return "Announcement";
+  return trimmed;
 }
 
 export function normalizeEventPost(
@@ -144,8 +151,8 @@ export function formatEventTimeRange(startsAt: string, endsAt?: string): string 
   return end ? `${start} – ${end}` : start;
 }
 
-export function eventKindLabel(kind: EventKind): string {
-  return kind === "announcement" ? "Announcement" : "Event";
+export function eventKindLabel(kind: string): string {
+  return normalizeEventKind(kind);
 }
 
 export function eventExcerpt(post: EventPost, max = 160): string {

@@ -7,7 +7,7 @@ import {
   fromDateTimeLocalValue,
   toDateTimeLocalValue,
 } from "@/lib/content/events";
-import type { EventKind, EventPost } from "@/lib/content/types";
+import type { EventPost } from "@/lib/content/types";
 
 type AdminEventModalProps = {
   post: EventPost;
@@ -121,21 +121,18 @@ export default function AdminEventModal({
           </div>
 
           <div className="admin-insight-modal-field">
-            <span className="text text-14 admin-insight-modal-label">Type</span>
-            <select
-              className="admin-event-select text text-16"
+            <span className="text text-14 admin-insight-modal-label">
+              Category / Type
+            </span>
+            <EditableText
+              className="text text-16"
               value={post.kind}
-              onChange={(event) =>
-                onChange((prev) => ({
-                  ...prev,
-                  kind: event.target.value as EventKind,
-                }))
-              }
-              aria-label="Event type"
-            >
-              <option value="event">Event</option>
-              <option value="announcement">Announcement</option>
-            </select>
+              onChange={(kind) => onChange((prev) => ({ ...prev, kind }))}
+              label="Category or type"
+            />
+            <p className="text text-14 admin-event-hint">
+              Examples: Event, Announcement, Workshop, Training, Open House
+            </p>
           </div>
 
           <div className="admin-insight-modal-field">
