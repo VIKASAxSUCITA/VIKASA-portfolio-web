@@ -169,6 +169,9 @@ export default function AdminEditableFooter({
                         <span className="text text-16">Insights</span>
                       </li>
                       <li>
+                        <span className="text text-16">Events</span>
+                      </li>
+                      <li>
                         <span className="text text-16">Contact</span>
                       </li>
                     </ul>

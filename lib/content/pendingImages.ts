@@ -1,8 +1,12 @@
+import { compressImageFile } from "./compressImage";
+
 const pending = new Map<string, File>();
 
-export function stageImageFile(file: File): string {
-  const url = URL.createObjectURL(file);
-  pending.set(url, file);
+/** Stage a local preview; image is compressed before preview/upload when possible. */
+export async function stageImageFile(file: File): Promise<string> {
+  const compressed = await compressImageFile(file);
+  const url = URL.createObjectURL(compressed);
+  pending.set(url, compressed);
   return url;
 }
 

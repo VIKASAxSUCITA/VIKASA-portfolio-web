@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   discardPendingImage,
   stageImageFile,
@@ -20,13 +20,26 @@ export default function EditableImage({
   className = "",
 }: EditableImageProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [compressing, setCompressing] = useState(false);
 
-  function handleFile(file: File | undefined) {
+  async function handleFile(file: File | undefined) {
     if (!file) return;
-    // Preview only — upload happens on Save
-    discardPendingImage(src);
-    onChange(stageImageFile(file));
-    if (inputRef.current) inputRef.current.value = "";
+    setCompressing(true);
+    try {
+      // Preview only — upload happens on Save (already compressed).
+      discardPendingImage(src);
+      onChange(await stageImageFile(file));
+    } catch (error) {
+      console.error(error);
+      window.alert(
+        error instanceof Error
+          ? error.message
+          : "Could not process that image. Try another file."
+      );
+    } finally {
+      setCompressing(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
   }
 
   return (
@@ -35,15 +48,19 @@ export default function EditableImage({
       className={`admin-editable-image ${className}`.trim()}
       onClick={() => inputRef.current?.click()}
       title="Click to change image"
+      disabled={compressing}
+      aria-busy={compressing}
     >
       <img src={src} alt={alt} />
-      <span className="admin-editable-image-hint">Change image</span>
+      <span className="admin-editable-image-hint">
+        {compressing ? "Compressing…" : "Change image"}
+      </span>
       <input
         ref={inputRef}
         type="file"
         accept="image/*"
         hidden
-        onChange={(event) => handleFile(event.target.files?.[0])}
+        onChange={(event) => void handleFile(event.target.files?.[0])}
       />
     </button>
   );

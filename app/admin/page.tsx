@@ -15,6 +15,11 @@ const pages = [
     status: "Add and edit full insight articles",
   },
   {
+    href: "/admin/events",
+    label: "Events",
+    status: "Add events and announcements with schedule",
+  },
+  {
     href: "/admin/footer",
     label: "Footer",
     status: "Edit social URLs and copyright",

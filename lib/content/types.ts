@@ -100,11 +100,38 @@ export type InsightsContent = {
   posts: InsightPost[];
 };
 
-export type PageId = "home" | "about" | "insights" | "footer";
+export type EventKind = "event" | "announcement";
+
+export type EventPost = {
+  id: string;
+  title: string;
+  /** Hero / listing cover image. */
+  coverImage: string;
+  /** Detail page content image. */
+  image: string;
+  kind: EventKind;
+  /** ISO datetime for when the event/announcement is scheduled. */
+  startsAt: string;
+  /** Optional ISO end datetime. Empty string when not set. */
+  endsAt: string;
+  location: string;
+  summary: string;
+  body: string;
+  createdAt: string;
+};
+
+export type EventsContent = {
+  heroTitle: string;
+  heading: string;
+  posts: EventPost[];
+};
+
+export type PageId = "home" | "about" | "insights" | "events" | "footer";
 
 export type PageContentMap = {
   home: HomeContent;
   about: AboutContent;
   insights: InsightsContent;
+  events: EventsContent;
   footer: FooterContent;
 };

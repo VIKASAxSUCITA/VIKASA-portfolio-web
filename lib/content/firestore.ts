@@ -2,15 +2,28 @@ import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { getFirebaseDb } from "@/lib/firebase";
 import {
   defaultAboutContent,
+  defaultEventsContent,
   defaultFooterContent,
   defaultHomeContent,
   defaultInsightsContent,
 } from "./defaults";
 import {
+  loadEventsContent,
+  saveEventsContent,
+} from "./eventsStore";
+import {
   loadInsightsContent,
   saveInsightsContent,
 } from "./insightsStore";
-import type { FooterContent, HomeContent, PageContentMap, PageId } from "./types";
+import type {
+  AboutContent,
+  FooterContent,
+  HomeContent,
+  PageContentMap,
+  PageId,
+} from "./types";
+
+const ABOUT_US_IMAGE = "/assets/img/vikasa/aboutUs_image.png";
 
 function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
   const defaults = defaultHomeContent;
@@ -18,7 +31,11 @@ function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
     ...defaults,
     ...saved,
     hero: { ...defaults.hero, ...saved.hero },
-    about: { ...defaults.about, ...saved.about },
+    about: {
+      ...defaults.about,
+      ...saved.about,
+      image: ABOUT_US_IMAGE,
+    },
     cta: { ...defaults.cta, ...saved.cta },
     services: { ...defaults.services, ...saved.services },
     contact: { ...defaults.contact, ...saved.contact },
@@ -45,6 +62,23 @@ function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
   return merged;
 }
 
+function mergeAboutContent(saved: Partial<AboutContent>): AboutContent {
+  const defaults = defaultAboutContent;
+  return {
+    ...defaults,
+    ...saved,
+    hero: { ...defaults.hero, ...saved.hero },
+    whatWeDo: {
+      ...defaults.whatWeDo,
+      ...saved.whatWeDo,
+      image: ABOUT_US_IMAGE,
+    },
+    story: { ...defaults.story, ...saved.story },
+    vision: { ...defaults.vision, ...saved.vision },
+    mission: { ...defaults.mission, ...saved.mission },
+  };
+}
+
 function mergeFooterContent(saved: Partial<FooterContent>): FooterContent {
   const defaults = defaultFooterContent;
   return {
@@ -59,6 +93,7 @@ const defaults: PageContentMap = {
   home: defaultHomeContent,
   about: defaultAboutContent,
   insights: defaultInsightsContent,
+  events: defaultEventsContent,
   footer: defaultFooterContent,
 };
 
@@ -72,6 +107,9 @@ export async function loadPageContent<T extends PageId>(
   if (pageId === "insights") {
     return (await loadInsightsContent()) as PageContentMap[T];
   }
+  if (pageId === "events") {
+    return (await loadEventsContent()) as PageContentMap[T];
+  }
 
   const snap = await getDoc(doc(getFirebaseDb(), "pages", pageId));
   if (!snap.exists()) {
@@ -81,6 +119,9 @@ export async function loadPageContent<T extends PageId>(
   if (!data) return getDefaultContent(pageId);
   if (pageId === "home") {
     return mergeHomeContent(data as Partial<HomeContent>) as PageContentMap[T];
+  }
+  if (pageId === "about") {
+    return mergeAboutContent(data as Partial<AboutContent>) as PageContentMap[T];
   }
   if (pageId === "footer") {
     return mergeFooterContent(data as Partial<FooterContent>) as PageContentMap[T];
@@ -94,6 +135,10 @@ export async function savePageContent<T extends PageId>(
 ) {
   if (pageId === "insights") {
     await saveInsightsContent(content as PageContentMap["insights"]);
+    return;
+  }
+  if (pageId === "events") {
+    await saveEventsContent(content as PageContentMap["events"]);
     return;
   }
 
