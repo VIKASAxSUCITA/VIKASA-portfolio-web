@@ -2,6 +2,8 @@
 
 import { FormEvent, useState } from "react";
 import type { HomeContent } from "@/lib/content/types";
+import { ArrowIcon, EditableField } from "../admin/EditableField";
+import EditableText from "../admin/EditableText";
 
 export function EmailIcon() {
   return (
@@ -27,12 +29,34 @@ export function WhatsAppIcon() {
   );
 }
 
+type Contact = HomeContent["contact"];
+
 type ContactFormProps = {
-  content: HomeContent["contact"];
+  content: Contact;
+  edit?: { onChange: (updater: (prev: Contact) => Contact) => void };
 };
 
-export default function ContactForm({ content }: ContactFormProps) {
+export default function ContactForm({ content, edit }: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "sent">("idle");
+
+  const text = (
+    key:
+      | "badge"
+      | "title"
+      | "text"
+      | "email"
+      | "whatsappLabel"
+      | "whatsappNumber"
+      | "formTitle"
+      | "formText"
+      | "buttonLabel"
+  ) =>
+    edit
+      ? {
+          onChange: (value: string) =>
+            edit.onChange((prev) => ({ ...prev, [key]: value })),
+        }
+      : undefined;
 
   const whatsappHref = `https://wa.me/${content.whatsappNumber}?text=${encodeURIComponent(
     "Hello VIKASA, I would like to request a proposal."
@@ -70,58 +94,128 @@ export default function ContactForm({ content }: ContactFormProps) {
                   className="subheading text-20 subheading-bg"
                   data-aos="fade-up"
                 >
-                  <span>{content.badge}</span>
+                  {edit ? (
+                    <EditableText
+                      value={content.badge}
+                      label="Contact badge"
+                      onChange={text("badge")!.onChange}
+                    />
+                  ) : (
+                    <span>{content.badge}</span>
+                  )}
                 </div>
-                <h2 className="heading text-50" data-aos="fade-up">
-                  {content.title}
-                </h2>
-                <p className="text text-18" data-aos="fade-up">
-                  {content.text}
-                </p>
+                <EditableField
+                  as="h2"
+                  className="heading text-50"
+                  value={content.title}
+                  aos="fade-up"
+                  label="Contact title"
+                  edit={text("title")}
+                />
+                <EditableField
+                  as="p"
+                  className="text text-18"
+                  value={content.text}
+                  multiline
+                  aos="fade-up"
+                  label="Contact description"
+                  edit={text("text")}
+                />
 
-                <a
-                  href={mailtoHref}
-                  className="card-icon-text card-icon-text-horizontal contact-channel"
-                  data-aos="fade-up"
-                  aria-label={`Email ${content.email}`}
-                >
-                  <div className="svg-wrapper">
-                    <EmailIcon />
+                {edit ? (
+                  <div className="card-icon-text card-icon-text-horizontal contact-channel">
+                    <div className="svg-wrapper">
+                      <EmailIcon />
+                    </div>
+                    <div className="content">
+                      <h2 className="heading text-24 fw-700">Email</h2>
+                      <EditableText
+                        className="text text-16"
+                        value={content.email}
+                        label="Email address"
+                        onChange={text("email")!.onChange}
+                      />
+                    </div>
                   </div>
-                  <div className="content">
-                    <h2 className="heading text-24 fw-700">Email</h2>
-                    <p className="text text-16">{content.email}</p>
-                  </div>
-                </a>
+                ) : (
+                  <a
+                    href={mailtoHref}
+                    className="card-icon-text card-icon-text-horizontal contact-channel"
+                    data-aos="fade-up"
+                    aria-label={`Email ${content.email}`}
+                  >
+                    <div className="svg-wrapper">
+                      <EmailIcon />
+                    </div>
+                    <div className="content">
+                      <h2 className="heading text-24 fw-700">Email</h2>
+                      <p className="text text-16">{content.email}</p>
+                    </div>
+                  </a>
+                )}
 
-                <a
-                  href={whatsappHref}
-                  className="card-icon-text card-icon-text-horizontal contact-channel"
-                  data-aos="fade-up"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Chat on WhatsApp"
-                >
-                  <div className="svg-wrapper">
-                    <WhatsAppIcon />
+                {edit ? (
+                  <div className="card-icon-text card-icon-text-horizontal contact-channel">
+                    <div className="svg-wrapper">
+                      <WhatsAppIcon />
+                    </div>
+                    <div className="content">
+                      <h2 className="heading text-24 fw-700">WhatsApp</h2>
+                      <EditableText
+                        className="text text-16"
+                        value={content.whatsappLabel}
+                        label="WhatsApp label"
+                        onChange={text("whatsappLabel")!.onChange}
+                      />
+                      <EditableText
+                        className="text text-14"
+                        value={content.whatsappNumber}
+                        label="WhatsApp number (digits only)"
+                        onChange={text("whatsappNumber")!.onChange}
+                      />
+                    </div>
                   </div>
-                  <div className="content">
-                    <h2 className="heading text-24 fw-700">WhatsApp</h2>
-                    <p className="text text-16">{content.whatsappLabel}</p>
-                  </div>
-                </a>
+                ) : (
+                  <a
+                    href={whatsappHref}
+                    className="card-icon-text card-icon-text-horizontal contact-channel"
+                    data-aos="fade-up"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Chat on WhatsApp"
+                  >
+                    <div className="svg-wrapper">
+                      <WhatsAppIcon />
+                    </div>
+                    <div className="content">
+                      <h2 className="heading text-24 fw-700">WhatsApp</h2>
+                      <p className="text text-16">{content.whatsappLabel}</p>
+                    </div>
+                  </a>
+                )}
               </div>
             </div>
 
             <div className="col-12 col-lg-6 col-contact-form">
               <div className="contact-form-wrap radius18">
                 <div className="contact-form-headings">
-                  <h2 className="heading text-32" data-aos="fade-up">
-                    {content.formTitle}
-                  </h2>
-                  <p className="text text-16" data-aos="fade-up">
-                    {content.formText}
-                  </p>
+                  <EditableField
+                    as="h2"
+                    className="heading text-32"
+                    value={content.formTitle}
+                    aos="fade-up"
+                    label="Form title"
+                    edit={text("formTitle")}
+                  />
+                  <EditableField
+                    as="p"
+                    className="text text-16"
+                    value={content.formText}
+                    multiline
+                    aos="fade-up"
+                    label="Form description"
+                    edit={text("formText")}
+                  />
                 </div>
                 <form
                   action="#"
@@ -141,6 +235,7 @@ export default function ContactForm({ content }: ContactFormProps) {
                       name="name"
                       required
                       autoComplete="name"
+                      disabled={Boolean(edit)}
                     />
                   </div>
                   <div className="field">
@@ -155,6 +250,7 @@ export default function ContactForm({ content }: ContactFormProps) {
                       name="email"
                       required
                       autoComplete="email"
+                      disabled={Boolean(edit)}
                     />
                   </div>
                   <div className="field">
@@ -168,32 +264,29 @@ export default function ContactForm({ content }: ContactFormProps) {
                       placeholder="Tell us about your project *"
                       name="message"
                       required
+                      disabled={Boolean(edit)}
                     />
                   </div>
                   <div className="form-button contact-form-actions">
-                    <button
-                      type="submit"
-                      className="button button--secondary"
-                      aria-label={content.buttonLabel}
-                    >
-                      {content.buttonLabel}
-                      <span className="svg-wrapper">
-                        <svg
-                          className="icon-20"
-                          width={20}
-                          height={20}
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden
-                        >
-                          <path
-                            d="M13.3365 7.84518L6.16435 15.0173L4.98584 13.8388L12.158 6.66667H5.83652V5H15.0032V14.1667H13.3365V7.84518Z"
-                            fill="currentColor"
-                          />
-                        </svg>
+                    {edit ? (
+                      <span className="button button--secondary">
+                        <EditableText
+                          value={content.buttonLabel}
+                          label="Form button"
+                          onChange={text("buttonLabel")!.onChange}
+                        />
+                        <ArrowIcon />
                       </span>
-                    </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="button button--secondary"
+                        aria-label={content.buttonLabel}
+                      >
+                        {content.buttonLabel}
+                        <ArrowIcon />
+                      </button>
+                    )}
                   </div>
                   {status === "sent" ? (
                     <p className="text text-14 contact-form-note">

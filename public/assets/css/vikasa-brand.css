@@ -1631,6 +1631,20 @@
   opacity: 0.85;
 }
 
+.admin-wp-bar-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.admin-wp-bar-item.is-active {
+  color: #fff;
+  background: #2c3338;
+  font-weight: 600;
+}
+
 .admin-wp-bar-msg {
   padding: 0 10px;
   color: #72aee6;
@@ -1672,6 +1686,18 @@
 
 .admin-site {
   background: #fff;
+}
+
+/* The live site header floats inside the admin preview, just below the
+   32px WordPress-style admin bar (which stays on top at z-index 1000). */
+.admin-site .header-1.header-floating {
+  top: 32px !important;
+}
+
+@media (max-width: 767px) {
+  .admin-site .header-1.header-floating {
+    top: 0 !important;
+  }
 }
 
 .admin-site .admin-editable-text,

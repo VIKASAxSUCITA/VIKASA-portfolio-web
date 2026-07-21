@@ -1,7 +1,17 @@
 import type { HomeContent } from "@/lib/content/types";
+import {
+  ArrowIcon,
+  EditableField,
+  EditableMedia,
+  SectionButton,
+} from "../admin/EditableField";
+import EditableText from "../admin/EditableText";
+
+type About = HomeContent["about"];
 
 type HomeAboutProps = {
-  content: HomeContent["about"];
+  content: About;
+  edit?: { onChange: (updater: (prev: About) => About) => void };
 };
 
 function CheckIcon() {
@@ -30,62 +40,93 @@ function CheckIcon() {
   );
 }
 
-export default function HomeAbout({ content }: HomeAboutProps) {
+export default function HomeAbout({ content, edit }: HomeAboutProps) {
+  const text = (key: "title" | "text" | "buttonLabel") =>
+    edit
+      ? {
+          onChange: (value: string) =>
+            edit.onChange((prev) => ({ ...prev, [key]: value })),
+        }
+      : undefined;
+
+  const imageEdit = edit
+    ? {
+        onChange: (image: string) =>
+          edit.onChange((prev) => ({ ...prev, image })),
+      }
+    : undefined;
+
   return (
     <div id="about" className="image-text mt-100">
       <div className="container">
         <div className="row align-items-center">
           <div className="col-lg-6 col-12">
             <div className="media-wrap" data-aos="zoom-in-up">
-              <img
+              <EditableMedia
                 src={content.image}
                 width={360}
                 height={450}
                 loading="lazy"
                 alt="What we do"
                 className="home-about-image"
+                edit={imageEdit}
               />
             </div>
           </div>
           <div className="col-lg-6 col-12">
             <div className="content section-headings">
-              <h2 className="heading text-50" data-aos="fade-up">
-                {content.title}
-              </h2>
-              <div className="text text-18" data-aos="fade-up">
-                {content.text}
-              </div>
+              <EditableField
+                as="h2"
+                className="heading text-50"
+                value={content.title}
+                aos="fade-up"
+                label="About title"
+                edit={text("title")}
+              />
+              <EditableField
+                className="text text-18"
+                value={content.text}
+                multiline
+                aos="fade-up"
+                label="About text"
+                edit={text("text")}
+              />
               <ul className="text-lists list-unstyled">
-                {content.items.map((item) => (
-                  <li key={item} className="text-item text text-18" data-aos="fade-up">
+                {content.items.map((item, index) => (
+                  <li
+                    key={index}
+                    className="text-item text text-18"
+                    data-aos="fade-up"
+                  >
                     <CheckIcon />
-                    {item}
+                    {edit ? (
+                      <EditableText
+                        value={item}
+                        label={`About point ${index + 1}`}
+                        onChange={(value) =>
+                          edit.onChange((prev) => {
+                            const items = [...prev.items] as About["items"];
+                            items[index] = value;
+                            return { ...prev, items };
+                          })
+                        }
+                      />
+                    ) : (
+                      item
+                    )}
                   </li>
                 ))}
               </ul>
               <div className="buttons" data-aos="fade-up">
-                <a
+                <SectionButton
+                  label={content.buttonLabel}
                   href="/about"
                   className="button button--primary"
-                  aria-label="More About Us"
+                  ariaLabel="More About Us"
+                  edit={text("buttonLabel")}
                 >
-                  {content.buttonLabel}
-                  <span className="svg-wrapper">
-                    <svg
-                      className="icon-20"
-                      width={20}
-                      height={20}
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M13.3365 7.84518L6.16435 15.0173L4.98584 13.8388L12.158 6.66667H5.83652V5H15.0032V14.1667H13.3365V7.84518Z"
-                        fill="CurrentColor"
-                      />
-                    </svg>
-                  </span>
-                </a>
+                  <ArrowIcon />
+                </SectionButton>
               </div>
             </div>
           </div>
