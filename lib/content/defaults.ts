@@ -1,5 +1,6 @@
 import type {
   AboutContent,
+  EventsContent,
   FooterContent,
   HomeContent,
   InsightPost,
@@ -77,7 +78,7 @@ export const defaultHomeContent: HomeContent = {
         description:
           "Strengthen strategy, models, and investor materials that drive growth.",
         items: [
-          "Market Intelligence & Advisory",
+          "Market Intelligence",
           "Business Model",
           "Financial Model",
           "Business Plan",
@@ -184,12 +185,53 @@ export const defaultInsightsContent: InsightsContent = {
   ],
 };
 
+export const defaultEventsContent: EventsContent = {
+  heroTitle: "Events",
+  heading: "Upcoming Events & Announcements",
+  posts: [
+    {
+      id: "event_1",
+      title: "VIKASA Business Growth Workshop",
+      coverImage: "/assets/img/blog/1.jpg",
+      image: "/assets/img/blog/3.jpg",
+      kind: "Event",
+      startsAt: "2026-08-15T09:00:00.000Z",
+      endsAt: "2026-08-15T12:00:00.000Z",
+      location: "Connexion, Koh Pich, Phnom Penh",
+      summary:
+        "Join us for a morning workshop on strategy, performance, and practical growth tools for owners and leadership teams.",
+      body: "Join VIKASA for a hands-on Business Growth Workshop designed for owners and top management.\n\nWe will cover market intelligence, financial clarity, and practical next steps you can apply immediately in your organization.\n\nSeats are limited. Register early to secure your place.",
+      createdAt: "2026-07-20T10:00:00.000Z",
+    },
+    {
+      id: "event_2",
+      title: "Office Hours Relocation Notice",
+      coverImage: "/assets/img/blog/2.jpg",
+      image: "/assets/img/blog/1.jpg",
+      kind: "Announcement",
+      startsAt: "2026-07-25T01:00:00.000Z",
+      endsAt: "",
+      location: "Connexion, Koh Pich, Phnom Penh",
+      summary:
+        "Our consulting team will operate from Connexion, Koh Pich starting later this month. Visit us by appointment.",
+      body: "We are pleased to announce that VIKASA will welcome clients at Connexion, Koh Pich, Corner of Koh Pich Street, and Park Ave, Phnom Penh.\n\nPlease continue to reach us by email or WhatsApp to schedule meetings. We look forward to hosting you.",
+      createdAt: "2026-07-18T08:00:00.000Z",
+    },
+  ],
+};
+
 export const defaultFooterContent: FooterContent = {
   social: {
     facebook: "https://web.facebook.com",
     linkedin: "https://www.linkedin.com/",
     twitter: "https://x.com/",
     instagram: "https://www.instagram.com/",
+  },
+  contact: {
+    address:
+      "Connexion, Koh Pich, Corner of Koh Pich Street, and Park Ave, Phnom Penh",
+    phone: "+855 00 000 0000",
+    email: "hello@vikasa.com",
   },
   copyright: "VIKASA. All rights reserved.",
 };

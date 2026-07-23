@@ -1,62 +1,78 @@
 import type { HomeContent } from "@/lib/content/types";
+import {
+  ArrowIcon,
+  EditableField,
+  EditableMedia,
+  SectionButton,
+} from "../admin/EditableField";
+
+type Hero = HomeContent["hero"];
 
 type HomeHeroProps = {
-  content: HomeContent["hero"];
+  content: Hero;
+  edit?: { onChange: (updater: (prev: Hero) => Hero) => void };
 };
 
-export default function HomeHero({ content }: HomeHeroProps) {
+export default function HomeHero({ content, edit }: HomeHeroProps) {
+  const text = (key: "title" | "text" | "ctaLabel") =>
+    edit
+      ? {
+          onChange: (value: string) =>
+            edit.onChange((prev) => ({ ...prev, [key]: value })),
+        }
+      : undefined;
+
+  const imageEdit = edit
+    ? {
+        onChange: (image: string) =>
+          edit.onChange((prev) => ({ ...prev, image })),
+      }
+    : undefined;
+
   return (
     <div className="hero-slider with-floating-header with-fixed-bg">
       <div className="slider-card overlay">
         <picture className="slider-media">
-          <img
+          <EditableMedia
             src={content.image}
             width={1920}
             height={1000}
             loading="eager"
             alt="VIKASA team"
+            edit={imageEdit}
           />
         </picture>
         <div className="slider-content">
           <div className="container height-100 d-flex align-items-center justify-content-center text-center">
             <div className="content-box section-headings">
-              <h2
+              <EditableField
+                as="h2"
                 className="heading text-90 fw-700"
-                data-aos="fade-up"
-                data-aos-delay="100"
-              >
-                {content.title}
-              </h2>
-              <div
+                value={content.title}
+                aos="fade-up"
+                aosDelay={100}
+                label="Hero title"
+                edit={text("title")}
+              />
+              <EditableField
                 className="text text-18"
-                data-aos="fade-up"
-                data-aos-delay="200"
-              >
-                {content.text}
-              </div>
+                value={content.text}
+                multiline
+                aos="fade-up"
+                aosDelay={200}
+                label="Hero text"
+                edit={text("text")}
+              />
               <div className="buttons" data-aos="fade-up" data-aos-delay="300">
-                <a
+                <SectionButton
+                  label={content.ctaLabel}
                   href="/#contact"
                   className="button button--primary"
-                  aria-label="Book Strategy Call"
+                  ariaLabel="Book Strategy Call"
+                  edit={text("ctaLabel")}
                 >
-                  {content.ctaLabel}
-                  <span className="svg-wrapper">
-                    <svg
-                      className="icon-20"
-                      width={20}
-                      height={20}
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M13.3365 7.84518L6.16435 15.0173L4.98584 13.8388L12.158 6.66667H5.83652V5H15.0032V14.1667H13.3365V7.84518Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  </span>
-                </a>
+                  <ArrowIcon />
+                </SectionButton>
               </div>
             </div>
           </div>

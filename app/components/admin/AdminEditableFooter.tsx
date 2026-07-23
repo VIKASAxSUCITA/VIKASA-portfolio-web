@@ -88,10 +88,10 @@ export default function AdminEditableFooter({
                   <div className="footer-widget footer-widget-brand">
                     <a className="footer-logo" href="/" aria-label="VIKASA">
                       <img
-                        src="/assets/img/vikasa/vikasa_logo.png"
+                        src="/assets/img/vikasa/white_log_vikasa.jpg"
                         alt="VIKASA"
-                        width={108}
-                        height={40}
+                        width={220}
+                        height={86}
                         loading="lazy"
                       />
                     </a>
@@ -169,6 +169,9 @@ export default function AdminEditableFooter({
                         <span className="text text-16">Insights</span>
                       </li>
                       <li>
+                        <span className="text text-16">Events</span>
+                      </li>
+                      <li>
                         <span className="text text-16">Contact</span>
                       </li>
                     </ul>
@@ -188,6 +191,61 @@ export default function AdminEditableFooter({
                       </li>
                       <li>
                         <span className="text text-16">Business Academy</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-12 col-md-6">
+                  <div className="footer-widget footer-widget-contact">
+                    <div className="widget-heading heading text-22">
+                      Contact Info
+                    </div>
+                    <ul className="footer-menu footer-contact-list list-unstyled">
+                      <li>
+                        <span className="footer-contact-label text text-14">
+                          Address
+                        </span>
+                        <EditableText
+                          value={content.contact.address}
+                          onChange={(address) =>
+                            update((prev) => ({
+                              ...prev,
+                              contact: { ...prev.contact, address },
+                            }))
+                          }
+                          label="Address"
+                          multiline
+                        />
+                      </li>
+                      <li>
+                        <span className="footer-contact-label text text-14">
+                          Phone Number
+                        </span>
+                        <EditableText
+                          value={content.contact.phone}
+                          onChange={(phone) =>
+                            update((prev) => ({
+                              ...prev,
+                              contact: { ...prev.contact, phone },
+                            }))
+                          }
+                          label="Phone Number"
+                        />
+                      </li>
+                      <li>
+                        <span className="footer-contact-label text text-14">
+                          Email
+                        </span>
+                        <EditableText
+                          value={content.contact.email}
+                          onChange={(email) =>
+                            update((prev) => ({
+                              ...prev,
+                              contact: { ...prev.contact, email },
+                            }))
+                          }
+                          label="Email"
+                        />
                       </li>
                     </ul>
                   </div>

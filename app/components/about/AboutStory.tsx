@@ -1,30 +1,46 @@
 import type { AboutContent } from "@/lib/content/types";
+import { EditableField } from "../admin/EditableField";
+
+type Story = AboutContent["story"];
 
 type AboutStoryProps = {
-  content: AboutContent["story"];
+  content: Story;
+  edit?: { onChange: (updater: (prev: Story) => Story) => void };
 };
 
-export default function AboutStory({ content }: AboutStoryProps) {
+export default function AboutStory({ content, edit }: AboutStoryProps) {
+  const text = (key: "title" | "text") =>
+    edit
+      ? {
+          onChange: (value: string) =>
+            edit.onChange((prev) => ({ ...prev, [key]: value })),
+        }
+      : undefined;
+
   return (
     <section className="mt-100" aria-labelledby="about-story-heading">
       <div className="container">
         <div className="about-story-inner text-center">
-          <h2
+          <EditableField
+            as="h2"
             id="about-story-heading"
             className="heading text-50 about-story-title"
-            data-aos="fade-up"
-            data-aos-delay="50"
-          >
-            {content.title}
-          </h2>
-
-          <p
+            value={content.title}
+            aos="fade-up"
+            aosDelay={50}
+            label="Story title"
+            edit={text("title")}
+          />
+          <EditableField
+            as="p"
             className="text text-18 about-story-desc"
-            data-aos="fade-up"
-            data-aos-delay="100"
-          >
-            {content.text}
-          </p>
+            value={content.text}
+            multiline
+            aos="fade-up"
+            aosDelay={100}
+            label="Story text"
+            edit={text("text")}
+          />
         </div>
       </div>
     </section>

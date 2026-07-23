@@ -1,6 +1,7 @@
 "use client";
 
 import AdminEditableFooter from "@/app/components/admin/AdminEditableFooter";
+import HomeHeader from "@/app/components/home/HomeHeader";
 import type { FooterContent } from "@/lib/content/types";
 
 type AdminSitePreviewProps = {
@@ -16,6 +17,7 @@ export default function AdminSitePreview({
 }: AdminSitePreviewProps) {
   return (
     <div className="admin-site">
+      <HomeHeader />
       {children}
       <div className="mt-100">
         <AdminEditableFooter content={footer} update={footerUpdate} />

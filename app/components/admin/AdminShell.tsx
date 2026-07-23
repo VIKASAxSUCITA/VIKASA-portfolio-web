@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/components/auth/AuthProvider";
 
 type AdminShellProps = {
@@ -12,15 +13,28 @@ type AdminShellProps = {
   pageTitle?: string;
 };
 
+const NAV_PAGES = [
+  { href: "/admin", label: "Home" },
+  { href: "/admin/about", label: "About" },
+  { href: "/admin/insights", label: "Insights" },
+  { href: "/admin/events", label: "Events" },
+  { href: "/admin/footer", label: "Footer" },
+] as const;
+
 export default function AdminShell({
   children,
   onSave,
   saving = false,
   dirty = false,
   message = "",
-  pageTitle,
 }: AdminShellProps) {
   const { user, logout } = useAuth();
+  const pathname = usePathname() ?? "/admin";
+
+  const isActive = (href: string) =>
+    href === "/admin"
+      ? pathname === "/admin" || pathname === "/admin/home"
+      : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <div className="admin-shell">
@@ -30,12 +44,20 @@ export default function AdminShell({
           <Link href="/admin" className="admin-wp-bar-item admin-wp-bar-brand">
             VIKASA
           </Link>
-          {pageTitle ? (
-            <span className="admin-wp-bar-item admin-wp-bar-page">{pageTitle}</span>
-          ) : null}
-          <Link href="/admin" className="admin-wp-bar-item">
-            All pages
-          </Link>
+          <nav className="admin-wp-bar-nav" aria-label="Pages">
+            {NAV_PAGES.map((page) => (
+              <Link
+                key={page.href}
+                href={page.href}
+                className={`admin-wp-bar-item${
+                  isActive(page.href) ? " is-active" : ""
+                }`}
+                aria-current={isActive(page.href) ? "page" : undefined}
+              >
+                {page.label}
+              </Link>
+            ))}
+          </nav>
           <Link href="/" className="admin-wp-bar-item" target="_blank" rel="noreferrer">
             View site
           </Link>
