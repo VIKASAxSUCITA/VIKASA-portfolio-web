@@ -79,6 +79,7 @@ export const defaultHomeContent: HomeContent = {
           "Strengthen strategy, models, and investor materials that drive growth.",
         items: [
           "Market Intelligence",
+          "Feasibility Studies",
           "Business Model",
           "Financial Model",
           "Business Plan",
