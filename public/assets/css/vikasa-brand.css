@@ -1041,6 +1041,13 @@
   --color-foreground-heading: var(--vikasa-brown);
 }
 
+.multicolumn .card-icon .service-card-icon-img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
 /* About / What We Do list icons */
 .image-text .text-item {
   --color-foreground: var(--vikasa-brown);
