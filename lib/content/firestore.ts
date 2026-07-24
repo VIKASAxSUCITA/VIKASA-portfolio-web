@@ -23,8 +23,6 @@ import type {
   PageId,
 } from "./types";
 
-const ABOUT_US_IMAGE = "/assets/img/vikasa/aboutUs_image.png";
-
 function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
   const defaults = defaultHomeContent;
   const merged: HomeContent = {
@@ -34,7 +32,6 @@ function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
     about: {
       ...defaults.about,
       ...saved.about,
-      image: ABOUT_US_IMAGE,
     },
     cta: { ...defaults.cta, ...saved.cta },
     services: { ...defaults.services, ...saved.services },
@@ -71,7 +68,6 @@ function mergeAboutContent(saved: Partial<AboutContent>): AboutContent {
     whatWeDo: {
       ...defaults.whatWeDo,
       ...saved.whatWeDo,
-      image: ABOUT_US_IMAGE,
     },
     story: { ...defaults.story, ...saved.story },
     vision: { ...defaults.vision, ...saved.vision },

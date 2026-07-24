@@ -811,7 +811,7 @@
   --color-background: var(--vikasa-brown);
   --color-foreground: var(--vikasa-white);
   --color-foreground-heading: var(--vikasa-white);
-  --color-foreground-subheading: var(--vikasa-gold);
+  --color-foreground-subheading: var(--vikasa-white);
 }
 
 .text-banner-inner {
@@ -823,17 +823,17 @@
 }
 
 .text-banner .subheading-bg {
-  color: var(--vikasa-gold);
-  background: rgba(187, 151, 89, 0.18);
-  border-color: rgba(187, 151, 89, 0.45);
+  color: var(--vikasa-white);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 .text-banner .button--secondary {
-  --color-secondary-button-text: var(--vikasa-brown);
+  --color-secondary-button-text: var(--vikasa-white);
   --color-secondary-button-background: var(--vikasa-gold);
   --color-secondary-button-border: var(--vikasa-gold);
-  --color-secondary-button-icon: var(--vikasa-gold);
-  --color-secondary-button-icon-background: var(--vikasa-brown);
+  --color-secondary-button-icon: var(--vikasa-brown);
+  --color-secondary-button-icon-background: var(--vikasa-white);
 }
 
 .text-banner .button--secondary:focus,
