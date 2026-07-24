@@ -75,16 +75,34 @@ async function uploadFile(file: File): Promise<string> {
 }
 
 async function walk(value: unknown): Promise<unknown> {
-  if (typeof value === "string" && value.startsWith("blob:")) {
-    const file = pending.get(value);
-    if (!file) {
-      throw new Error(
-        "A new image preview is missing. Choose the image again."
-      );
+  if (typeof value === "string") {
+    if (value.startsWith("blob:")) {
+      const file = pending.get(value);
+      if (!file) {
+        throw new Error(
+          "A new image preview is missing. Choose the image again."
+        );
+      }
+      const url = await uploadFile(file);
+      discardPendingImage(value);
+      return url;
     }
-    const url = await uploadFile(file);
-    discardPendingImage(value);
-    return url;
+
+    // TipTap bodyHtml (and similar) can embed blob: image URLs inside HTML.
+    if (value.includes("blob:")) {
+      const blobUrls = [
+        ...value.matchAll(/\bblob:(?:https?:\/\/[^"'>\s]+|[^"'>\s]+)/g),
+      ].map((match) => match[0]);
+      const unique = [...new Set(blobUrls)];
+      let next = value;
+      for (const blobUrl of unique) {
+        const uploaded = (await walk(blobUrl)) as string;
+        next = next.split(blobUrl).join(uploaded);
+      }
+      return next;
+    }
+
+    return value;
   }
 
   if (Array.isArray(value)) {

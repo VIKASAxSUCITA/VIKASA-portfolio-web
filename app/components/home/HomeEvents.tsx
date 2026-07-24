@@ -8,6 +8,8 @@ import type { EventPost } from "@/lib/content/types";
 type HomeEventsProps = {
   heading: string;
   posts: EventPost[];
+  /** Admin preview: cards open the Events editor instead of the public site. */
+  adminLinks?: boolean;
 };
 
 function CalendarIcon() {
@@ -74,7 +76,17 @@ function ArrowIcon() {
   );
 }
 
-export default function HomeEvents({ heading, posts }: HomeEventsProps) {
+export default function HomeEvents({
+  heading,
+  posts,
+  adminLinks = false,
+}: HomeEventsProps) {
+  const listHref = adminLinks ? "/admin/events" : "/events";
+  const postHref = (id: string) =>
+    adminLinks
+      ? `/admin/events?edit=${encodeURIComponent(id)}`
+      : `/events/${id}`;
+
   return (
     <div id="home-events" className="events-schedule-section section-padding">
       <div className="container">
@@ -87,11 +99,19 @@ export default function HomeEvents({ heading, posts }: HomeEventsProps) {
           >
             {heading}
           </h2>
+          {adminLinks ? (
+            <p className="text text-14 admin-insights-preview-note">
+              Click a card or Manage Events to edit in admin. Use Add Event
+              there to create a new one.
+            </p>
+          ) : null}
         </div>
 
         {posts.length === 0 ? (
           <p className="text text-18 text-center" data-aos="fade-up">
-            No events or announcements yet. Check back soon.
+            {adminLinks
+              ? "No events yet. Open Manage Events to create one."
+              : "No events or announcements yet. Check back soon."}
           </p>
         ) : (
           <div className="events-card-list">
@@ -127,7 +147,7 @@ export default function HomeEvents({ heading, posts }: HomeEventsProps) {
 
                   <div className="event-list-card-body">
                     <h3 className="heading event-list-card-title">
-                      <a href={`/events/${post.id}`}>{post.title}</a>
+                      <a href={postHref(post.id)}>{post.title}</a>
                     </h3>
 
                     <ul className="event-list-card-meta list-unstyled">
@@ -151,10 +171,10 @@ export default function HomeEvents({ heading, posts }: HomeEventsProps) {
 
                     <div className="event-list-card-footer">
                       <a
-                        href={`/events/${post.id}`}
+                        href={postHref(post.id)}
                         className="button button--primary event-list-card-cta"
                       >
-                        View Details
+                        {adminLinks ? "Edit Event" : "View Details"}
                         <span className="svg-wrapper" aria-hidden>
                           <ArrowIcon />
                         </span>
@@ -173,11 +193,13 @@ export default function HomeEvents({ heading, posts }: HomeEventsProps) {
           data-aos-delay="100"
         >
           <a
-            href="/events"
+            href={listHref}
             className="button button--primary"
-            aria-label="Discover more Events"
+            aria-label={
+              adminLinks ? "Manage Events in admin" : "Discover more Events"
+            }
           >
-            Discover More
+            {adminLinks ? "Manage Events" : "Discover More"}
             <span className="svg-wrapper">
               <svg
                 className="icon-20"

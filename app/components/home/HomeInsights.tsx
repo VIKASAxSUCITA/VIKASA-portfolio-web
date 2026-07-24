@@ -4,9 +4,21 @@ import type { InsightPost } from "@/lib/content/types";
 type HomeInsightsProps = {
   heading: string;
   posts: InsightPost[];
+  /** Admin preview: cards open the Insights editor instead of the public site. */
+  adminLinks?: boolean;
 };
 
-export default function HomeInsights({ heading, posts }: HomeInsightsProps) {
+export default function HomeInsights({
+  heading,
+  posts,
+  adminLinks = false,
+}: HomeInsightsProps) {
+  const listHref = adminLinks ? "/admin/insights" : "/insights";
+  const postHref = (id: string) =>
+    adminLinks
+      ? `/admin/insights?edit=${encodeURIComponent(id)}`
+      : `/insights/${id}`;
+
   return (
     <div className="insights-tiles-section section-padding">
       <div className="container">
@@ -19,6 +31,12 @@ export default function HomeInsights({ heading, posts }: HomeInsightsProps) {
           >
             {heading}
           </h2>
+          {adminLinks ? (
+            <p className="text text-14 admin-insights-preview-note">
+              Click a card or Manage Insights to edit in admin. Use Add Insight
+              there to create a new one.
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -34,7 +52,7 @@ export default function HomeInsights({ heading, posts }: HomeInsightsProps) {
           {posts.map((post, index) => (
             <InsightCardLink
               key={post.id}
-              href={`/insights/${post.id}`}
+              href={postHref(post.id)}
               title={post.title}
               image={post.image}
               index={index}
@@ -50,11 +68,13 @@ export default function HomeInsights({ heading, posts }: HomeInsightsProps) {
           data-aos-delay="100"
         >
           <a
-            href="/insights"
+            href={listHref}
             className="button button--primary"
-            aria-label="Discover more Insights"
+            aria-label={
+              adminLinks ? "Manage Insights in admin" : "Discover more Insights"
+            }
           >
-            Discover More
+            {adminLinks ? "Manage Insights" : "Discover More"}
             <span className="svg-wrapper">
               <svg
                 className="icon-20"

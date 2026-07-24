@@ -524,6 +524,21 @@
   background-position: center;
   color: #fff;
   text-align: center;
+  overflow: hidden;
+}
+
+.insight-detail-hero.is-editing .insight-detail-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.insight-detail-hero.is-editing .insight-detail-hero-media .admin-editable-image,
+.insight-detail-hero.is-editing .insight-detail-hero-media .admin-editable-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .insight-detail-hero-overlay {
@@ -671,6 +686,163 @@
 
 .insight-detail-byline strong {
   color: var(--vikasa-brown, #5e3123);
+}
+
+/* Rich text body (Tiptap output + public render) */
+.insight-rich-body {
+  color: rgba(40, 40, 40, 0.82);
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+.insight-rich-body > *:first-child {
+  margin-top: 0;
+}
+
+.insight-rich-body p {
+  margin: 0 0 24px;
+}
+
+.insight-detail-inner > .insight-rich-body > p:first-of-type::first-letter {
+  float: left;
+  margin: 6px 12px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 4.6rem;
+  font-weight: 700;
+  line-height: 0.8;
+  color: var(--vikasa-brown, #5e3123);
+}
+
+.insight-rte .ProseMirror > p:first-of-type::first-letter {
+  float: none;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.insight-rich-body h2 {
+  margin: 36px 0 18px;
+  color: var(--vikasa-brown, #5e3123);
+  font-size: clamp(1.45rem, 2.4vw, 1.85rem);
+  line-height: 1.3;
+}
+
+.insight-rich-body h3 {
+  margin: 28px 0 14px;
+  color: var(--vikasa-brown, #5e3123);
+  font-size: 1.25rem;
+  line-height: 1.35;
+}
+
+.insight-rich-body blockquote {
+  position: relative;
+  margin: 36px 0;
+  padding: 8px 0 8px 28px;
+  border-left: 3px solid var(--vikasa-gold, #bb9759);
+  color: var(--vikasa-brown, #5e3123);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-style: italic;
+  line-height: 1.55;
+}
+
+.insight-rich-body blockquote p {
+  margin: 0;
+}
+
+.insight-rich-body ul,
+.insight-rich-body ol {
+  margin: 0 0 24px;
+  padding-left: 1.35rem;
+}
+
+.insight-rich-body li {
+  margin: 0 0 8px;
+}
+
+.insight-rich-body a,
+.insight-rich-body .insight-rte-link {
+  color: var(--vikasa-brown, #5e3123);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.insight-rich-body img,
+.insight-rich-body .insight-rte-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 28px 0;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.insight-rte {
+  margin-bottom: 8px;
+}
+
+.insight-rte-toolbar {
+  position: sticky;
+  top: 88px;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 10px;
+  border: 1px solid rgba(94, 49, 35, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+}
+
+.insight-rte-btn {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid rgba(94, 49, 35, 0.18);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--vikasa-brown, #5e3123);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.insight-rte-btn:hover {
+  border-color: rgba(94, 49, 35, 0.4);
+  background: rgba(94, 49, 35, 0.05);
+}
+
+.insight-rte-btn.is-active {
+  border-color: var(--vikasa-brown, #5e3123);
+  background: var(--vikasa-brown, #5e3123);
+  color: #fff;
+}
+
+.insight-rte-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.insight-rte .ProseMirror {
+  min-height: 320px;
+  outline: none;
+}
+
+.insight-rte .ProseMirror p.is-editor-empty:first-child::before {
+  float: left;
+  height: 0;
+  color: rgba(94, 49, 35, 0.4);
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .insight-rte-toolbar {
+    top: 0;
+  }
 }
 
 @media (max-width: 991px) {
@@ -1867,12 +2039,15 @@
 .admin-site .hero-slider .admin-editable-text,
 .admin-site .page-banner .admin-editable-text,
 .admin-site .text-banner .admin-editable-text,
+.admin-site .insight-detail-hero .admin-editable-text,
 .admin-site .hero-slider input.admin-editable-text,
 .admin-site .page-banner input.admin-editable-text,
 .admin-site .text-banner input.admin-editable-text,
+.admin-site .insight-detail-hero input.admin-editable-text,
 .admin-site .hero-slider textarea.admin-editable-text,
 .admin-site .page-banner textarea.admin-editable-text,
-.admin-site .text-banner textarea.admin-editable-text {
+.admin-site .text-banner textarea.admin-editable-text,
+.admin-site .insight-detail-hero textarea.admin-editable-text {
   color: #fff;
   caret-color: #fff;
 }
@@ -1880,12 +2055,15 @@
 .admin-site .hero-slider .admin-editable-text:hover,
 .admin-site .page-banner .admin-editable-text:hover,
 .admin-site .text-banner .admin-editable-text:hover,
+.admin-site .insight-detail-hero .admin-editable-text:hover,
 .admin-site .hero-slider input.admin-editable-text:hover,
 .admin-site .page-banner input.admin-editable-text:hover,
 .admin-site .text-banner input.admin-editable-text:hover,
+.admin-site .insight-detail-hero input.admin-editable-text:hover,
 .admin-site .hero-slider textarea.admin-editable-text:hover,
 .admin-site .page-banner textarea.admin-editable-text:hover,
-.admin-site .text-banner textarea.admin-editable-text:hover {
+.admin-site .text-banner textarea.admin-editable-text:hover,
+.admin-site .insight-detail-hero textarea.admin-editable-text:hover {
   background: rgba(255, 255, 255, 0.1);
   background-color: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.45);
@@ -1895,12 +2073,15 @@
 .admin-site .hero-slider .admin-editable-text:focus,
 .admin-site .page-banner .admin-editable-text:focus,
 .admin-site .text-banner .admin-editable-text:focus,
+.admin-site .insight-detail-hero .admin-editable-text:focus,
 .admin-site .hero-slider input.admin-editable-text:focus,
 .admin-site .page-banner input.admin-editable-text:focus,
 .admin-site .text-banner input.admin-editable-text:focus,
+.admin-site .insight-detail-hero input.admin-editable-text:focus,
 .admin-site .hero-slider textarea.admin-editable-text:focus,
 .admin-site .page-banner textarea.admin-editable-text:focus,
-.admin-site .text-banner textarea.admin-editable-text:focus {
+.admin-site .text-banner textarea.admin-editable-text:focus,
+.admin-site .insight-detail-hero textarea.admin-editable-text:focus {
   color: #fff;
   background: rgba(0, 0, 0, 0.25);
   background-color: rgba(0, 0, 0, 0.25);
@@ -2191,6 +2372,79 @@
 .admin-insights-preview-note {
   margin-top: 8px;
   color: rgba(94, 49, 35, 0.7);
+}
+
+.admin-detail-toolbar {
+  position: sticky;
+  top: 32px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid rgba(94, 49, 35, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.admin-detail-toolbar-hint {
+  flex: 1;
+  margin: 0;
+  color: rgba(94, 49, 35, 0.72);
+}
+
+.admin-detail-back {
+  flex-shrink: 0;
+}
+
+.admin-site .insight-detail-paired .admin-editable-image,
+.admin-site .insight-detail-feature .admin-editable-image,
+.admin-site .event-detail-feature .admin-editable-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.admin-site .insight-detail-paired .admin-editable-image,
+.admin-site .insight-detail-paired .admin-editable-image img {
+  height: 280px;
+}
+
+.admin-site .insight-detail-paired .admin-editable-image img,
+.admin-site .insight-detail-feature .admin-editable-image img,
+.admin-site .event-detail-feature .admin-editable-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-site .insight-detail-feature .admin-editable-image img {
+  min-height: 360px;
+}
+
+.admin-site .event-detail-feature .admin-editable-image img {
+  min-height: 420px;
+}
+
+.admin-site .insight-detail-tag.admin-editable-text,
+.admin-site .insight-detail-tag input.admin-editable-text {
+  width: auto;
+  min-width: 8rem;
+  text-align: center;
+  color: #fff;
+}
+
+.admin-site .event-info-list .admin-editable-text,
+.admin-site .event-info-list input.admin-editable-text {
+  color: var(--vikasa-brown, #5e3123);
+}
+
+.admin-site .event-info-list .admin-event-datetime {
+  max-width: none;
 }
 
 .admin-insight-add-card {

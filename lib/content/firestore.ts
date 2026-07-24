@@ -1,5 +1,10 @@
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { getFirebaseDb } from "@/lib/firebase";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+  getFirebaseDb,
+} from "@/lib/firebase/firestore";
 import {
   defaultAboutContent,
   defaultEventsContent,

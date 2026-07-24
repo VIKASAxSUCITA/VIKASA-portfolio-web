@@ -3,27 +3,20 @@ import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
 import { getFirebaseClientConfig } from "./config";
 
-let app: FirebaseApp | undefined;
-let auth: Auth | undefined;
-let db: Firestore | undefined;
-
-export function getFirebaseApp() {
-  if (!app) {
-    app = getApps().length ? getApp() : initializeApp(getFirebaseClientConfig());
-  }
-  return app;
+/**
+ * Always resolve through the current Firebase app.
+ * Avoid caching Auth/Firestore instances across Next.js HMR — a stale instance
+ * from a previous module evaluation fails Firestore's `instanceof` checks and
+ * throws: "Expected first argument to doc() to be a CollectionReference..."
+ */
+export function getFirebaseApp(): FirebaseApp {
+  return getApps().length ? getApp() : initializeApp(getFirebaseClientConfig());
 }
 
-export function getFirebaseAuth() {
-  if (!auth) {
-    auth = getAuth(getFirebaseApp());
-  }
-  return auth;
+export function getFirebaseAuth(): Auth {
+  return getAuth(getFirebaseApp());
 }
 
-export function getFirebaseDb() {
-  if (!db) {
-    db = getFirestore(getFirebaseApp());
-  }
-  return db;
+export function getFirebaseDb(): Firestore {
+  return getFirestore(getFirebaseApp());
 }

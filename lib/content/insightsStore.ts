@@ -8,8 +8,8 @@ import {
   setDoc,
   updateDoc,
   writeBatch,
-} from "firebase/firestore";
-import { getFirebaseDb } from "@/lib/firebase";
+  getFirebaseDb,
+} from "@/lib/firebase/firestore";
 import { defaultInsightsContent } from "./defaults";
 import {
   mergeInsightsContent,
@@ -53,6 +53,9 @@ function entriesCollection() {
 }
 
 function entryDoc(id: string) {
+  if (!id?.trim()) {
+    throw new Error("Cannot save an insight without a valid id.");
+  }
   return doc(getFirebaseDb(), ...INSIGHTS_PAGE_REF, ENTRIES_COLLECTION, id);
 }
 
@@ -62,6 +65,7 @@ function insightDocPayload(post: InsightPost) {
     image: post.image,
     category: post.category,
     author: post.author,
+    bodyHtml: post.bodyHtml,
     quote: post.quote,
     sectionTitle: post.sectionTitle,
     paragraphs: post.paragraphs,

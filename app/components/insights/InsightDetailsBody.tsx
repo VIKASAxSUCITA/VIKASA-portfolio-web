@@ -1,29 +1,82 @@
+"use client";
+
+import {
+  EditableField,
+  EditableMedia,
+} from "@/app/components/admin/EditableField";
+import InsightRichTextEditor from "@/app/components/insights/InsightRichTextEditor";
 import { formatInsightDate } from "@/lib/content/insights";
 import type { InsightPost } from "@/lib/content/types";
 
 type InsightDetailsBodyProps = {
   post: InsightPost;
+  edit?: { onChange: (updater: (prev: InsightPost) => InsightPost) => void };
 };
 
-export default function InsightDetailsBody({ post }: InsightDetailsBodyProps) {
+export default function InsightDetailsBody({
+  post,
+  edit,
+}: InsightDetailsBodyProps) {
   const dateLabel = formatInsightDate(post.createdAt);
-  const [lead, second, third, fourth] = post.paragraphs;
-  const quote = post.quote.trim();
-  const sectionTitle = post.sectionTitle.trim();
+
+  const patch = <K extends keyof InsightPost>(key: K, value: InsightPost[K]) =>
+    edit?.onChange((prev) => ({ ...prev, [key]: value }));
 
   return (
     <main className="insight-detail">
       <section
-        className="insight-detail-hero"
-        style={{ backgroundImage: `url(${post.image})` }}
+        className={`insight-detail-hero${edit ? " is-editing" : ""}`}
+        style={edit ? undefined : { backgroundImage: `url(${post.image})` }}
         aria-label={post.title}
       >
+        {edit ? (
+          <picture className="media media-bg insight-detail-hero-media">
+            <EditableMedia
+              src={post.image}
+              width={1920}
+              height={900}
+              loading="eager"
+              alt=""
+              edit={{ onChange: (image) => patch("image", image) }}
+            />
+          </picture>
+        ) : null}
         <div className="insight-detail-hero-overlay" aria-hidden />
         <div className="container insight-detail-hero-content">
-          <span className="insight-detail-tag">{post.category}</span>
-          <h1 className="heading insight-detail-hero-title">{post.title}</h1>
+          {edit ? (
+            <EditableField
+              as="span"
+              className="insight-detail-tag"
+              value={post.category}
+              label="Category"
+              edit={{ onChange: (category) => patch("category", category) }}
+            />
+          ) : (
+            <span className="insight-detail-tag">{post.category}</span>
+          )}
+          <EditableField
+            as="h1"
+            className="heading insight-detail-hero-title"
+            value={post.title}
+            label="Insight title"
+            edit={
+              edit
+                ? { onChange: (title) => patch("title", title) }
+                : undefined
+            }
+          />
           <div className="insight-detail-hero-meta text text-14">
-            <span className="insight-detail-author">{post.author}</span>
+            {edit ? (
+              <EditableField
+                as="span"
+                className="insight-detail-author"
+                value={post.author}
+                label="Author"
+                edit={{ onChange: (author) => patch("author", author) }}
+              />
+            ) : (
+              <span className="insight-detail-author">{post.author}</span>
+            )}
             {dateLabel ? <span>{dateLabel}</span> : null}
           </div>
         </div>
@@ -31,52 +84,30 @@ export default function InsightDetailsBody({ post }: InsightDetailsBodyProps) {
 
       <article className="insight-detail-article">
         <div className="insight-detail-inner">
-          {lead ? <p className="insight-detail-lead text">{lead}</p> : null}
-          {second ? <p className="text insight-detail-copy">{second}</p> : null}
-
-          <div className="insight-detail-paired">
-            {post.pairedImages.map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                alt=""
-                width={768}
-                height={700}
-                loading="lazy"
-              />
-            ))}
-          </div>
-
-          {sectionTitle ? (
-            <h2 className="heading insight-detail-section-title">
-              {sectionTitle}
-            </h2>
-          ) : null}
-
-          {third ? <p className="text insight-detail-copy">{third}</p> : null}
-
-          {quote ? (
-            <blockquote className="insight-detail-quote">
-              <span className="insight-detail-quote-mark" aria-hidden>
-                “
-              </span>
-              <p>{quote}</p>
-            </blockquote>
-          ) : null}
-
-          {fourth ? <p className="text insight-detail-copy">{fourth}</p> : null}
-
-          <figure className="insight-detail-feature">
-            <img
-              src={post.image}
-              alt=""
-              width={1200}
-              height={700}
-              loading="lazy"
+          {edit ? (
+            <InsightRichTextEditor
+              content={post.bodyHtml}
+              onChange={(bodyHtml) => patch("bodyHtml", bodyHtml)}
             />
-          </figure>
+          ) : (
+            <div
+              className="insight-rich-body"
+              dangerouslySetInnerHTML={{ __html: post.bodyHtml }}
+            />
+          )}
+
           <p className="insight-detail-byline text text-16">
-            By <strong>{post.author}</strong>
+            By{" "}
+            {edit ? (
+              <EditableField
+                as="strong"
+                value={post.author}
+                label="Author"
+                edit={{ onChange: (author) => patch("author", author) }}
+              />
+            ) : (
+              <strong>{post.author}</strong>
+            )}
           </p>
         </div>
       </article>

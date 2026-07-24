@@ -94,8 +94,16 @@ export default function AdminHomeEditor() {
               content={content.services}
               edit={sectionEdit("services")}
             />
-            <HomeInsights heading={insightsHeading} posts={latestInsights} />
-            <HomeEvents heading={eventsHeading} posts={latestEvents} />
+            <HomeInsights
+              heading={insightsHeading}
+              posts={latestInsights}
+              adminLinks
+            />
+            <HomeEvents
+              heading={eventsHeading}
+              posts={latestEvents}
+              adminLinks
+            />
             <HomeContact
               content={content.contact}
               edit={sectionEdit("contact")}
