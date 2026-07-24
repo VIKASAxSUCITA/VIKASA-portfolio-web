@@ -86,6 +86,10 @@ export function sortEventsBySchedule(posts: EventPost[]): EventPost[] {
   });
 }
 
+export function getLatestEvents(posts: EventPost[], limit = 3): EventPost[] {
+  return sortEventsBySchedule(posts).slice(0, limit);
+}
+
 export function findEventById(
   posts: EventPost[],
   id: string

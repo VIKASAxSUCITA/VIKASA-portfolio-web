@@ -37,15 +37,16 @@ html {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 9;
-  background-color: rgba(0, 0, 0, 0.3); }
+  z-index: 10040;
+  padding: 0;
+  border: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
 
 #drawer-overlay:not(.show) {
-  display: none; }
-
-@media (max-width: 991px) {
-  #drawer-overlay {
-    display: none; } }
+  display: none;
+}
 
 img,
 picture,
@@ -572,7 +573,6 @@ h6,
 
 .section-padding {
   --padding-top: 100px;
-  --padding-bottom: 100px;
   -webkit-padding-before: var(--padding-top);
   padding-block-start: var(--padding-top);
   -webkit-padding-after: var(--padding-bottom);

@@ -9,11 +9,17 @@ import HomeAbout from "@/app/components/home/HomeAbout";
 import HomeCta from "@/app/components/home/HomeCta";
 import HomeServices from "@/app/components/home/HomeServices";
 import HomeInsights from "@/app/components/home/HomeInsights";
+import HomeEvents from "@/app/components/home/HomeEvents";
 import HomeContact from "@/app/components/home/HomeContact";
 import { usePageEditor } from "@/app/components/admin/usePageEditor";
 import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
+import { getLatestEvents } from "@/lib/content/events";
 import { getLatestInsights } from "@/lib/content/insights";
-import type { HomeContent, InsightsContent } from "@/lib/content/types";
+import type {
+  EventsContent,
+  HomeContent,
+  InsightsContent,
+} from "@/lib/content/types";
 
 export default function AdminHomeEditor() {
   const {
@@ -29,15 +35,23 @@ export default function AdminHomeEditor() {
   } = usePageWithFooterEditor("home");
 
   const insightsEditor = usePageEditor("insights");
+  const eventsEditor = usePageEditor("events");
   const [insightsPreview, setInsightsPreview] = useState<InsightsContent | null>(
     null
   );
+  const [eventsPreview, setEventsPreview] = useState<EventsContent | null>(null);
 
   useEffect(() => {
     if (!insightsEditor.loading) {
       setInsightsPreview(insightsEditor.content);
     }
   }, [insightsEditor.loading, insightsEditor.content]);
+
+  useEffect(() => {
+    if (!eventsEditor.loading) {
+      setEventsPreview(eventsEditor.content);
+    }
+  }, [eventsEditor.loading, eventsEditor.content]);
 
   const shellProps = {
     pageTitle: "Home",
@@ -47,7 +61,7 @@ export default function AdminHomeEditor() {
     message,
   };
 
-  if (loading || insightsEditor.loading) {
+  if (loading || insightsEditor.loading || eventsEditor.loading) {
     return (
       <AdminGuard>
         <AdminShell {...shellProps}>
@@ -59,6 +73,9 @@ export default function AdminHomeEditor() {
 
   const latestInsights = getLatestInsights(insightsPreview?.posts ?? [], 3);
   const insightsHeading = insightsPreview?.heading ?? "Latest Insights From Us";
+  const latestEvents = getLatestEvents(eventsPreview?.posts ?? [], 3);
+  const eventsHeading =
+    eventsPreview?.heading ?? "Upcoming Events & Announcements";
 
   const sectionEdit = <K extends keyof HomeContent>(key: K) => ({
     onChange: (updater: (prev: HomeContent[K]) => HomeContent[K]) =>
@@ -78,6 +95,7 @@ export default function AdminHomeEditor() {
               edit={sectionEdit("services")}
             />
             <HomeInsights heading={insightsHeading} posts={latestInsights} />
+            <HomeEvents heading={eventsHeading} posts={latestEvents} />
             <HomeContact
               content={content.contact}
               edit={sectionEdit("contact")}

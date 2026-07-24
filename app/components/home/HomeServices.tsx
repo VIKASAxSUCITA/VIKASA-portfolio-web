@@ -83,12 +83,11 @@ export default function HomeServices({ content, edit }: HomeServicesProps) {
     });
 
   return (
-    <div className="multicolumn multicolumn-page section-padding">
+    <div id="services" className="multicolumn multicolumn-page section-padding">
       <div className="container">
         <div className="multicolumn-header section-headings">
           <EditableField
             as="h2"
-            id="services"
             className="heading text-50"
             value={content.heading}
             aos="fade-up"

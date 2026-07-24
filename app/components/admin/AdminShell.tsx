@@ -38,7 +38,6 @@ export default function AdminShell({
 
   return (
     <div className="admin-shell">
-      {/* WordPress-style thin admin bar */}
       <header className="admin-wp-bar" role="banner">
         <div className="admin-wp-bar-left">
           <Link href="/admin" className="admin-wp-bar-item admin-wp-bar-brand">
@@ -58,7 +57,12 @@ export default function AdminShell({
               </Link>
             ))}
           </nav>
-          <Link href="/" className="admin-wp-bar-item" target="_blank" rel="noreferrer">
+          <Link
+            href="/"
+            className="admin-wp-bar-item"
+            target="_blank"
+            rel="noreferrer"
+          >
             View site
           </Link>
         </div>
@@ -75,7 +79,11 @@ export default function AdminShell({
             </button>
           ) : null}
           <span className="admin-wp-bar-item">{user?.email ?? "admin"}</span>
-          <button type="button" className="admin-wp-bar-item admin-wp-bar-btn" onClick={() => logout()}>
+          <button
+            type="button"
+            className="admin-wp-bar-item admin-wp-bar-btn"
+            onClick={() => logout()}
+          >
             Sign out
           </button>
         </div>

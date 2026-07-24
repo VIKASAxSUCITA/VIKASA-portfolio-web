@@ -3,11 +3,11 @@ import {
   formatEventBadgeDate,
   formatEventTimeRange,
 } from "@/lib/content/events";
-import type { EventsContent } from "@/lib/content/types";
+import type { EventPost } from "@/lib/content/types";
 
-type EventsListProps = {
-  heading: EventsContent["heading"];
-  posts: EventsContent["posts"];
+type HomeEventsProps = {
+  heading: string;
+  posts: EventPost[];
 };
 
 function CalendarIcon() {
@@ -74,12 +74,13 @@ function ArrowIcon() {
   );
 }
 
-export default function EventsList({ heading, posts }: EventsListProps) {
+export default function HomeEvents({ heading, posts }: HomeEventsProps) {
   return (
-    <div className="events-schedule-section section-padding">
+    <div id="home-events" className="events-schedule-section section-padding">
       <div className="container">
         <div className="section-headings text-center">
           <h2
+            id="events"
             className="heading text-50"
             data-aos="fade-up"
             data-aos-delay="50"
@@ -165,6 +166,35 @@ export default function EventsList({ heading, posts }: EventsListProps) {
             })}
           </div>
         )}
+
+        <div
+          className="buttons buttons-discover"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <a
+            href="/events"
+            className="button button--primary"
+            aria-label="Discover more Events"
+          >
+            Discover More
+            <span className="svg-wrapper">
+              <svg
+                className="icon-20"
+                width={20}
+                height={20}
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13.3365 7.84518L6.16435 15.0173L4.98584 13.8388L12.158 6.66667H5.83652V5H15.0032V14.1667H13.3365V7.84518Z"
+                  fill="CurrentColor"
+                />
+              </svg>
+            </span>
+          </a>
+        </div>
       </div>
     </div>
   );

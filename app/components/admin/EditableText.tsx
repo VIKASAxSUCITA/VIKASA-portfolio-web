@@ -8,6 +8,7 @@ type EditableTextProps = {
   multiline?: boolean;
   className?: string;
   label?: string;
+  id?: string;
   autoFocus?: boolean;
 };
 
@@ -21,11 +22,13 @@ const EditableText = forwardRef<
     multiline = false,
     className = "",
     label,
+    id,
     autoFocus = false,
   },
   ref
 ) {
   const shared = {
+    id,
     className: `admin-editable-text ${multiline ? "is-multiline" : ""} ${className}`.trim(),
     value,
     onChange: (
