@@ -87,6 +87,12 @@ export type InsightPost = {
   image: string;
   category: string;
   author: string;
+  /** Rich article HTML authored with Tiptap. */
+  bodyHtml: string;
+  /**
+   * Legacy structured fields — still read for migration into bodyHtml.
+   * New edits go through bodyHtml only.
+   */
   quote: string;
   sectionTitle: string;
   paragraphs: [string, string, string, string];

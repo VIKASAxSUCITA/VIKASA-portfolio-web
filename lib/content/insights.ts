@@ -2,7 +2,16 @@ import {
   defaultInsightPairedImages,
   defaultInsightParagraphs,
 } from "./defaults";
+import {
+  buildInsightBodyHtmlFromLegacy,
+  insightBodyPlainText,
+} from "./insightHtml";
 import type { InsightPost, InsightsContent } from "./types";
+
+export {
+  buildInsightBodyHtmlFromLegacy,
+  insightBodyPlainText,
+} from "./insightHtml";
 
 export function slugifyInsightName(title: string): string {
   return (
@@ -28,6 +37,7 @@ export function createEmptyInsight(): InsightPost {
     sectionTitle: "",
     paragraphs: ["", "", "", ""] as InsightPost["paragraphs"],
     pairedImages: [...defaultInsightPairedImages] as InsightPost["pairedImages"],
+    bodyHtml: "<p></p>",
     createdAt: new Date().toISOString(),
   };
 }
@@ -47,16 +57,32 @@ export function normalizeInsightPost(
       ) as InsightPost["pairedImages"])
     : ([...defaultInsightPairedImages] as InsightPost["pairedImages"]);
 
+  const quote = post.quote ?? "";
+  const sectionTitle = post.sectionTitle ?? "";
+  const image = post.image ?? "/assets/img/blog/1.jpg";
+
+  const bodyHtml =
+    typeof post.bodyHtml === "string" && post.bodyHtml.trim()
+      ? post.bodyHtml
+      : buildInsightBodyHtmlFromLegacy({
+          paragraphs,
+          pairedImages,
+          sectionTitle,
+          quote,
+          featureImage: image,
+        });
+
   return {
     id: post.id,
     title: post.title ?? "New Insight",
-    image: post.image ?? "/assets/img/blog/1.jpg",
+    image,
     category: post.category?.trim() || "Insight",
     author: post.author?.trim() || "VIKASA",
-    quote: post.quote ?? "",
-    sectionTitle: post.sectionTitle ?? "",
+    quote,
+    sectionTitle,
     paragraphs,
     pairedImages,
+    bodyHtml,
     createdAt: post.createdAt ?? "1970-01-01T00:00:00.000Z",
   };
 }
@@ -113,7 +139,8 @@ export function formatInsightDate(iso: string): string {
 }
 
 export function insightExcerpt(post: InsightPost, max = 140): string {
-  const text = post.paragraphs[0]?.trim() || "";
+  const text =
+    insightBodyPlainText(post.bodyHtml) || post.paragraphs[0]?.trim() || "";
   if (text.length <= max) return text;
   return `${text.slice(0, max).trim()}…`;
 }

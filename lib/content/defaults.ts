@@ -6,6 +6,7 @@ import type {
   InsightPost,
   InsightsContent,
 } from "./types";
+import { buildInsightBodyHtmlFromLegacy } from "./insightHtml";
 
 export const defaultInsightParagraphs: InsightPost["paragraphs"] = [
   "Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore of magna aliqua. Ut enim ad minim veniam, made of owl the quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea dolor commodo consequat. Duis aute irure and dolor in reprehenderit.",
@@ -25,17 +26,31 @@ function insightDefaults(
   image: string,
   createdAt: string
 ): InsightPost {
+  const paragraphs = [...defaultInsightParagraphs] as InsightPost["paragraphs"];
+  const pairedImages = [
+    ...defaultInsightPairedImages,
+  ] as InsightPost["pairedImages"];
+  const quote =
+    "Accountability and continuous improvement unlock growth that lasts.";
+  const sectionTitle = "Creative approach to every project";
+
   return {
     id,
     title,
     image,
     category: "Insight",
     author: "VIKASA",
-    quote:
-      "Accountability and continuous improvement unlock growth that lasts.",
-    sectionTitle: "Creative approach to every project",
-    paragraphs: [...defaultInsightParagraphs] as InsightPost["paragraphs"],
-    pairedImages: [...defaultInsightPairedImages] as InsightPost["pairedImages"],
+    quote,
+    sectionTitle,
+    paragraphs,
+    pairedImages,
+    bodyHtml: buildInsightBodyHtmlFromLegacy({
+      paragraphs,
+      pairedImages,
+      sectionTitle,
+      quote,
+      featureImage: image,
+    }),
     createdAt,
   };
 }
@@ -79,6 +94,7 @@ export const defaultHomeContent: HomeContent = {
           "Strengthen strategy, models, and investor materials that drive growth.",
         items: [
           "Market Intelligence",
+          "Feasibility Studies",
           "Business Model",
           "Financial Model",
           "Business Plan",

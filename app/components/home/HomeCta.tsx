@@ -58,7 +58,6 @@ export default function HomeCta({ content, edit }: HomeCtaProps) {
               ) : (
                 <span>{content.badge}</span>
               )}
-              <PlayIcon />
             </div>
             <EditableField
               as="h2"

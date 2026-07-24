@@ -59,14 +59,18 @@ export function usePageEditor<T extends PageId>(pageId: T) {
     async (snapshot: PageContentMap[T]) => {
       setSaving(true);
       setMessage("");
+      const previous = savedRef.current;
       try {
+        // 1) Upload new previews → permanent Blob URLs
         const resolved = await resolvePendingImages(snapshot);
-        await deleteRemovedBlobs(savedRef.current, resolved);
-        setContent(resolved);
+        // 2) Persist content first so the site never points at deleted files
         await savePageContent(pageId, resolved);
+        setContent(resolved);
         savedRef.current = resolved;
         setDirty(false);
         setMessage("Saved.");
+        // 3) Remove replaced/orphaned Blob files (home, about, insights, events, …)
+        await deleteRemovedBlobs(previous, resolved);
         return resolved;
       } catch (error) {
         console.error(error);

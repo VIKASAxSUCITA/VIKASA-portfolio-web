@@ -6,8 +6,8 @@ import {
   serverTimestamp,
   setDoc,
   writeBatch,
-} from "firebase/firestore";
-import { getFirebaseDb } from "@/lib/firebase";
+  getFirebaseDb,
+} from "@/lib/firebase/firestore";
 import { defaultEventsContent } from "./defaults";
 import {
   mergeEventsContent,
@@ -30,6 +30,9 @@ function entriesCollection() {
 }
 
 function entryDoc(id: string) {
+  if (!id?.trim()) {
+    throw new Error("Cannot save an event without a valid id.");
+  }
   return doc(getFirebaseDb(), ...EVENTS_PAGE_REF, ENTRIES_COLLECTION, id);
 }
 

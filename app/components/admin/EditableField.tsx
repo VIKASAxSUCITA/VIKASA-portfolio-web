@@ -45,6 +45,7 @@ export function EditableField({
   if (edit) {
     return (
       <EditableText
+        id={id}
         className={className}
         value={value}
         onChange={edit.onChange}

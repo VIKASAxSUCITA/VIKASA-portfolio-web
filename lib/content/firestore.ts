@@ -1,5 +1,10 @@
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { getFirebaseDb } from "@/lib/firebase";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+  getFirebaseDb,
+} from "@/lib/firebase/firestore";
 import {
   defaultAboutContent,
   defaultEventsContent,
@@ -23,8 +28,6 @@ import type {
   PageId,
 } from "./types";
 
-const ABOUT_US_IMAGE = "/assets/img/vikasa/aboutUs_image.png";
-
 function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
   const defaults = defaultHomeContent;
   const merged: HomeContent = {
@@ -34,7 +37,6 @@ function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
     about: {
       ...defaults.about,
       ...saved.about,
-      image: ABOUT_US_IMAGE,
     },
     cta: { ...defaults.cta, ...saved.cta },
     services: { ...defaults.services, ...saved.services },
@@ -47,14 +49,24 @@ function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
       ...merged.services,
       cards: merged.services.cards.map((card) => {
         if (card.title !== "Business Enhancement" || !card.items) return card;
-        return {
-          ...card,
-          items: card.items.map((item) =>
-            item === "Market Intelligence & Advisory"
-              ? "Market Intelligence"
-              : item
-          ),
-        };
+
+        const items = card.items.map((item) =>
+          item === "Market Intelligence & Advisory"
+            ? "Market Intelligence"
+            : item
+        );
+
+        // Insert Feasibility Studies under Market Intelligence when missing.
+        if (!items.includes("Feasibility Studies")) {
+          const marketIndex = items.indexOf("Market Intelligence");
+          if (marketIndex >= 0) {
+            items.splice(marketIndex + 1, 0, "Feasibility Studies");
+          } else {
+            items.unshift("Feasibility Studies");
+          }
+        }
+
+        return { ...card, items };
       }),
     };
   }
@@ -71,7 +83,6 @@ function mergeAboutContent(saved: Partial<AboutContent>): AboutContent {
     whatWeDo: {
       ...defaults.whatWeDo,
       ...saved.whatWeDo,
-      image: ABOUT_US_IMAGE,
     },
     story: { ...defaults.story, ...saved.story },
     vision: { ...defaults.vision, ...saved.vision },

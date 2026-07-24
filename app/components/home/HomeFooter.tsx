@@ -228,7 +228,6 @@ export default function HomeFooter({
 
       {showUtilities ? (
         <>
-          <drawer-opener id="drawer-overlay"></drawer-opener>
           <scroll-top>
             <div className="scroll-to-top">
               <svg

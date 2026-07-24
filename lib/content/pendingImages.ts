@@ -1,6 +1,8 @@
 import { compressImageFile } from "./compressImage";
 
 const pending = new Map<string, File>();
+/** Vercel Blob URLs replaced in the editor; deleted after a successful Save. */
+const pendingDeletes = new Set<string>();
 
 /** Stage a local preview; image is compressed before preview/upload when possible. */
 export async function stageImageFile(file: File): Promise<string> {
@@ -23,6 +25,16 @@ export function isVercelBlobUrl(url: string) {
     return new URL(url).hostname.endsWith(".blob.vercel-storage.com");
   } catch {
     return false;
+  }
+}
+
+/**
+ * Remember a permanent Blob URL that was replaced in the UI.
+ * It is deleted from storage after the next successful Save (if unused).
+ */
+export function markBlobForDeletion(url: string) {
+  if (isVercelBlobUrl(url)) {
+    pendingDeletes.add(url);
   }
 }
 
@@ -63,16 +75,34 @@ async function uploadFile(file: File): Promise<string> {
 }
 
 async function walk(value: unknown): Promise<unknown> {
-  if (typeof value === "string" && value.startsWith("blob:")) {
-    const file = pending.get(value);
-    if (!file) {
-      throw new Error(
-        "A new image preview is missing. Choose the image again."
-      );
+  if (typeof value === "string") {
+    if (value.startsWith("blob:")) {
+      const file = pending.get(value);
+      if (!file) {
+        throw new Error(
+          "A new image preview is missing. Choose the image again."
+        );
+      }
+      const url = await uploadFile(file);
+      discardPendingImage(value);
+      return url;
     }
-    const url = await uploadFile(file);
-    discardPendingImage(value);
-    return url;
+
+    // TipTap bodyHtml (and similar) can embed blob: image URLs inside HTML.
+    if (value.includes("blob:")) {
+      const blobUrls = [
+        ...value.matchAll(/\bblob:(?:https?:\/\/[^"'>\s]+|[^"'>\s]+)/g),
+      ].map((match) => match[0]);
+      const unique = [...new Set(blobUrls)];
+      let next = value;
+      for (const blobUrl of unique) {
+        const uploaded = (await walk(blobUrl)) as string;
+        next = next.split(blobUrl).join(uploaded);
+      }
+      return next;
+    }
+
+    return value;
   }
 
   if (Array.isArray(value)) {
@@ -96,25 +126,50 @@ export async function resolvePendingImages<T>(content: T): Promise<T> {
   return (await walk(content)) as T;
 }
 
-/** Delete Vercel Blob files that were removed/replaced on Save. */
+function urlsToDelete(previous: unknown, next: unknown): string[] {
+  const before = collectVercelBlobUrls(previous);
+  const after = collectVercelBlobUrls(next);
+  const marked = [...pendingDeletes];
+  pendingDeletes.clear();
+
+  const removed = new Set<string>();
+  for (const url of before) {
+    if (!after.has(url)) removed.add(url);
+  }
+  for (const url of marked) {
+    if (!after.has(url)) removed.add(url);
+  }
+  return [...removed];
+}
+
+/**
+ * Delete Vercel Blob files that were removed/replaced.
+ * Call this only after content has been saved successfully.
+ * Soft-fails: logs and returns instead of blocking the editor.
+ */
 export async function deleteRemovedBlobs(
   previous: unknown,
   next: unknown
 ): Promise<void> {
-  const before = collectVercelBlobUrls(previous);
-  const after = collectVercelBlobUrls(next);
-  const removed = [...before].filter((url) => !after.has(url));
+  const removed = urlsToDelete(previous, next);
   if (removed.length === 0) return;
 
-  const res = await fetch("/api/admin/blob", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ urls: removed }),
-  });
-  if (!res.ok) {
-    const data = (await res.json().catch(() => null)) as {
-      error?: string;
-    } | null;
-    throw new Error(data?.error || "Failed to delete replaced images");
+  try {
+    const res = await fetch("/api/admin/blob", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ urls: removed }),
+    });
+    if (!res.ok) {
+      const data = (await res.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+      console.error(
+        data?.error || "Failed to delete replaced images",
+        removed
+      );
+    }
+  } catch (error) {
+    console.error("Failed to delete replaced images", error, removed);
   }
 }

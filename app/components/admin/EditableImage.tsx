@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import {
   discardPendingImage,
+  markBlobForDeletion,
   stageImageFile,
 } from "@/lib/content/pendingImages";
 
@@ -27,6 +28,8 @@ export default function EditableImage({
     setCompressing(true);
     try {
       // Preview only — upload happens on Save (already compressed).
+      // Mark the previous permanent Blob for deletion after Save.
+      markBlobForDeletion(src);
       discardPendingImage(src);
       onChange(await stageImageFile(file));
     } catch (error) {

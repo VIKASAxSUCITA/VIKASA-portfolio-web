@@ -17,7 +17,7 @@ export default function AdminSitePreview({
 }: AdminSitePreviewProps) {
   return (
     <div className="admin-site">
-      <HomeHeader />
+      <HomeHeader previewMode />
       {children}
       <div className="mt-100">
         <AdminEditableFooter content={footer} update={footerUpdate} />
