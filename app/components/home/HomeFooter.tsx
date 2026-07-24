@@ -133,7 +133,7 @@ export default function HomeFooter({
                         </a>
                       </li>
                       <li>
-                        <a href="/events" className="text text-16 link">
+                        <a href="/#events" className="text text-16 link">
                           Events
                         </a>
                       </li>

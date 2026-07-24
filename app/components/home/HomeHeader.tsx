@@ -8,14 +8,9 @@ const navLinks = [
   { href: "/#about", label: "About Us" },
   { href: "/#services", label: "Services" },
   { href: "/#insights", label: "Insights" },
-  { href: "/events", label: "Events" },
+  { href: "/#events", label: "Events" },
   { href: "/#contact", label: "Contact" },
 ] as const;
-
-/** In admin preview, Events scrolls to the home section instead of leaving. */
-const previewNavLinks = navLinks.map((link) =>
-  link.href === "/events" ? { ...link, href: "/#events" } : link
-);
 
 function scrollToHash(hash: string) {
   const id = hash.replace(/^#/, "");
@@ -110,7 +105,7 @@ type HomeHeaderProps = {
 export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const links = previewMode ? previewNavLinks : navLinks;
+  const links = navLinks;
 
   useEffect(() => {
     setMounted(true);
