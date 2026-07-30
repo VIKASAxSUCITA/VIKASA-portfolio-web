@@ -1,6 +1,9 @@
+import type { Locale } from "@/lib/i18n/locale";
+import { asLocalized } from "@/lib/i18n/localized";
 import {
   defaultInsightPairedImages,
   defaultInsightParagraphs,
+  defaultInsightsContent,
 } from "./defaults";
 import {
   buildInsightBodyHtmlFromLegacy,
@@ -30,6 +33,8 @@ export function createEmptyInsight(): InsightPost {
   return {
     id: `new_insight_${stamp}`,
     title: "New Insight",
+    titleKm: "",
+    titleZh: "",
     image: "/assets/img/blog/1.jpg",
     category: "Insight",
     author: "VIKASA",
@@ -38,6 +43,8 @@ export function createEmptyInsight(): InsightPost {
     paragraphs: ["", "", "", ""] as InsightPost["paragraphs"],
     pairedImages: [...defaultInsightPairedImages] as InsightPost["pairedImages"],
     bodyHtml: "<p></p>",
+    bodyHtmlKm: "",
+    bodyHtmlZh: "",
     createdAt: new Date().toISOString(),
   };
 }
@@ -75,6 +82,8 @@ export function normalizeInsightPost(
   return {
     id: post.id,
     title: post.title ?? "New Insight",
+    titleKm: post.titleKm?.trim() || "",
+    titleZh: post.titleZh?.trim() || "",
     image,
     category: post.category?.trim() || "Insight",
     author: post.author?.trim() || "VIKASA",
@@ -83,8 +92,26 @@ export function normalizeInsightPost(
     paragraphs,
     pairedImages,
     bodyHtml,
+    bodyHtmlKm: post.bodyHtmlKm?.trim() || "",
+    bodyHtmlZh: post.bodyHtmlZh?.trim() || "",
     createdAt: post.createdAt ?? "1970-01-01T00:00:00.000Z",
   };
+}
+
+/** Localized insight field with English fallback. */
+export function insightText(
+  post: InsightPost,
+  field: "title" | "bodyHtml",
+  locale: Locale
+): string {
+  if (field === "title") {
+    if (locale === "km" && post.titleKm.trim()) return post.titleKm;
+    if (locale === "zh" && post.titleZh.trim()) return post.titleZh;
+    return post.title;
+  }
+  if (locale === "km" && post.bodyHtmlKm.trim()) return post.bodyHtmlKm;
+  if (locale === "zh" && post.bodyHtmlZh.trim()) return post.bodyHtmlZh;
+  return post.bodyHtml;
 }
 
 export function mergeInsightsContent(
@@ -98,8 +125,11 @@ export function mergeInsightsContent(
   );
 
   return {
-    heroTitle: saved.heroTitle ?? "Insights",
-    heading: saved.heading ?? "Latest Insights From Us",
+    heroTitle: asLocalized(
+      saved.heroTitle,
+      defaultInsightsContent.heroTitle.en
+    ),
+    heading: asLocalized(saved.heading, defaultInsightsContent.heading.en),
     posts: defaultsPosts ?? [],
   };
 }
@@ -138,9 +168,14 @@ export function formatInsightDate(iso: string): string {
   });
 }
 
-export function insightExcerpt(post: InsightPost, max = 140): string {
+export function insightExcerpt(
+  post: InsightPost,
+  max = 140,
+  locale: Locale = "en"
+): string {
+  const html = insightText(post, "bodyHtml", locale);
   const text =
-    insightBodyPlainText(post.bodyHtml) || post.paragraphs[0]?.trim() || "";
+    insightBodyPlainText(html) || post.paragraphs[0]?.trim() || "";
   if (text.length <= max) return text;
   return `${text.slice(0, max).trim()}…`;
 }

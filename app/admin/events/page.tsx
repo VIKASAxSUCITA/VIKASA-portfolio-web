@@ -5,7 +5,8 @@ import AdminGuard from "@/app/components/admin/AdminGuard";
 import AdminEventDetailEditor from "@/app/components/admin/AdminEventDetailEditor";
 import AdminShell from "@/app/components/admin/AdminShell";
 import AdminSitePreview from "@/app/components/admin/AdminSitePreview";
-import EditableText from "@/app/components/admin/EditableText";
+import LocalizedEditableField from "@/app/components/i18n/LocalizedEditableField";
+import LocalizedSection from "@/app/components/i18n/LocalizedSection";
 import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
 import {
   createEmptyEvent,
@@ -14,6 +15,7 @@ import {
   sortEventsBySchedule,
 } from "@/lib/content/events";
 import type { EventPost } from "@/lib/content/types";
+import { asLocalized, setLocalized } from "@/lib/i18n/localized";
 
 export default function AdminEventsEditorPage() {
   const {
@@ -125,13 +127,42 @@ export default function AdminEventsEditorPage() {
                 </picture>
                 <div className="page-banner-content">
                   <div className="container text-center">
-                    <EditableText
-                      className="heading text-80 fw-700"
-                      value={content.heroTitle}
-                      onChange={(heroTitle) =>
-                        update((prev) => ({ ...prev, heroTitle }))
-                      }
-                    />
+                    <LocalizedSection
+                      edit
+                      translateSources={[
+                        content.heroTitle.en,
+                        content.heading.en,
+                      ]}
+                      onAutoTranslated={(locale, values) => {
+                        update((prev) => ({
+                          ...prev,
+                          heroTitle: setLocalized(
+                            asLocalized(prev.heroTitle),
+                            locale,
+                            values[0] ?? ""
+                          ),
+                          heading: setLocalized(
+                            asLocalized(prev.heading),
+                            locale,
+                            values[1] ?? ""
+                          ),
+                        }));
+                      }}
+                    >
+                      {(locale) => (
+                        <LocalizedEditableField
+                          as="span"
+                          className="heading text-80 fw-700"
+                          value={content.heroTitle}
+                          locale={locale}
+                          label="Events hero title"
+                          edit={{
+                            onChange: (heroTitle) =>
+                              update((prev) => ({ ...prev, heroTitle })),
+                          }}
+                        />
+                      )}
+                    </LocalizedSection>
                   </div>
                 </div>
               </section>
@@ -139,13 +170,34 @@ export default function AdminEventsEditorPage() {
               <div className="featured-blog blog-style-3 section-padding">
                 <div className="container">
                   <div className="section-headings text-center">
-                    <EditableText
-                      className="heading text-50"
-                      value={content.heading}
-                      onChange={(heading) =>
-                        update((prev) => ({ ...prev, heading }))
-                      }
-                    />
+                    <LocalizedSection
+                      edit
+                      translateSources={[content.heading.en]}
+                      onAutoTranslated={(locale, values) => {
+                        update((prev) => ({
+                          ...prev,
+                          heading: setLocalized(
+                            asLocalized(prev.heading),
+                            locale,
+                            values[0] ?? ""
+                          ),
+                        }));
+                      }}
+                    >
+                      {(locale) => (
+                        <LocalizedEditableField
+                          as="span"
+                          className="heading text-50"
+                          value={content.heading}
+                          locale={locale}
+                          label="Events list heading"
+                          edit={{
+                            onChange: (heading) =>
+                              update((prev) => ({ ...prev, heading })),
+                          }}
+                        />
+                      )}
+                    </LocalizedSection>
                     <p className="text text-14 admin-insights-preview-note">
                       Click a card to edit the full detail page, or use Add for
                       a new event/announcement. After editing or deleting, click

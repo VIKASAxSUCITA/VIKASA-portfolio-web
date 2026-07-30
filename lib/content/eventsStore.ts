@@ -15,13 +15,15 @@ import {
   sortEventsBySchedule,
 } from "./events";
 import type { EventPost, EventsContent } from "./types";
+import type { LocalizedString } from "@/lib/i18n/locale";
+import { asLocalized } from "@/lib/i18n/localized";
 
 const EVENTS_PAGE_REF = ["pages", "events"] as const;
 const ENTRIES_COLLECTION = "entries";
 
 type EventsPageMeta = {
-  heroTitle?: string;
-  heading?: string;
+  heroTitle?: LocalizedString | string;
+  heading?: LocalizedString | string;
   entriesReady?: boolean;
 };
 
@@ -39,6 +41,8 @@ function entryDoc(id: string) {
 function eventDocPayload(post: EventPost) {
   return {
     title: post.title,
+    titleKm: post.titleKm,
+    titleZh: post.titleZh,
     coverImage: post.coverImage,
     image: post.image,
     kind: post.kind,
@@ -46,7 +50,11 @@ function eventDocPayload(post: EventPost) {
     endsAt: post.endsAt,
     location: post.location,
     summary: post.summary,
+    summaryKm: post.summaryKm,
+    summaryZh: post.summaryZh,
     body: post.body,
+    bodyKm: post.bodyKm,
+    bodyZh: post.bodyZh,
     createdAt: post.createdAt,
   };
 }
@@ -71,8 +79,8 @@ export async function loadEventsContent(): Promise<EventsContent> {
 
   if (meta?.entriesReady) {
     return mergeEventsContent({
-      heroTitle: meta.heroTitle,
-      heading: meta.heading,
+      heroTitle: asLocalized(meta.heroTitle),
+      heading: asLocalized(meta.heading),
       posts: sortEventsBySchedule(entryPosts),
     });
   }
@@ -82,8 +90,8 @@ export async function loadEventsContent(): Promise<EventsContent> {
   }
 
   return mergeEventsContent({
-    heroTitle: meta?.heroTitle,
-    heading: meta?.heading,
+    heroTitle: asLocalized(meta?.heroTitle),
+    heading: asLocalized(meta?.heading),
     posts: sortEventsBySchedule(entryPosts),
   });
 }

@@ -11,7 +11,7 @@ export type TextEdit = { onChange: (value: string) => void };
 /** Image edit handler mirroring {@link TextEdit} for media fields. */
 export type ImageEdit = { onChange: (src: string) => void };
 
-type EditableFieldProps = {
+export type EditableFieldProps = {
   /** Semantic tag used for the static (public) render, e.g. "h2" or "p". */
   as?: ElementType;
   value: string;

@@ -80,7 +80,7 @@ export default function HomeFooter({
                   <div className="footer-widget footer-widget-brand">
                     <a className="footer-logo" href="/" aria-label="VIKASA">
                       <img
-                        src="/assets/img/vikasa/white_log_vikasa.jpg"
+                        src="/assets/img/vikasa/vikasa_logo.png"
                         alt="VIKASA"
                         width={220}
                         height={86}
@@ -118,27 +118,27 @@ export default function HomeFooter({
                         </a>
                       </li>
                       <li>
-                        <a href="/#about" className="text text-16 link">
+                        <a href="/about" className="text text-16 link">
                           About Us
                         </a>
                       </li>
                       <li>
-                        <a href="/#services" className="text text-16 link">
+                        <a href="/services" className="text text-16 link">
                           Services
                         </a>
                       </li>
                       <li>
-                        <a href="/#insights" className="text text-16 link">
+                        <a href="/insights" className="text text-16 link">
                           Insights
                         </a>
                       </li>
                       <li>
-                        <a href="/#events" className="text text-16 link">
+                        <a href="/events" className="text text-16 link">
                           Events
                         </a>
                       </li>
                       <li>
-                        <a href="/#contact" className="text text-16 link">
+                        <a href="/contact" className="text text-16 link">
                           Contact
                         </a>
                       </li>
@@ -152,17 +152,23 @@ export default function HomeFooter({
                     </div>
                     <ul className="footer-menu list-unstyled">
                       <li>
-                        <a href="/#services" className="text text-16 link">
+                        <a href="/services/investment" className="text text-16 link">
                           Investment
                         </a>
                       </li>
                       <li>
-                        <a href="/#services" className="text text-16 link">
+                        <a
+                          href="/services/business-enhancement"
+                          className="text text-16 link"
+                        >
                           Business Enhancement
                         </a>
                       </li>
                       <li>
-                        <a href="/#services" className="text text-16 link">
+                        <a
+                          href="/services/business-academy"
+                          className="text text-16 link"
+                        >
                           Business Academy
                         </a>
                       </li>

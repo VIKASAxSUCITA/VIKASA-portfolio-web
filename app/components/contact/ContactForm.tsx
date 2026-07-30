@@ -1,8 +1,11 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import LocalizedEditableField from "@/app/components/i18n/LocalizedEditableField";
+import LocalizedSection from "@/app/components/i18n/LocalizedSection";
 import type { HomeContent } from "@/lib/content/types";
-import { ArrowIcon, EditableField } from "../admin/EditableField";
+import { asLocalized, readLocalized, setLocalized } from "@/lib/i18n/localized";
+import { ArrowIcon } from "../admin/EditableField";
 import EditableText from "../admin/EditableText";
 
 export function EmailIcon() {
@@ -39,25 +42,6 @@ type ContactFormProps = {
 export default function ContactForm({ content, edit }: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "sent">("idle");
 
-  const text = (
-    key:
-      | "badge"
-      | "title"
-      | "text"
-      | "email"
-      | "whatsappLabel"
-      | "whatsappNumber"
-      | "formTitle"
-      | "formText"
-      | "buttonLabel"
-  ) =>
-    edit
-      ? {
-          onChange: (value: string) =>
-            edit.onChange((prev) => ({ ...prev, [key]: value })),
-        }
-      : undefined;
-
   const whatsappHref = `https://wa.me/${content.whatsappNumber}?text=${encodeURIComponent(
     "Hello VIKASA, I would like to request a proposal."
   )}`;
@@ -84,221 +68,340 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
   }
 
   return (
-    <div className="section-contact-form section-padding">
-      <div className="container">
-        <div id="contact" className="contact-box radius18">
-          <div className="row product-grid justify-content-between">
-            <div className="col-12 col-lg-6 col-contact-content">
-              <div className="section-headings">
-                <div
-                  className="subheading text-20 subheading-bg"
-                  data-aos="fade-up"
-                >
-                  {edit ? (
-                    <EditableText
-                      value={content.badge}
-                      label="Contact badge"
-                      onChange={text("badge")!.onChange}
-                    />
-                  ) : (
-                    <span>{content.badge}</span>
-                  )}
-                </div>
-                <EditableField
-                  as="h2"
-                  className="heading text-50"
-                  value={content.title}
-                  aos="fade-up"
-                  label="Contact title"
-                  edit={text("title")}
-                />
-                <EditableField
-                  as="p"
-                  className="text text-18"
-                  value={content.text}
-                  multiline
-                  aos="fade-up"
-                  label="Contact description"
-                  edit={text("text")}
-                />
-
-                {edit ? (
-                  <div className="card-icon-text card-icon-text-horizontal contact-channel">
-                    <div className="svg-wrapper">
-                      <EmailIcon />
-                    </div>
-                    <div className="content">
-                      <h2 className="heading text-24 fw-700">Email</h2>
-                      <EditableText
-                        className="text text-16"
-                        value={content.email}
-                        label="Email address"
-                        onChange={text("email")!.onChange}
+    <LocalizedSection
+      edit={!!edit}
+      translateSources={[
+        content.badge.en,
+        content.title.en,
+        content.text.en,
+        content.whatsappLabel.en,
+        content.formTitle.en,
+        content.formText.en,
+        content.buttonLabel.en,
+      ]}
+      onAutoTranslated={(locale, values) => {
+        edit?.onChange((prev) => ({
+          ...prev,
+          badge: setLocalized(asLocalized(prev.badge), locale, values[0] ?? ""),
+          title: setLocalized(asLocalized(prev.title), locale, values[1] ?? ""),
+          text: setLocalized(asLocalized(prev.text), locale, values[2] ?? ""),
+          whatsappLabel: setLocalized(
+            asLocalized(prev.whatsappLabel),
+            locale,
+            values[3] ?? ""
+          ),
+          formTitle: setLocalized(
+            asLocalized(prev.formTitle),
+            locale,
+            values[4] ?? ""
+          ),
+          formText: setLocalized(
+            asLocalized(prev.formText),
+            locale,
+            values[5] ?? ""
+          ),
+          buttonLabel: setLocalized(
+            asLocalized(prev.buttonLabel),
+            locale,
+            values[6] ?? ""
+          ),
+        }));
+      }}
+    >
+      {(locale) => (
+        <div className="section-contact-form section-padding">
+          <div className="container">
+            <div id="contact" className="contact-box radius18">
+              <div className="row product-grid justify-content-between">
+                <div className="col-12 col-lg-6 col-contact-content">
+                  <div className="section-headings">
+                    <div
+                      className="subheading text-20 subheading-bg"
+                      data-aos="fade-up"
+                    >
+                      <LocalizedEditableField
+                        as="span"
+                        value={content.badge}
+                        locale={locale}
+                        label="Contact badge"
+                        edit={
+                          edit
+                            ? {
+                                onChange: (badge) =>
+                                  edit.onChange((prev) => ({ ...prev, badge })),
+                              }
+                            : undefined
+                        }
                       />
                     </div>
-                  </div>
-                ) : (
-                  <a
-                    href={mailtoHref}
-                    className="card-icon-text card-icon-text-horizontal contact-channel"
-                    data-aos="fade-up"
-                    aria-label={`Email ${content.email}`}
-                  >
-                    <div className="svg-wrapper">
-                      <EmailIcon />
-                    </div>
-                    <div className="content">
-                      <h2 className="heading text-24 fw-700">Email</h2>
-                      <p className="text text-16">{content.email}</p>
-                    </div>
-                  </a>
-                )}
+                    <LocalizedEditableField
+                      as="h2"
+                      className="heading text-50"
+                      value={content.title}
+                      locale={locale}
+                      aos="fade-up"
+                      label="Contact title"
+                      edit={
+                        edit
+                          ? {
+                              onChange: (title) =>
+                                edit.onChange((prev) => ({ ...prev, title })),
+                            }
+                          : undefined
+                      }
+                    />
+                    <LocalizedEditableField
+                      as="p"
+                      className="text text-18"
+                      value={content.text}
+                      locale={locale}
+                      multiline
+                      aos="fade-up"
+                      label="Contact description"
+                      edit={
+                        edit
+                          ? {
+                              onChange: (text) =>
+                                edit.onChange((prev) => ({ ...prev, text })),
+                            }
+                          : undefined
+                      }
+                    />
 
-                {edit ? (
-                  <div className="card-icon-text card-icon-text-horizontal contact-channel">
-                    <div className="svg-wrapper">
-                      <WhatsAppIcon />
-                    </div>
-                    <div className="content">
-                      <h2 className="heading text-24 fw-700">WhatsApp</h2>
-                      <EditableText
-                        className="text text-16"
-                        value={content.whatsappLabel}
-                        label="WhatsApp label"
-                        onChange={text("whatsappLabel")!.onChange}
-                      />
-                      <EditableText
-                        className="text text-14"
-                        value={content.whatsappNumber}
-                        label="WhatsApp number (digits only)"
-                        onChange={text("whatsappNumber")!.onChange}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <a
-                    href={whatsappHref}
-                    className="card-icon-text card-icon-text-horizontal contact-channel"
-                    data-aos="fade-up"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Chat on WhatsApp"
-                  >
-                    <div className="svg-wrapper">
-                      <WhatsAppIcon />
-                    </div>
-                    <div className="content">
-                      <h2 className="heading text-24 fw-700">WhatsApp</h2>
-                      <p className="text text-16">{content.whatsappLabel}</p>
-                    </div>
-                  </a>
-                )}
-              </div>
-            </div>
-
-            <div className="col-12 col-lg-6 col-contact-form">
-              <div className="contact-form-wrap radius18">
-                <div className="contact-form-headings">
-                  <EditableField
-                    as="h2"
-                    className="heading text-32"
-                    value={content.formTitle}
-                    aos="fade-up"
-                    label="Form title"
-                    edit={text("formTitle")}
-                  />
-                  <EditableField
-                    as="p"
-                    className="text text-16"
-                    value={content.formText}
-                    multiline
-                    aos="fade-up"
-                    label="Form description"
-                    edit={text("formText")}
-                  />
-                </div>
-                <form
-                  action="#"
-                  className="form contact-form"
-                  data-aos="fade-up"
-                  onSubmit={handleSubmit}
-                >
-                  <div className="field">
-                    <label htmlFor="ContactForm-name" className="visually-hidden">
-                      Your Name
-                    </label>
-                    <input
-                      id="ContactForm-name"
-                      className="contact-form-control"
-                      type="text"
-                      placeholder="Your Name *"
-                      name="name"
-                      required
-                      autoComplete="name"
-                      disabled={Boolean(edit)}
-                    />
-                  </div>
-                  <div className="field">
-                    <label htmlFor="ContactForm-email" className="visually-hidden">
-                      Email
-                    </label>
-                    <input
-                      id="ContactForm-email"
-                      className="contact-form-control"
-                      type="email"
-                      placeholder="Email *"
-                      name="email"
-                      required
-                      autoComplete="email"
-                      disabled={Boolean(edit)}
-                    />
-                  </div>
-                  <div className="field">
-                    <label htmlFor="ContactForm-body" className="visually-hidden">
-                      Project details
-                    </label>
-                    <textarea
-                      id="ContactForm-body"
-                      className="contact-form-control"
-                      rows={4}
-                      placeholder="Tell us about your project *"
-                      name="message"
-                      required
-                      disabled={Boolean(edit)}
-                    />
-                  </div>
-                  <div className="form-button contact-form-actions">
                     {edit ? (
-                      <span className="button button--secondary">
-                        <EditableText
-                          value={content.buttonLabel}
-                          label="Form button"
-                          onChange={text("buttonLabel")!.onChange}
-                        />
-                        <ArrowIcon />
-                      </span>
+                      <div className="card-icon-text card-icon-text-horizontal contact-channel">
+                        <div className="svg-wrapper">
+                          <EmailIcon />
+                        </div>
+                        <div className="content">
+                          <h2 className="heading text-24 fw-700">Email</h2>
+                          <EditableText
+                            className="text text-16"
+                            value={content.email}
+                            label="Email address"
+                            onChange={(email) =>
+                              edit.onChange((prev) => ({ ...prev, email }))
+                            }
+                          />
+                        </div>
+                      </div>
                     ) : (
-                      <button
-                        type="submit"
-                        className="button button--secondary"
-                        aria-label={content.buttonLabel}
+                      <a
+                        href={mailtoHref}
+                        className="card-icon-text card-icon-text-horizontal contact-channel"
+                        data-aos="fade-up"
+                        aria-label={`Email ${content.email}`}
                       >
-                        {content.buttonLabel}
-                        <ArrowIcon />
-                      </button>
+                        <div className="svg-wrapper">
+                          <EmailIcon />
+                        </div>
+                        <div className="content">
+                          <h2 className="heading text-24 fw-700">Email</h2>
+                          <p className="text text-16">{content.email}</p>
+                        </div>
+                      </a>
+                    )}
+
+                    {edit ? (
+                      <div className="card-icon-text card-icon-text-horizontal contact-channel">
+                        <div className="svg-wrapper">
+                          <WhatsAppIcon />
+                        </div>
+                        <div className="content">
+                          <h2 className="heading text-24 fw-700">WhatsApp</h2>
+                          <LocalizedEditableField
+                            className="text text-16"
+                            value={content.whatsappLabel}
+                            locale={locale}
+                            label="WhatsApp label"
+                            edit={{
+                              onChange: (whatsappLabel) =>
+                                edit.onChange((prev) => ({
+                                  ...prev,
+                                  whatsappLabel,
+                                })),
+                            }}
+                          />
+                          <EditableText
+                            className="text text-14"
+                            value={content.whatsappNumber}
+                            label="WhatsApp number (digits only)"
+                            onChange={(whatsappNumber) =>
+                              edit.onChange((prev) => ({
+                                ...prev,
+                                whatsappNumber,
+                              }))
+                            }
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <a
+                        href={whatsappHref}
+                        className="card-icon-text card-icon-text-horizontal contact-channel"
+                        data-aos="fade-up"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Chat on WhatsApp"
+                      >
+                        <div className="svg-wrapper">
+                          <WhatsAppIcon />
+                        </div>
+                        <div className="content">
+                          <h2 className="heading text-24 fw-700">WhatsApp</h2>
+                          <p className="text text-16">
+                            {readLocalized(content.whatsappLabel, locale)}
+                          </p>
+                        </div>
+                      </a>
                     )}
                   </div>
-                  {status === "sent" ? (
-                    <p className="text text-14 contact-form-note">
-                      Opening your email app to send the proposal request…
-                    </p>
-                  ) : null}
-                </form>
+                </div>
+
+                <div className="col-12 col-lg-6 col-contact-form">
+                  <div className="contact-form-wrap radius18">
+                    <div className="contact-form-headings">
+                      <LocalizedEditableField
+                        as="h2"
+                        className="heading text-32"
+                        value={content.formTitle}
+                        locale={locale}
+                        aos="fade-up"
+                        label="Form title"
+                        edit={
+                          edit
+                            ? {
+                                onChange: (formTitle) =>
+                                  edit.onChange((prev) => ({
+                                    ...prev,
+                                    formTitle,
+                                  })),
+                              }
+                            : undefined
+                        }
+                      />
+                      <LocalizedEditableField
+                        as="p"
+                        className="text text-16"
+                        value={content.formText}
+                        locale={locale}
+                        multiline
+                        aos="fade-up"
+                        label="Form description"
+                        edit={
+                          edit
+                            ? {
+                                onChange: (formText) =>
+                                  edit.onChange((prev) => ({ ...prev, formText })),
+                              }
+                            : undefined
+                        }
+                      />
+                    </div>
+                    <form
+                      action="#"
+                      className="form contact-form"
+                      data-aos="fade-up"
+                      onSubmit={handleSubmit}
+                    >
+                      <div className="field">
+                        <label
+                          htmlFor="ContactForm-name"
+                          className="visually-hidden"
+                        >
+                          Your Name
+                        </label>
+                        <input
+                          id="ContactForm-name"
+                          className="contact-form-control"
+                          type="text"
+                          placeholder="Your Name *"
+                          name="name"
+                          required
+                          autoComplete="name"
+                          disabled={Boolean(edit)}
+                        />
+                      </div>
+                      <div className="field">
+                        <label
+                          htmlFor="ContactForm-email"
+                          className="visually-hidden"
+                        >
+                          Email
+                        </label>
+                        <input
+                          id="ContactForm-email"
+                          className="contact-form-control"
+                          type="email"
+                          placeholder="Email *"
+                          name="email"
+                          required
+                          autoComplete="email"
+                          disabled={Boolean(edit)}
+                        />
+                      </div>
+                      <div className="field">
+                        <label
+                          htmlFor="ContactForm-body"
+                          className="visually-hidden"
+                        >
+                          Project details
+                        </label>
+                        <textarea
+                          id="ContactForm-body"
+                          className="contact-form-control"
+                          rows={4}
+                          placeholder="Tell us about your project *"
+                          name="message"
+                          required
+                          disabled={Boolean(edit)}
+                        />
+                      </div>
+                      <div className="form-button contact-form-actions">
+                        {edit ? (
+                          <span className="button button--secondary">
+                            <LocalizedEditableField
+                              as="span"
+                              value={content.buttonLabel}
+                              locale={locale}
+                              label="Form button"
+                              edit={{
+                                onChange: (buttonLabel) =>
+                                  edit.onChange((prev) => ({
+                                    ...prev,
+                                    buttonLabel,
+                                  })),
+                              }}
+                            />
+                            <ArrowIcon />
+                          </span>
+                        ) : (
+                          <button
+                            type="submit"
+                            className="button button--secondary"
+                            aria-label={readLocalized(
+                              content.buttonLabel,
+                              locale
+                            )}
+                          >
+                            {readLocalized(content.buttonLabel, locale)}
+                            <ArrowIcon />
+                          </button>
+                        )}
+                      </div>
+                      {status === "sent" ? (
+                        <p className="text text-14 contact-form-note">
+                          Opening your email app to send the proposal request…
+                        </p>
+                      ) : null}
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </LocalizedSection>
   );
 }

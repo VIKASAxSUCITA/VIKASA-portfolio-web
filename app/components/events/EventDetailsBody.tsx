@@ -1,17 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import {
   EditableField,
   EditableMedia,
 } from "@/app/components/admin/EditableField";
+import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
+import AutoTranslateButton from "@/app/components/i18n/AutoTranslateButton";
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import {
   eventKindLabel,
+  eventText,
   formatEventBadgeDate,
   formatEventTimeRange,
   fromDateTimeLocalValue,
   toDateTimeLocalValue,
 } from "@/lib/content/events";
 import type { EventPost } from "@/lib/content/types";
+import type { Locale } from "@/lib/i18n/locale";
 
 type EventContactInfo = {
   email?: string;
@@ -37,20 +43,50 @@ function BreadcrumbChevron() {
   );
 }
 
+function titleKeyFor(locale: Locale): keyof EventPost {
+  if (locale === "km") return "titleKm";
+  if (locale === "zh") return "titleZh";
+  return "title";
+}
+
+function summaryKeyFor(locale: Locale): keyof EventPost {
+  if (locale === "km") return "summaryKm";
+  if (locale === "zh") return "summaryZh";
+  return "summary";
+}
+
+function bodyKeyFor(locale: Locale): keyof EventPost {
+  if (locale === "km") return "bodyKm";
+  if (locale === "zh") return "bodyZh";
+  return "body";
+}
+
 export default function EventDetailsBody({
   post,
   contact,
   edit,
 }: EventDetailsBodyProps) {
+  const { locale: siteLocale } = useLocale();
+  const [editLocale, setEditLocale] = useState<Locale>("en");
+  const locale = edit ? editLocale : siteLocale;
+
+  const displayTitle = eventText(post, "title", locale);
+  const displaySummary = eventText(post, "summary", locale);
+  const displayBody = eventText(post, "body", locale);
+
   const dateLabel = formatEventBadgeDate(post.startsAt);
   const timeRange = formatEventTimeRange(post.startsAt, post.endsAt);
-  const paragraphs = post.body
+  const paragraphs = displayBody
     .split(/\n\s*\n/)
     .map((part) => part.trim())
     .filter(Boolean);
 
   const patch = <K extends keyof EventPost>(key: K, value: EventPost[K]) =>
     edit?.onChange((prev) => ({ ...prev, [key]: value }));
+
+  const titleKey = titleKeyFor(locale);
+  const summaryKey = summaryKeyFor(locale);
+  const bodyKey = bodyKeyFor(locale);
 
   const publicInfoRows = [
     { label: "Category", value: eventKindLabel(post.kind) },
@@ -63,7 +99,7 @@ export default function EventDetailsBody({
 
   return (
     <main className="event-detail-page">
-      <section className="page-banner overlay" aria-label={post.title}>
+      <section className="page-banner overlay page-banner--full" aria-label={displayTitle}>
         <picture className="media media-bg">
           <EditableMedia
             src={post.coverImage}
@@ -80,14 +116,56 @@ export default function EventDetailsBody({
         </picture>
         <div className="page-banner-content">
           <div className="container text-center">
+            {edit ? (
+              <div className="locale-edit-bar">
+                <LocaleEditTabs
+                  locale={editLocale}
+                  onChange={setEditLocale}
+                />
+                <AutoTranslateButton
+                  sources={[post.title, post.summary, post.body]}
+                  onTranslated={(target, values) => {
+                    const [titleVal, summaryVal, bodyVal] = values;
+                    edit.onChange((prev) => {
+                      if (target === "km") {
+                        return {
+                          ...prev,
+                          titleKm: titleVal ?? prev.titleKm,
+                          summaryKm: summaryVal ?? prev.summaryKm,
+                          bodyKm: bodyVal ?? prev.bodyKm,
+                        };
+                      }
+                      if (target === "zh") {
+                        return {
+                          ...prev,
+                          titleZh: titleVal ?? prev.titleZh,
+                          summaryZh: summaryVal ?? prev.summaryZh,
+                          bodyZh: bodyVal ?? prev.bodyZh,
+                        };
+                      }
+                      return prev;
+                    });
+                  }}
+                />
+              </div>
+            ) : null}
             <EditableField
               as="h1"
               className="heading text-80 fw-700"
-              value={post.title}
+              value={
+                edit
+                  ? String(post[titleKey] || post.title)
+                  : displayTitle
+              }
               aos="fade-up"
               label="Event title"
               edit={
-                edit ? { onChange: (title) => patch("title", title) } : undefined
+                edit
+                  ? {
+                      onChange: (value) =>
+                        patch(titleKey, value as EventPost[typeof titleKey]),
+                    }
+                  : undefined
               }
             />
             <ul
@@ -112,7 +190,7 @@ export default function EventDetailsBody({
                 <BreadcrumbChevron />
               </li>
               <li>
-                <span className="text text-18 active">{post.title}</span>
+                <span className="text text-18 active">{displayTitle}</span>
               </li>
             </ul>
           </div>
@@ -141,25 +219,42 @@ export default function EventDetailsBody({
               <EditableField
                 as="h2"
                 className="heading event-detail-title"
-                value={post.title}
+                value={
+                  edit
+                    ? String(post[titleKey] || post.title)
+                    : displayTitle
+                }
                 label="Event title"
                 edit={
                   edit
-                    ? { onChange: (title) => patch("title", title) }
+                    ? {
+                        onChange: (value) =>
+                          patch(titleKey, value as EventPost[typeof titleKey]),
+                      }
                     : undefined
                 }
               />
 
-              {edit || post.summary ? (
+              {edit || displaySummary ? (
                 <EditableField
                   as="p"
                   className="text text-18 event-detail-lead"
-                  value={post.summary}
+                  value={
+                    edit
+                      ? String(post[summaryKey] || post.summary)
+                      : displaySummary
+                  }
                   multiline
                   label="Short summary"
                   edit={
                     edit
-                      ? { onChange: (summary) => patch("summary", summary) }
+                      ? {
+                          onChange: (value) =>
+                            patch(
+                              summaryKey,
+                              value as EventPost[typeof summaryKey]
+                            ),
+                        }
                       : undefined
                   }
                 />
@@ -169,10 +264,13 @@ export default function EventDetailsBody({
                 <EditableField
                   as="p"
                   className="text text-16 event-detail-copy"
-                  value={post.body}
+                  value={String(post[bodyKey] || post.body)}
                   multiline
                   label="Full details"
-                  edit={{ onChange: (body) => patch("body", body) }}
+                  edit={{
+                    onChange: (value) =>
+                      patch(bodyKey, value as EventPost[typeof bodyKey]),
+                  }}
                 />
               ) : (
                 paragraphs.map((paragraph, index) => (
@@ -282,7 +380,7 @@ export default function EventDetailsBody({
                   Interested in this {eventKindLabel(post.kind).toLowerCase()}?
                   Reach out and we will share the next steps.
                 </p>
-                <a href="/#contact" className="button button--primary">
+                <a href="/contact" className="button button--primary">
                   Contact Us
                 </a>
               </div>

@@ -5,10 +5,12 @@ import AdminGuard from "@/app/components/admin/AdminGuard";
 import AdminInsightDetailEditor from "@/app/components/admin/AdminInsightDetailEditor";
 import AdminShell from "@/app/components/admin/AdminShell";
 import AdminSitePreview from "@/app/components/admin/AdminSitePreview";
-import EditableText from "@/app/components/admin/EditableText";
+import LocalizedEditableField from "@/app/components/i18n/LocalizedEditableField";
+import LocalizedSection from "@/app/components/i18n/LocalizedSection";
 import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
 import { createEmptyInsight, sortInsightsByLatest } from "@/lib/content/insights";
 import type { InsightPost } from "@/lib/content/types";
+import { asLocalized, setLocalized } from "@/lib/i18n/localized";
 
 export default function AdminInsightsEditorPage() {
   const {
@@ -115,13 +117,42 @@ export default function AdminInsightsEditorPage() {
                 </picture>
                 <div className="page-banner-content">
                   <div className="container text-center">
-                    <EditableText
-                      className="heading text-80 fw-700"
-                      value={content.heroTitle}
-                      onChange={(heroTitle) =>
-                        update((prev) => ({ ...prev, heroTitle }))
-                      }
-                    />
+                    <LocalizedSection
+                      edit
+                      translateSources={[
+                        content.heroTitle.en,
+                        content.heading.en,
+                      ]}
+                      onAutoTranslated={(locale, values) => {
+                        update((prev) => ({
+                          ...prev,
+                          heroTitle: setLocalized(
+                            asLocalized(prev.heroTitle),
+                            locale,
+                            values[0] ?? ""
+                          ),
+                          heading: setLocalized(
+                            asLocalized(prev.heading),
+                            locale,
+                            values[1] ?? ""
+                          ),
+                        }));
+                      }}
+                    >
+                      {(locale) => (
+                        <LocalizedEditableField
+                          as="span"
+                          className="heading text-80 fw-700"
+                          value={content.heroTitle}
+                          locale={locale}
+                          label="Insights hero title"
+                          edit={{
+                            onChange: (heroTitle) =>
+                              update((prev) => ({ ...prev, heroTitle })),
+                          }}
+                        />
+                      )}
+                    </LocalizedSection>
                   </div>
                 </div>
               </section>
@@ -129,13 +160,34 @@ export default function AdminInsightsEditorPage() {
               <div className="featured-blog blog-style-3 section-padding">
                 <div className="container">
                   <div className="section-headings text-center">
-                    <EditableText
-                      className="heading text-50"
-                      value={content.heading}
-                      onChange={(heading) =>
-                        update((prev) => ({ ...prev, heading }))
-                      }
-                    />
+                    <LocalizedSection
+                      edit
+                      translateSources={[content.heading.en]}
+                      onAutoTranslated={(locale, values) => {
+                        update((prev) => ({
+                          ...prev,
+                          heading: setLocalized(
+                            asLocalized(prev.heading),
+                            locale,
+                            values[0] ?? ""
+                          ),
+                        }));
+                      }}
+                    >
+                      {(locale) => (
+                        <LocalizedEditableField
+                          as="span"
+                          className="heading text-50"
+                          value={content.heading}
+                          locale={locale}
+                          label="Insights list heading"
+                          edit={{
+                            onChange: (heading) =>
+                              update((prev) => ({ ...prev, heading })),
+                          }}
+                        />
+                      )}
+                    </LocalizedSection>
                     <p className="text text-14 admin-insights-preview-note">
                       Click a card to edit the full detail page, or use Add for
                       a new insight. After editing or deleting, click Save in

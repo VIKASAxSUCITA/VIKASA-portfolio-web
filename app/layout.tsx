@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | VIKASA",
   },
   description:
-    "VIKASA — creative business consulting for corporate entities and professional businesses.",
+    "VIKASA — business strategy, investment, and corporate advisory for leaders and enterprises.",
   icons: {
     icon: [
       {
@@ -30,12 +30,12 @@ export const metadata: Metadata = {
     siteName: "VIKASA",
     title: "VIKASA",
     description:
-      "Creative business consulting for corporate entities and professional businesses.",
+      "Business strategy, investment, and corporate advisory for leaders and enterprises.",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#5e3123",
+  themeColor: "#5E3023",
   width: "device-width",
   initialScale: 1,
 };
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
           rel="stylesheet"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
@@ -64,6 +64,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <link rel="stylesheet" href="/assets/css/style.css" />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link rel="stylesheet" href="/assets/css/vikasa-brand.css" />
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link rel="stylesheet" href="/assets/css/vikasa-consulting.css" />
       </head>
       <body suppressHydrationWarning>
         <SiteChrome>{children}</SiteChrome>

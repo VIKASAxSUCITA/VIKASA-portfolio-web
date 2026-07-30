@@ -24,7 +24,7 @@ export default async function Page() {
     <HomeContent
       content={content}
       insightsHeading={insights.heading}
-      latestInsights={getLatestInsights(insights.posts, 3)}
+      latestInsights={getLatestInsights(insights.posts, 6)}
       eventsHeading={events.heading}
       latestEvents={getLatestEvents(events.posts, 3)}
     />

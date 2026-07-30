@@ -1,3 +1,6 @@
+import type { Locale } from "@/lib/i18n/locale";
+import { asLocalized } from "@/lib/i18n/localized";
+import { defaultEventsContent } from "./defaults";
 import type { EventPost, EventsContent } from "./types";
 
 export function createEmptyEvent(): EventPost {
@@ -8,6 +11,8 @@ export function createEmptyEvent(): EventPost {
   return {
     id: `new_event_${stamp}`,
     title: "New Event",
+    titleKm: "",
+    titleZh: "",
     coverImage: "/assets/img/blog/1.jpg",
     image: "/assets/img/blog/2.jpg",
     kind: "Event",
@@ -15,7 +20,11 @@ export function createEmptyEvent(): EventPost {
     endsAt: "",
     location: "",
     summary: "",
+    summaryKm: "",
+    summaryZh: "",
     body: "",
+    bodyKm: "",
+    bodyZh: "",
     createdAt: new Date().toISOString(),
   };
 }
@@ -38,6 +47,8 @@ export function normalizeEventPost(
   return {
     id: post.id,
     title: post.title?.trim() || "New Event",
+    titleKm: post.titleKm?.trim() || "",
+    titleZh: post.titleZh?.trim() || "",
     coverImage: post.coverImage || fallbackImage,
     image: fallbackImage,
     kind: normalizeEventKind(post.kind),
@@ -45,9 +56,30 @@ export function normalizeEventPost(
     endsAt: post.endsAt?.trim() || "",
     location: post.location?.trim() || "",
     summary: post.summary?.trim() || "",
+    summaryKm: post.summaryKm?.trim() || "",
+    summaryZh: post.summaryZh?.trim() || "",
     body: post.body?.trim() || "",
+    bodyKm: post.bodyKm?.trim() || "",
+    bodyZh: post.bodyZh?.trim() || "",
     createdAt: post.createdAt || "1970-01-01T00:00:00.000Z",
   };
+}
+
+/** Localized event field with English fallback. */
+export function eventText(
+  post: EventPost,
+  field: "title" | "summary" | "body",
+  locale: Locale
+): string {
+  if (locale === "km") {
+    const value = field === "title" ? post.titleKm : field === "summary" ? post.summaryKm : post.bodyKm;
+    if (value.trim()) return value;
+  }
+  if (locale === "zh") {
+    const value = field === "title" ? post.titleZh : field === "summary" ? post.summaryZh : post.bodyZh;
+    if (value.trim()) return value;
+  }
+  return post[field] || "";
 }
 
 export function mergeEventsContent(
@@ -61,8 +93,8 @@ export function mergeEventsContent(
   );
 
   return {
-    heroTitle: saved.heroTitle ?? "Events",
-    heading: saved.heading ?? "Upcoming Events & Announcements",
+    heroTitle: asLocalized(saved.heroTitle, defaultEventsContent.heroTitle.en),
+    heading: asLocalized(saved.heading, defaultEventsContent.heading.en),
     posts: posts ?? [],
   };
 }
@@ -126,15 +158,24 @@ export function formatEventDate(iso: string): string {
 
 /** Compact badge date like "Jan 10, 2025". */
 export function formatEventBadgeDate(iso: string): string {
+  const parts = formatEventBadgeParts(iso);
+  if (!parts) return "";
+  return `${parts.month} ${parts.day}, ${parts.year}`;
+}
+
+/** Split badge parts so month can sit above day/year. */
+export function formatEventBadgeParts(
+  iso: string
+): { month: string; day: string; year: string } | null {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime()) || date.getFullYear() < 1971) {
-    return "";
+    return null;
   }
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return {
+    month: date.toLocaleDateString("en-US", { month: "short" }),
+    day: String(date.getDate()),
+    year: String(date.getFullYear()),
+  };
 }
 
 export function formatEventTime(iso: string): string {
@@ -159,8 +200,14 @@ export function eventKindLabel(kind: string): string {
   return normalizeEventKind(kind);
 }
 
-export function eventExcerpt(post: EventPost, max = 160): string {
-  const text = (post.summary || post.body).replace(/\s+/g, " ").trim();
+export function eventExcerpt(
+  post: EventPost,
+  max = 160,
+  locale: Locale = "en"
+): string {
+  const text = (eventText(post, "summary", locale) || eventText(post, "body", locale))
+    .replace(/\s+/g, " ")
+    .trim();
   if (text.length <= max) return text;
   return `${text.slice(0, max).trim()}…`;
 }

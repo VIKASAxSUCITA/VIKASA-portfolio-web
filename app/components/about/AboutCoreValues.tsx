@@ -1,30 +1,82 @@
+"use client";
+
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
+import type { Locale } from "@/lib/i18n/locale";
+
 const values = [
   {
     id: "accountability",
-    title: "Reinforce Accountability",
-    text: "Taking responsibility, reliability and delivering with commitment.",
+    title: {
+      en: "Reinforce Accountability",
+      km: "ពង្រឹងភាពទទួលខុសត្រូវ",
+      zh: "强化问责",
+    },
+    text: {
+      en: "Taking responsibility, reliability and delivering with commitment.",
+      km: "ទទួលខុសត្រូវ នូវភាពអាចទុកចិត្តបាន និងបំពេញការងារដោយការប្តេជ្ញាចិត្ត។",
+      zh: "承担责任、可靠交付、以承诺兑现结果。",
+    },
   },
   {
     id: "future",
-    title: "Reshape Future",
-    text: "Driving transformation through vision and action.",
+    title: {
+      en: "Reshape Future",
+      km: "ប្តូររូបរាងអនាគត",
+      zh: "重塑未来",
+    },
+    text: {
+      en: "Driving transformation through vision and action.",
+      km: "ជំរុញការផ្លាស់ប្តូរតាមរយៈចក្ខុវិស័យ និងសកម្មភាព។",
+      zh: "以愿景与行动推动变革。",
+    },
   },
   {
     id: "growth",
-    title: "Revitalize Growth",
-    text: "Empowering businesses with strategies for long-term success.",
+    title: {
+      en: "Revitalize Growth",
+      km: "បន្ធប់បន្ថយកំណើន",
+      zh: "焕新增长",
+    },
+    text: {
+      en: "Empowering businesses with strategies for long-term success.",
+      km: "ជួយអាជីវកម្មដោយយុទ្ធសាស្ត្រសម្រាប់ជោគជ័យរយៈពេលវែង។",
+      zh: "以长期成功策略赋能企业。",
+    },
   },
   {
     id: "excellence",
-    title: "Refining Excellence",
-    text: "Conveys a sense of continuous improvement and attention to detail, often resulting in a more polished, elegant, or effective outcome.",
+    title: {
+      en: "Refining Excellence",
+      km: "កែលម្អភាពល្អឥតខច្ចៗ",
+      zh: "精进卓越",
+    },
+    text: {
+      en: "Conveys a sense of continuous improvement and attention to detail, often resulting in a more polished, elegant, or effective outcome.",
+      km: "បង្ហាញពីការកែលម្អបន្ត និងការយកចិត្តទុកដាក់លម្អិត ដែលនាំទៅរកលទ្ធផលដែលមានគុណភាព និងមានប្រសិទ្ធភាព។",
+      zh: "体现持续改进与细节关注，带来更精致、更有效的结果。",
+    },
   },
   {
     id: "possibilities",
-    title: "Reimagine Possibilities",
-    text: "Thinking beyond limits to drive innovation and new solutions.",
+    title: {
+      en: "Reimagine Possibilities",
+      km: "គិតឡើងវិញនូវលទ្ធភាព",
+      zh: "重新想象可能",
+    },
+    text: {
+      en: "Thinking beyond limits to drive innovation and new solutions.",
+      km: "គិតលើសពីដែនកំណត់ ដើម្បីជំរុញនវានុវត្តន៍ និងដំណោះស្រាយថ្មី។",
+      zh: "突破边界思考，驱动创新与新方案。",
+    },
   },
 ] as const;
+
+function localizedCopy(
+  field: { en: string; km: string; zh: string },
+  locale: Locale
+) {
+  return (field[locale] || field.en).trim() || field.en;
+}
 
 function ValueIcon({ id }: { id: (typeof values)[number]["id"] }) {
   switch (id) {
@@ -135,6 +187,14 @@ function ValueIcon({ id }: { id: (typeof values)[number]["id"] }) {
 }
 
 export default function AboutCoreValues() {
+  const { locale } = useLocale();
+  const sectionTitle =
+    locale === "km"
+      ? "តម្លៃស្នូល"
+      : locale === "zh"
+        ? "核心价值观"
+        : "Core Values";
+
   return (
     <section
       className="about-values section-padding"
@@ -148,7 +208,7 @@ export default function AboutCoreValues() {
             data-aos="fade-up"
             data-aos-delay="50"
           >
-            Core Values
+            {sectionTitle}
           </h2>
         </div>
 
@@ -164,9 +224,11 @@ export default function AboutCoreValues() {
                 <ValueIcon id={value.id} />
               </div>
               <h3 className="heading text-22 about-values-item-title">
-                {value.title}
+                {localizedCopy(value.title, locale)}
               </h3>
-              <p className="text text-16 about-values-item-desc">{value.text}</p>
+              <p className="text text-16 about-values-item-desc">
+                {localizedCopy(value.text, locale)}
+              </p>
             </article>
           ))}
         </div>

@@ -1,8 +1,13 @@
+"use client";
+
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import {
   formatInsightDate,
   insightExcerpt,
+  insightText,
 } from "@/lib/content/insights";
 import type { InsightsContent } from "@/lib/content/types";
+import { readLocalized } from "@/lib/i18n/localized";
 
 type InsightsListProps = {
   heading: InsightsContent["heading"];
@@ -24,6 +29,17 @@ function ArrowIcon() {
 }
 
 export default function InsightsList({ heading, posts }: InsightsListProps) {
+  const { locale } = useLocale();
+  const headingText = readLocalized(heading, locale);
+  const eyebrow =
+    locale === "km"
+      ? "វិចារណកថារបស់យើង"
+      : locale === "zh"
+        ? "我们的洞察"
+        : "Our Insights";
+  const readMore =
+    locale === "km" ? "អានបន្ថែម" : locale === "zh" ? "阅读更多" : "Read More";
+
   return (
     <div className="insights-articles-section section-padding">
       <div className="container">
@@ -32,19 +48,20 @@ export default function InsightsList({ heading, posts }: InsightsListProps) {
             className="subheading text-16 insights-articles-eyebrow"
             data-aos="fade-up"
           >
-            Our Insights
+            {eyebrow}
           </div>
           <h2
             className="heading text-50"
             data-aos="fade-up"
             data-aos-delay="50"
           >
-            {heading}
+            {headingText}
           </h2>
         </div>
 
         <div className="insights-articles-grid">
           {posts.map((post, index) => {
+            const title = insightText(post, "title", locale);
             const dateLabel = formatInsightDate(post.createdAt);
             const meta = [post.category.toUpperCase(), dateLabel]
               .filter(Boolean)
@@ -57,17 +74,21 @@ export default function InsightsList({ heading, posts }: InsightsListProps) {
                 className="insight-article-card"
                 data-aos="fade-up"
                 data-aos-delay={index % 3 === 0 ? undefined : (index % 3) * 80}
-                style={{ ["--insight-card-image" as string]: `url(${post.image})` }}
+                style={{
+                  ["--insight-card-image" as string]: `url(${post.image})`,
+                }}
               >
                 <span className="insight-article-card-meta text text-14">
                   {meta}
                 </span>
-                <h3 className="insight-article-card-title heading">{post.title}</h3>
+                <h3 className="insight-article-card-title heading">{title}</h3>
                 <p className="insight-article-card-excerpt text text-16">
-                  {insightExcerpt(post)}
+                  {insightExcerpt(post, 140, locale)}
                 </p>
                 <span className="insight-article-card-cta">
-                  <span className="insight-article-card-cta-label">Read More</span>
+                  <span className="insight-article-card-cta-label">
+                    {readMore}
+                  </span>
                   <span className="insight-article-card-arrow" aria-hidden>
                     <ArrowIcon />
                   </span>

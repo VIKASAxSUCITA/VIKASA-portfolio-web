@@ -20,6 +20,10 @@ import {
   loadInsightsContent,
   saveInsightsContent,
 } from "./insightsStore";
+import {
+  normalizeAboutContent,
+  normalizeHomeContent,
+} from "./localizeContent";
 import type {
   AboutContent,
   FooterContent,
@@ -29,65 +33,11 @@ import type {
 } from "./types";
 
 function mergeHomeContent(saved: Partial<HomeContent>): HomeContent {
-  const defaults = defaultHomeContent;
-  const merged: HomeContent = {
-    ...defaults,
-    ...saved,
-    hero: { ...defaults.hero, ...saved.hero },
-    about: {
-      ...defaults.about,
-      ...saved.about,
-    },
-    cta: { ...defaults.cta, ...saved.cta },
-    services: { ...defaults.services, ...saved.services },
-    contact: { ...defaults.contact, ...saved.contact },
-  };
-
-  // Prefer current defaults for service card labels when CMS still has older copy.
-  if (merged.services?.cards) {
-    merged.services = {
-      ...merged.services,
-      cards: merged.services.cards.map((card) => {
-        if (card.title !== "Business Enhancement" || !card.items) return card;
-
-        const items = card.items.map((item) =>
-          item === "Market Intelligence & Advisory"
-            ? "Market Intelligence"
-            : item
-        );
-
-        // Insert Feasibility Studies under Market Intelligence when missing.
-        if (!items.includes("Feasibility Studies")) {
-          const marketIndex = items.indexOf("Market Intelligence");
-          if (marketIndex >= 0) {
-            items.splice(marketIndex + 1, 0, "Feasibility Studies");
-          } else {
-            items.unshift("Feasibility Studies");
-          }
-        }
-
-        return { ...card, items };
-      }),
-    };
-  }
-
-  return merged;
+  return normalizeHomeContent(saved);
 }
 
 function mergeAboutContent(saved: Partial<AboutContent>): AboutContent {
-  const defaults = defaultAboutContent;
-  return {
-    ...defaults,
-    ...saved,
-    hero: { ...defaults.hero, ...saved.hero },
-    whatWeDo: {
-      ...defaults.whatWeDo,
-      ...saved.whatWeDo,
-    },
-    story: { ...defaults.story, ...saved.story },
-    vision: { ...defaults.vision, ...saved.vision },
-    mission: { ...defaults.mission, ...saved.mission },
-  };
+  return normalizeAboutContent(saved);
 }
 
 function mergeFooterContent(saved: Partial<FooterContent>): FooterContent {
