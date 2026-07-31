@@ -1,8 +1,9 @@
 "use strict";
 // aos
 AOS.init({
-  duration: 1500,
-  once: true,
+  duration: 500,
+  once: false,
+  mirror: true,
 });
 
 // footer copyright year

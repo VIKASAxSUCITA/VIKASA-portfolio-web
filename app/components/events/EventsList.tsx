@@ -1,36 +1,20 @@
+"use client";
+
+import EventDateBadge from "@/app/components/events/EventDateBadge";
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import {
   eventExcerpt,
-  formatEventBadgeDate,
+  eventText,
   formatEventTimeRange,
 } from "@/lib/content/events";
 import type { EventsContent } from "@/lib/content/types";
+import { readLocalized } from "@/lib/i18n/localized";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 type EventsListProps = {
   heading: EventsContent["heading"];
   posts: EventsContent["posts"];
 };
-
-function CalendarIcon() {
-  return (
-    <svg width={14} height={14} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect
-        x="3"
-        y="5"
-        width="18"
-        height="16"
-        rx="2"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M3 9h18M8 3v4M16 3v4"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
 
 function PinIcon() {
   return (
@@ -75,6 +59,9 @@ function ArrowIcon() {
 }
 
 export default function EventsList({ heading, posts }: EventsListProps) {
+  const { locale } = useLocale();
+  const headingText = readLocalized(heading, locale);
+
   return (
     <div className="events-schedule-section section-padding">
       <div className="container">
@@ -84,28 +71,29 @@ export default function EventsList({ heading, posts }: EventsListProps) {
             data-aos="fade-up"
             data-aos-delay="50"
           >
-            {heading}
+            {headingText}
           </h2>
         </div>
 
         {posts.length === 0 ? (
           <p className="text text-18 text-center" data-aos="fade-up">
-            No events or announcements yet. Check back soon.
+            {uiT(ui.events.empty, locale)}
           </p>
         ) : (
           <div className="events-card-list">
             {posts.map((post, index) => {
-              const badgeDate = formatEventBadgeDate(post.startsAt);
+              const title = eventText(post, "title", locale);
               const timeRange = formatEventTimeRange(
                 post.startsAt,
-                post.endsAt
+                post.endsAt,
+                locale
               );
 
               return (
                 <article
                   key={post.id}
                   className="event-list-card"
-                  data-aos="fade-up"
+                  data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                   data-aos-delay={index * 60}
                 >
                   <div className="event-list-card-media">
@@ -116,17 +104,12 @@ export default function EventsList({ heading, posts }: EventsListProps) {
                       height={280}
                       loading="lazy"
                     />
-                    {badgeDate ? (
-                      <span className="event-list-card-date">
-                        <CalendarIcon />
-                        {badgeDate}
-                      </span>
-                    ) : null}
+                    <EventDateBadge startsAt={post.startsAt} />
                   </div>
 
                   <div className="event-list-card-body">
                     <h3 className="heading event-list-card-title">
-                      <a href={`/events/${post.id}`}>{post.title}</a>
+                      <a href={`/events/${post.id}`}>{title}</a>
                     </h3>
 
                     <ul className="event-list-card-meta list-unstyled">
@@ -145,7 +128,7 @@ export default function EventsList({ heading, posts }: EventsListProps) {
                     </ul>
 
                     <p className="text text-16 event-list-card-excerpt">
-                      {eventExcerpt(post, 180)}
+                      {eventExcerpt(post, 180, locale)}
                     </p>
 
                     <div className="event-list-card-footer">
@@ -153,7 +136,7 @@ export default function EventsList({ heading, posts }: EventsListProps) {
                         href={`/events/${post.id}`}
                         className="button button--primary event-list-card-cta"
                       >
-                        View Details
+                        {uiT(ui.events.viewDetails, locale)}
                         <span className="svg-wrapper" aria-hidden>
                           <ArrowIcon />
                         </span>

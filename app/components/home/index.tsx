@@ -3,6 +3,7 @@ import HomeHashScroll from "./HomeHashScroll";
 import HomePageStyles from "./HomePageStyles";
 import FooterSection from "./FooterSection";
 import type { EventPost, HomeContent, InsightPost } from "@/lib/content/types";
+import type { LocalizedString } from "@/lib/i18n/locale";
 
 export { default as HomePageStyles } from "./HomePageStyles";
 export { default as HomeHeader } from "./HomeHeader";
@@ -19,9 +20,9 @@ export { default as HomeHashScroll } from "./HomeHashScroll";
 
 type HomeContentProps = {
   content: HomeContent;
-  insightsHeading: string;
+  insightsHeading: LocalizedString | string;
   latestInsights: InsightPost[];
-  eventsHeading: string;
+  eventsHeading: LocalizedString | string;
   latestEvents: EventPost[];
 };
 

@@ -1,10 +1,10 @@
+"use client";
+
+import LocalizedEditableField from "@/app/components/i18n/LocalizedEditableField";
+import LocalizedSection from "@/app/components/i18n/LocalizedSection";
 import type { HomeContent } from "@/lib/content/types";
-import {
-  ArrowIcon,
-  EditableField,
-  SectionButton,
-} from "../admin/EditableField";
-import EditableText from "../admin/EditableText";
+import { asLocalized, readLocalized, setLocalized } from "@/lib/i18n/localized";
+import { ArrowIcon, SectionButton } from "../admin/EditableField";
 
 type Cta = HomeContent["cta"];
 
@@ -34,65 +34,129 @@ function PlayIcon() {
 }
 
 export default function HomeCta({ content, edit }: HomeCtaProps) {
-  const text = (key: "badge" | "title" | "text" | "buttonLabel") =>
-    edit
-      ? {
-          onChange: (value: string) =>
-            edit.onChange((prev) => ({ ...prev, [key]: value })),
-        }
-      : undefined;
-
   return (
-    <div className="text-banner mt-100">
-      <div className="container-fluid">
-        <div className="text-banner-inner radius18">
-          <div className="section-headings">
-            <div className="subheading text-20 subheading-bg" data-aos="fade-up">
-              <PlayIcon />
-              {edit ? (
-                <EditableText
-                  value={content.badge}
-                  label="CTA badge"
-                  onChange={text("badge")!.onChange}
+    <LocalizedSection
+      edit={!!edit}
+      translateSources={[
+        content.badge.en,
+        content.title.en,
+        content.text.en,
+        content.buttonLabel.en,
+      ]}
+      onAutoTranslated={(locale, values) => {
+        edit?.onChange((prev) => ({
+          ...prev,
+          badge: setLocalized(asLocalized(prev.badge), locale, values[0] ?? ""),
+          title: setLocalized(asLocalized(prev.title), locale, values[1] ?? ""),
+          text: setLocalized(asLocalized(prev.text), locale, values[2] ?? ""),
+          buttonLabel: setLocalized(
+            asLocalized(prev.buttonLabel),
+            locale,
+            values[3] ?? ""
+          ),
+        }));
+      }}
+    >
+      {(locale) => (
+        <section className="consulting-cta vikasa-cta-banner">
+          <div className="vikasa-cta-banner-bg" aria-hidden>
+            <img
+              src="/assets/img/vikasa/aboutUS_Banner_Page.png"
+              alt=""
+              width={1920}
+              height={800}
+              loading="lazy"
+              className="vikasa-cta-banner-image"
+            />
+            <div className="vikasa-cta-banner-overlay" />
+          </div>
+
+          <div className="container vikasa-cta-banner-content">
+            <div className="text-banner-inner">
+              <div className="section-headings">
+                <div
+                  className="subheading text-20 subheading-bg"
+                  data-aos="fade-up"
+                >
+                  <PlayIcon />
+                  <LocalizedEditableField
+                    as="span"
+                    value={content.badge}
+                    locale={locale}
+                    label="CTA badge"
+                    edit={
+                      edit
+                        ? {
+                            onChange: (badge) =>
+                              edit.onChange((prev) => ({ ...prev, badge })),
+                          }
+                        : undefined
+                    }
+                  />
+                </div>
+                <LocalizedEditableField
+                  as="h2"
+                  className="heading text-80"
+                  value={content.title}
+                  locale={locale}
+                  aos="fade-up"
+                  label="CTA title"
+                  edit={
+                    edit
+                      ? {
+                          onChange: (title) =>
+                            edit.onChange((prev) => ({ ...prev, title })),
+                        }
+                      : undefined
+                  }
                 />
-              ) : (
-                <span>{content.badge}</span>
-              )}
-            </div>
-            <EditableField
-              as="h2"
-              className="heading text-80"
-              value={content.title}
-              aos="fade-up"
-              label="CTA title"
-              edit={text("title")}
-            />
-            <EditableField
-              as="p"
-              className="text text-24"
-              value={content.text}
-              multiline
-              aos="fade-up"
-              label="CTA text"
-              edit={text("text")}
-            />
-            <div className="buttons" data-aos="fade-up">
-              <SectionButton
-                label={content.buttonLabel}
-                href="/#contact"
-                className="button button--secondary"
-                ariaLabel="See More Services"
-                edit={text("buttonLabel")}
-              >
-                <ArrowIcon />
-                <span className="visually-hidden">
-                  To learn more about the service, click this button.
-                </span>
-              </SectionButton>
+                <LocalizedEditableField
+                  as="p"
+                  className="text text-24"
+                  value={content.text}
+                  locale={locale}
+                  multiline
+                  aos="fade-up"
+                  label="CTA text"
+                  edit={
+                    edit
+                      ? {
+                          onChange: (text) =>
+                            edit.onChange((prev) => ({ ...prev, text })),
+                        }
+                      : undefined
+                  }
+                />
+                <div className="buttons" data-aos="fade-up">
+                  <SectionButton
+                    label={readLocalized(content.buttonLabel, locale)}
+                    href="/contact"
+                    className="button button--secondary vikasa-btn-ghost"
+                    ariaLabel={readLocalized(content.buttonLabel, locale)}
+                    edit={
+                      edit
+                        ? {
+                            onChange: (label) =>
+                              edit.onChange((prev) => ({
+                                ...prev,
+                                buttonLabel: setLocalized(
+                                  asLocalized(prev.buttonLabel),
+                                  locale,
+                                  label
+                                ),
+                              })),
+                          }
+                        : undefined
+                    }
+                  >
+                    <ArrowIcon />
+                  </SectionButton>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
+      )}
+    </LocalizedSection>
   );
 }

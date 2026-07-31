@@ -1,3 +1,5 @@
+import type { LocalizedString } from "@/lib/i18n/locale";
+
 export type FooterContent = {
   social: {
     facebook: string;
@@ -15,84 +17,83 @@ export type FooterContent = {
 
 export type HomeContent = {
   hero: {
-    title: string;
-    text: string;
+    title: LocalizedString;
+    text: LocalizedString;
     image: string;
-    ctaLabel: string;
+    ctaLabel: LocalizedString;
   };
   about: {
-    title: string;
-    text: string;
+    title: LocalizedString;
+    text: LocalizedString;
     image: string;
-    items: [string, string, string];
-    buttonLabel: string;
+    items: [LocalizedString, LocalizedString, LocalizedString];
+    buttonLabel: LocalizedString;
   };
   cta: {
-    badge: string;
-    title: string;
-    text: string;
-    buttonLabel: string;
+    badge: LocalizedString;
+    title: LocalizedString;
+    text: LocalizedString;
+    buttonLabel: LocalizedString;
   };
   services: {
-    heading: string;
+    heading: LocalizedString;
     cards: Array<{
-      title: string;
-      description: string;
-      items: string[];
+      title: LocalizedString;
+      description: LocalizedString;
+      items: LocalizedString[];
     }>;
   };
   contact: {
-    badge: string;
-    title: string;
-    text: string;
+    badge: LocalizedString;
+    title: LocalizedString;
+    text: LocalizedString;
     email: string;
     whatsappNumber: string;
-    whatsappLabel: string;
-    formTitle: string;
-    formText: string;
-    buttonLabel: string;
+    whatsappLabel: LocalizedString;
+    formTitle: LocalizedString;
+    formText: LocalizedString;
+    buttonLabel: LocalizedString;
   };
 };
 
 export type AboutContent = {
   hero: {
-    title: string;
-    text: string;
+    title: LocalizedString;
+    text: LocalizedString;
     image: string;
   };
   whatWeDo: {
-    title: string;
-    text: string;
+    title: LocalizedString;
+    text: LocalizedString;
     image: string;
-    items: [string, string, string];
-    buttonLabel: string;
+    items: [LocalizedString, LocalizedString, LocalizedString];
+    buttonLabel: LocalizedString;
   };
   story: {
-    title: string;
-    text: string;
+    title: LocalizedString;
+    text: LocalizedString;
   };
   vision: {
-    title: string;
-    text: string;
+    title: LocalizedString;
+    text: LocalizedString;
   };
   mission: {
-    title: string;
-    text: string;
+    title: LocalizedString;
+    text: LocalizedString;
   };
 };
 
 export type InsightPost = {
   id: string;
   title: string;
+  titleKm: string;
+  titleZh: string;
   image: string;
   category: string;
   author: string;
-  /** Rich article HTML authored with Tiptap. */
   bodyHtml: string;
-  /**
-   * Legacy structured fields — still read for migration into bodyHtml.
-   * New edits go through bodyHtml only.
-   */
+  bodyHtmlKm: string;
+  bodyHtmlZh: string;
   quote: string;
   sectionTitle: string;
   paragraphs: [string, string, string, string];
@@ -101,33 +102,34 @@ export type InsightPost = {
 };
 
 export type InsightsContent = {
-  heroTitle: string;
-  heading: string;
+  heroTitle: LocalizedString;
+  heading: LocalizedString;
   posts: InsightPost[];
 };
 
 export type EventPost = {
   id: string;
   title: string;
-  /** Hero / listing cover image. */
+  titleKm: string;
+  titleZh: string;
   coverImage: string;
-  /** Detail page content image. */
   image: string;
-  /** Freeform category, e.g. Event, Announcement, Workshop. */
   kind: string;
-  /** ISO datetime for when the event/announcement is scheduled. */
   startsAt: string;
-  /** Optional ISO end datetime. Empty string when not set. */
   endsAt: string;
   location: string;
   summary: string;
+  summaryKm: string;
+  summaryZh: string;
   body: string;
+  bodyKm: string;
+  bodyZh: string;
   createdAt: string;
 };
 
 export type EventsContent = {
-  heroTitle: string;
-  heading: string;
+  heroTitle: LocalizedString;
+  heading: LocalizedString;
   posts: EventPost[];
 };
 

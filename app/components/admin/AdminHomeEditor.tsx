@@ -71,7 +71,7 @@ export default function AdminHomeEditor() {
     );
   }
 
-  const latestInsights = getLatestInsights(insightsPreview?.posts ?? [], 3);
+  const latestInsights = getLatestInsights(insightsPreview?.posts ?? [], 6);
   const insightsHeading = insightsPreview?.heading ?? "Latest Insights From Us";
   const latestEvents = getLatestEvents(eventsPreview?.posts ?? [], 3);
   const eventsHeading =

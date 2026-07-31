@@ -2,20 +2,21 @@
 
 import { MouseEvent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
+import LocaleSwitcher from "@/app/components/i18n/LocaleSwitcher";
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
+import SiteSearch from "@/app/components/home/SiteSearch";
+import type { Locale } from "@/lib/i18n/locale";
+import { ui } from "@/lib/i18n/ui";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/#about", label: "About Us" },
-  { href: "/#services", label: "Services" },
-  { href: "/#insights", label: "Insights" },
-  { href: "/events", label: "Events" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/", labels: ui.nav.home },
+  { href: "/about", labels: ui.nav.about },
+  { href: "/services", labels: ui.nav.services },
+  { href: "/insights", labels: ui.nav.insights },
+  { href: "/events", labels: ui.nav.events },
+  { href: "/contact", labels: ui.nav.contact },
 ] as const;
-
-/** In admin preview, Events scrolls to the home section instead of leaving. */
-const previewNavLinks = navLinks.map((link) =>
-  link.href === "/events" ? { ...link, href: "/#events" } : link
-);
 
 function scrollToHash(hash: string) {
   const id = hash.replace(/^#/, "");
@@ -78,43 +79,76 @@ function CloseIcon() {
   );
 }
 
+function isNavActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 function NavLinks({
   links,
+  locale,
+  pathname,
   onNavigate,
 }: {
-  links: readonly { href: string; label: string }[];
+  links: readonly { href: string; labels: Record<Locale, string> }[];
+  locale: Locale;
+  pathname: string;
   onNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
 }) {
   return (
     <ul className="header-menu list-unstyled">
-      {links.map(({ href, label }) => (
-        <li key={href} className="nav-item">
-          <a
-            className="menu-link menu-link-main"
-            href={href}
-            onClick={(event) => onNavigate(event, href)}
-          >
-            {label}
-          </a>
-        </li>
-      ))}
+      {links.map(({ href, labels }) => {
+        const active = isNavActive(pathname, href);
+        return (
+          <li key={href} className={`nav-item${active ? " is-active" : ""}`}>
+            <a
+              className={`menu-link menu-link-main${active ? " is-active" : ""}`}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              onClick={(event) => onNavigate(event, href)}
+            >
+              {labels[locale]}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   );
 }
 
 type HomeHeaderProps = {
-  /** Admin preview: keep the same look, but scroll in-page instead of leaving /admin. */
   previewMode?: boolean;
 };
 
 export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
+  const { locale } = useLocale();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const links = previewMode ? previewNavLinks : navLinks;
+  const [scrolled, setScrolled] = useState(false);
+  const links = navLinks;
+  const isHome = pathname === "/";
+  const isAbout = pathname === "/about";
+  const isServices =
+    pathname === "/services" || pathname.startsWith("/services/");
+  const overHero =
+    (isHome || isAbout || isServices) && !scrolled && !previewMode;
+  const logoSrc = overHero
+    ? "/assets/img/vikasa/white_log_vikasa.jpg"
+    : "/assets/img/vikasa/vikasa_logo.png";
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 48);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.classList.toggle("scroll-lock", menuOpen);
@@ -147,9 +181,19 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
 
     if (previewMode) {
       event.preventDefault();
-      scrollToHash(hashFromHref(href));
+      const previewHash: Record<string, string> = {
+        "/": "",
+        "/about": "#about",
+        "/services": "#services",
+        "/insights": "#insights",
+        "/events": "#events",
+        "/contact": "#contact",
+      };
+      scrollToHash(previewHash[href] ?? hashFromHref(href));
       return;
     }
+
+    if (!href.startsWith("/#") && href !== "/") return;
 
     const isHomeHash =
       href === "/" || href.startsWith("/#") || href.startsWith("#");
@@ -199,8 +243,8 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
               <img
                 src="/assets/img/vikasa/vikasa_logo.png"
                 alt="VIKASA"
-                width={108}
-                height={40}
+                width={146}
+                height={54}
               />
             </a>
             <button
@@ -212,7 +256,12 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
               <CloseIcon />
             </button>
           </div>
-          <NavLinks links={links} onNavigate={handleNavClick} />
+          <NavLinks
+            links={links}
+            locale={locale}
+            pathname={pathname}
+            onNavigate={handleNavClick}
+          />
         </nav>
       </div>,
       document.body
@@ -221,7 +270,11 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
   return (
     <>
       <sticky-header data-sticky-type="always">
-        <header className="header-1 header-floating">
+        <header
+          className={`header-1 header-floating${
+            overHero ? " is-over-hero" : ""
+          }${scrolled ? " is-scrolled" : ""}`}
+        >
           <div className="container-fluid">
             <div className="header-grid">
               <a
@@ -230,19 +283,28 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
                 aria-label="VIKASA"
                 onClick={handleLogoClick}
               >
-                <img
-                  src="/assets/img/vikasa/vikasa_logo.png"
-                  alt="VIKASA"
-                  width={108}
-                  height={40}
-                />
+                <img src={logoSrc} alt="VIKASA" width={146} height={54} />
               </a>
 
-              <nav className="header-nav drawer-menu d-none d-lg-block" aria-label="Main">
-                <NavLinks links={links} onNavigate={handleNavClick} />
+              <nav
+                className="header-nav drawer-menu d-none d-lg-block"
+                aria-label="Main"
+              >
+                <NavLinks
+                  links={links}
+                  locale={locale}
+                  pathname={pathname}
+                  onNavigate={handleNavClick}
+                />
               </nav>
 
-              <div className="header-actions d-flex align-items-center">
+              <div className="header-actions d-flex align-items-center gap-2">
+                {!previewMode ? (
+                  <>
+                    <SiteSearch />
+                    <LocaleSwitcher />
+                  </>
+                ) : null}
                 <button
                   type="button"
                   className="svg-wrapper menu-open d-lg-none header-menu-toggle"

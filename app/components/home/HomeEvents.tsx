@@ -1,42 +1,46 @@
+"use client";
+
+import EventDateBadge from "@/app/components/events/EventDateBadge";
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import {
   eventExcerpt,
-  formatEventBadgeDate,
+  eventKindLabel,
+  eventText,
   formatEventTimeRange,
 } from "@/lib/content/events";
 import type { EventPost } from "@/lib/content/types";
+import type { LocalizedString } from "@/lib/i18n/locale";
+import { readLocalized } from "@/lib/i18n/localized";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 type HomeEventsProps = {
-  heading: string;
+  heading: LocalizedString | string;
   posts: EventPost[];
   /** Admin preview: cards open the Events editor instead of the public site. */
   adminLinks?: boolean;
 };
 
-function CalendarIcon() {
-  return (
-    <svg width={14} height={14} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect
-        x="3"
-        y="5"
-        width="18"
-        height="16"
-        rx="2"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M3 9h18M8 3v4M16 3v4"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
+const EYEBROW: Record<string, string> = {
+  en: "Schedule",
+  km: "កាលវិភាគ",
+  zh: "日程",
+};
+
+const VIEW_DETAILS: Record<string, string> = {
+  en: "View details",
+  km: "មើលព័ត៌មាន",
+  zh: "查看详情",
+};
+
+const VIEW_ALL: Record<string, string> = {
+  en: "View all events",
+  km: "មើលព្រឹត្តិការណ៍ទាំងអស់",
+  zh: "查看全部活动",
+};
 
 function PinIcon() {
   return (
-    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width={14} height={14} viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z"
         stroke="currentColor"
@@ -49,7 +53,7 @@ function PinIcon() {
 
 function ClockIcon() {
   return (
-    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width={14} height={14} viewBox="0 0 24 24" fill="none" aria-hidden>
       <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
       <path
         d="M12 7v5l3 2"
@@ -64,11 +68,11 @@ function ClockIcon() {
 
 function ArrowIcon() {
   return (
-    <svg width={16} height={16} viewBox="0 0 20 20" fill="none" aria-hidden>
+    <svg width={14} height={14} viewBox="0 0 20 20" fill="none" aria-hidden>
       <path
-        d="M5 15L15 5M15 5H8M15 5V12"
+        d="M4 10h11M11 5l5 5-5 5"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth={1.8}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -81,107 +85,119 @@ export default function HomeEvents({
   posts,
   adminLinks = false,
 }: HomeEventsProps) {
+  const { locale } = useLocale();
+  const headingText = readLocalized(heading, locale);
   const listHref = adminLinks ? "/admin/events" : "/events";
   const postHref = (id: string) =>
     adminLinks
       ? `/admin/events?edit=${encodeURIComponent(id)}`
       : `/events/${id}`;
 
+  const cards = posts.slice(0, 3);
+  const eyebrow = EYEBROW[locale] ?? EYEBROW.en;
+  const detailsLabel = adminLinks
+    ? "Edit event"
+    : (VIEW_DETAILS[locale] ?? VIEW_DETAILS.en);
+  const viewAll = adminLinks
+    ? "Manage Events"
+    : (VIEW_ALL[locale] ?? VIEW_ALL.en);
+
   return (
-    <div id="home-events" className="events-schedule-section section-padding">
+    <div id="home-events" className="home-events-section section-padding">
       <div className="container">
-        <div className="section-headings text-center">
+        <div className="home-events-head section-headings text-center">
+          <p className="home-events-eyebrow" data-aos="fade-up">
+            {eyebrow}
+          </p>
           <h2
             id="events"
             className="heading text-50"
             data-aos="fade-up"
             data-aos-delay="50"
           >
-            {heading}
+            {headingText}
           </h2>
           {adminLinks ? (
             <p className="text text-14 admin-insights-preview-note">
-              Click a card or Manage Events to edit in admin. Use Add Event
-              there to create a new one.
+              Click a card or Manage Events to edit in admin.
             </p>
           ) : null}
         </div>
 
-        {posts.length === 0 ? (
-          <p className="text text-18 text-center" data-aos="fade-up">
+        {cards.length === 0 ? (
+          <p className="text text-16 text-center" data-aos="fade-up">
             {adminLinks
-              ? "No events yet. Open Manage Events to create one."
-              : "No events or announcements yet. Check back soon."}
+              ? uiT(ui.events.emptyAdmin, locale)
+              : uiT(ui.events.empty, locale)}
           </p>
         ) : (
-          <div className="events-card-list">
-            {posts.map((post, index) => {
-              const badgeDate = formatEventBadgeDate(post.startsAt);
+          <div className="home-events-grid">
+            {cards.map((post, index) => {
+              const title = eventText(post, "title", locale);
               const timeRange = formatEventTimeRange(
                 post.startsAt,
-                post.endsAt
+                post.endsAt,
+                locale
               );
+              const excerpt = eventExcerpt(post, 90, locale);
 
               return (
-                <article
+                <a
                   key={post.id}
-                  className="event-list-card"
-                  data-aos="fade-up"
-                  data-aos-delay={index * 60}
+                  href={postHref(post.id)}
+                  className="home-event-card"
+                  data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
+                  data-aos-delay={index * 70}
+                  aria-label={title}
                 >
-                  <div className="event-list-card-media">
+                  <span className="home-event-card-media">
                     <img
                       src={post.coverImage}
                       alt=""
                       width={420}
-                      height={280}
+                      height={240}
                       loading="lazy"
                     />
-                    {badgeDate ? (
-                      <span className="event-list-card-date">
-                        <CalendarIcon />
-                        {badgeDate}
+                    <EventDateBadge startsAt={post.startsAt} />
+                  </span>
+
+                  <span className="home-event-card-body">
+                    {post.kind ? (
+                      <span className="home-event-card-kind">
+                        {eventKindLabel(post.kind, locale)}
                       </span>
                     ) : null}
-                  </div>
+                    <span className="home-event-card-title heading">
+                      {title}
+                    </span>
 
-                  <div className="event-list-card-body">
-                    <h3 className="heading event-list-card-title">
-                      <a href={postHref(post.id)}>{post.title}</a>
-                    </h3>
-
-                    <ul className="event-list-card-meta list-unstyled">
+                    <span className="home-event-card-meta">
                       {post.location ? (
-                        <li>
+                        <span>
                           <PinIcon />
-                          <span>{post.location}</span>
-                        </li>
+                          {post.location}
+                        </span>
                       ) : null}
                       {timeRange ? (
-                        <li>
+                        <span>
                           <ClockIcon />
-                          <span>{timeRange}</span>
-                        </li>
-                      ) : null}
-                    </ul>
-
-                    <p className="text text-16 event-list-card-excerpt">
-                      {eventExcerpt(post, 180)}
-                    </p>
-
-                    <div className="event-list-card-footer">
-                      <a
-                        href={postHref(post.id)}
-                        className="button button--primary event-list-card-cta"
-                      >
-                        {adminLinks ? "Edit Event" : "View Details"}
-                        <span className="svg-wrapper" aria-hidden>
-                          <ArrowIcon />
+                          {timeRange}
                         </span>
-                      </a>
-                    </div>
-                  </div>
-                </article>
+                      ) : null}
+                    </span>
+
+                    {excerpt ? (
+                      <span className="home-event-card-excerpt text">
+                        {excerpt}
+                      </span>
+                    ) : null}
+
+                    <span className="home-event-card-cta">
+                      {detailsLabel}
+                      <ArrowIcon />
+                    </span>
+                  </span>
+                </a>
               );
             })}
           </div>
@@ -194,27 +210,12 @@ export default function HomeEvents({
         >
           <a
             href={listHref}
-            className="button button--primary"
+            className="button button--secondary home-events-view-all"
             aria-label={
-              adminLinks ? "Manage Events in admin" : "Discover more Events"
+              adminLinks ? "Manage Events in admin" : "View all events"
             }
           >
-            {adminLinks ? "Manage Events" : "Discover More"}
-            <span className="svg-wrapper">
-              <svg
-                className="icon-20"
-                width={20}
-                height={20}
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.3365 7.84518L6.16435 15.0173L4.98584 13.8388L12.158 6.66667H5.83652V5H15.0032V14.1667H13.3365V7.84518Z"
-                  fill="CurrentColor"
-                />
-              </svg>
-            </span>
+            {viewAll}
           </a>
         </div>
       </div>

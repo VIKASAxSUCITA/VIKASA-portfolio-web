@@ -21,9 +21,7 @@ export default function EventsBody({ content }: EventsBodyProps) {
         <EventsHero heroTitle={content.heroTitle} />
         <EventsList heading={content.heading} posts={content.posts} />
       </main>
-      <div className="mt-100">
-        <FooterSection />
-      </div>
+      <FooterSection />
     </>
   );
 }

@@ -1,10 +1,10 @@
+"use client";
+
+import LocalizedEditableField from "@/app/components/i18n/LocalizedEditableField";
+import LocalizedSection from "@/app/components/i18n/LocalizedSection";
 import type { HomeContent } from "@/lib/content/types";
-import {
-  ArrowIcon,
-  EditableField,
-  EditableMedia,
-  SectionButton,
-} from "../admin/EditableField";
+import { asLocalized, readLocalized, setLocalized } from "@/lib/i18n/localized";
+import WhatWeDoMedia from "@/app/components/shared/WhatWeDoMedia";
 import EditableText from "../admin/EditableText";
 
 type About = HomeContent["about"];
@@ -41,97 +41,117 @@ function CheckIcon() {
 }
 
 export default function HomeAbout({ content, edit }: HomeAboutProps) {
-  const text = (key: "title" | "text" | "buttonLabel") =>
-    edit
-      ? {
-          onChange: (value: string) =>
-            edit.onChange((prev) => ({ ...prev, [key]: value })),
-        }
-      : undefined;
-
-  const imageEdit = edit
-    ? {
-        onChange: (image: string) =>
-          edit.onChange((prev) => ({ ...prev, image })),
-      }
-    : undefined;
+  const itemSources = content.items.map((item) => asLocalized(item).en);
 
   return (
-    <div id="about" className="image-text mt-100">
-      <div className="container">
-        <div className="row align-items-center">
-          <div className="col-lg-6 col-12">
-            <div className="media-wrap" data-aos="zoom-in-up">
-              <EditableMedia
-                src={content.image}
-                width={360}
-                height={450}
-                loading="lazy"
-                alt="What we do"
-                className="home-about-image"
-                edit={imageEdit}
-              />
-            </div>
-          </div>
-          <div className="col-lg-6 col-12">
-            <div className="content section-headings">
-              <EditableField
-                as="h2"
-                className="heading text-50"
-                value={content.title}
-                aos="fade-up"
-                label="About title"
-                edit={text("title")}
-              />
-              <EditableField
-                className="text text-18"
-                value={content.text}
-                multiline
-                aos="fade-up"
-                label="About text"
-                edit={text("text")}
-              />
-              <ul className="text-lists list-unstyled">
-                {content.items.map((item, index) => (
-                  <li
-                    key={index}
-                    className="text-item text text-18"
-                    data-aos="fade-up"
-                  >
-                    <CheckIcon />
-                    {edit ? (
-                      <EditableText
-                        value={item}
-                        label={`About point ${index + 1}`}
-                        onChange={(value) =>
-                          edit.onChange((prev) => {
-                            const items = [...prev.items] as About["items"];
-                            items[index] = value;
-                            return { ...prev, items };
-                          })
+    <LocalizedSection
+      edit={!!edit}
+      translateSources={[content.title.en, content.text.en, ...itemSources]}
+      onAutoTranslated={(locale, values) => {
+        edit?.onChange((prev) => ({
+          ...prev,
+          title: setLocalized(asLocalized(prev.title), locale, values[0] ?? ""),
+          text: setLocalized(asLocalized(prev.text), locale, values[1] ?? ""),
+          items: prev.items.map((item, index) =>
+            setLocalized(
+              asLocalized(item),
+              locale,
+              values[index + 2] ?? asLocalized(item)[locale]
+            )
+          ) as About["items"],
+        }));
+      }}
+    >
+      {(locale) => (
+        <div id="about" className="image-text mt-100">
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col-lg-6 col-12">
+                <WhatWeDoMedia
+                  src={content.image}
+                  aos="fade-right"
+                  edit={
+                    edit
+                      ? {
+                          onChange: (image) =>
+                            edit.onChange((prev) => ({ ...prev, image })),
                         }
-                      />
-                    ) : (
-                      item
-                    )}
-                  </li>
-                ))}
-              </ul>
-              <div className="buttons" data-aos="fade-up">
-                <SectionButton
-                  label={content.buttonLabel}
-                  href="/about"
-                  className="button button--primary"
-                  ariaLabel="More About Us"
-                  edit={text("buttonLabel")}
-                >
-                  <ArrowIcon />
-                </SectionButton>
+                      : undefined
+                  }
+                />
+              </div>
+              <div className="col-lg-6 col-12">
+                <div className="content section-headings">
+                  <LocalizedEditableField
+                    as="h2"
+                    className="heading text-50"
+                    value={content.title}
+                    locale={locale}
+                    aos="fade-left"
+                    label="About title"
+                    edit={
+                      edit
+                        ? {
+                            onChange: (title) =>
+                              edit.onChange((prev) => ({ ...prev, title })),
+                          }
+                        : undefined
+                    }
+                  />
+                  <LocalizedEditableField
+                    className="text text-18"
+                    value={content.text}
+                    locale={locale}
+                    multiline
+                    aos="fade-left"
+                    aosDelay={80}
+                    label="About text"
+                    edit={
+                      edit
+                        ? {
+                            onChange: (text) =>
+                              edit.onChange((prev) => ({ ...prev, text })),
+                          }
+                        : undefined
+                    }
+                  />
+                  <ul className="text-lists list-unstyled">
+                    {content.items.map((item, index) => (
+                      <li
+                        key={index}
+                        className="text-item text text-18"
+                        data-aos="fade-left"
+                        data-aos-delay={120 + index * 60}
+                      >
+                        <CheckIcon />
+                        {edit ? (
+                          <EditableText
+                            value={readLocalized(item, locale)}
+                            label={`About point ${index + 1}`}
+                            onChange={(value) =>
+                              edit.onChange((prev) => {
+                                const items = [...prev.items] as About["items"];
+                                items[index] = setLocalized(
+                                  asLocalized(items[index]),
+                                  locale,
+                                  value
+                                );
+                                return { ...prev, items };
+                              })
+                            }
+                          />
+                        ) : (
+                          readLocalized(item, locale)
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </LocalizedSection>
   );
 }

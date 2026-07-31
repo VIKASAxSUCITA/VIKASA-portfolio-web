@@ -1,17 +1,24 @@
 "use client";
 
+import { useState } from "react";
 import {
   EditableField,
   EditableMedia,
 } from "@/app/components/admin/EditableField";
+import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
+import AutoTranslateButton from "@/app/components/i18n/AutoTranslateButton";
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import {
   eventKindLabel,
+  eventText,
   formatEventBadgeDate,
   formatEventTimeRange,
   fromDateTimeLocalValue,
   toDateTimeLocalValue,
 } from "@/lib/content/events";
 import type { EventPost } from "@/lib/content/types";
+import type { Locale } from "@/lib/i18n/locale";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 type EventContactInfo = {
   email?: string;
@@ -37,14 +44,40 @@ function BreadcrumbChevron() {
   );
 }
 
+function titleKeyFor(locale: Locale): keyof EventPost {
+  if (locale === "km") return "titleKm";
+  if (locale === "zh") return "titleZh";
+  return "title";
+}
+
+function summaryKeyFor(locale: Locale): keyof EventPost {
+  if (locale === "km") return "summaryKm";
+  if (locale === "zh") return "summaryZh";
+  return "summary";
+}
+
+function bodyKeyFor(locale: Locale): keyof EventPost {
+  if (locale === "km") return "bodyKm";
+  if (locale === "zh") return "bodyZh";
+  return "body";
+}
+
 export default function EventDetailsBody({
   post,
   contact,
   edit,
 }: EventDetailsBodyProps) {
-  const dateLabel = formatEventBadgeDate(post.startsAt);
-  const timeRange = formatEventTimeRange(post.startsAt, post.endsAt);
-  const paragraphs = post.body
+  const { locale: siteLocale } = useLocale();
+  const [editLocale, setEditLocale] = useState<Locale>("en");
+  const locale = edit ? editLocale : siteLocale;
+
+  const displayTitle = eventText(post, "title", locale);
+  const displaySummary = eventText(post, "summary", locale);
+  const displayBody = eventText(post, "body", locale);
+
+  const dateLabel = formatEventBadgeDate(post.startsAt, locale);
+  const timeRange = formatEventTimeRange(post.startsAt, post.endsAt, locale);
+  const paragraphs = displayBody
     .split(/\n\s*\n/)
     .map((part) => part.trim())
     .filter(Boolean);
@@ -52,18 +85,46 @@ export default function EventDetailsBody({
   const patch = <K extends keyof EventPost>(key: K, value: EventPost[K]) =>
     edit?.onChange((prev) => ({ ...prev, [key]: value }));
 
+  const titleKey = titleKeyFor(locale);
+  const summaryKey = summaryKeyFor(locale);
+  const bodyKey = bodyKeyFor(locale);
+
   const publicInfoRows = [
-    { label: "Category", value: eventKindLabel(post.kind) },
-    { label: "Date", value: dateLabel },
-    { label: "Time", value: timeRange },
-    { label: "Phone", value: contact?.phone || "" },
-    { label: "Location", value: post.location },
-    { label: "E-mail", value: contact?.email || "" },
+    {
+      key: "category" as const,
+      label: uiT(ui.events.category, locale),
+      value: eventKindLabel(post.kind, locale),
+    },
+    {
+      key: "date" as const,
+      label: uiT(ui.events.date, locale),
+      value: dateLabel,
+    },
+    {
+      key: "time" as const,
+      label: uiT(ui.events.time, locale),
+      value: timeRange,
+    },
+    {
+      key: "phone" as const,
+      label: uiT(ui.events.phone, locale),
+      value: contact?.phone || "",
+    },
+    {
+      key: "location" as const,
+      label: uiT(ui.events.location, locale),
+      value: post.location,
+    },
+    {
+      key: "email" as const,
+      label: uiT(ui.events.email, locale),
+      value: contact?.email || "",
+    },
   ].filter((row) => row.value);
 
   return (
     <main className="event-detail-page">
-      <section className="page-banner overlay" aria-label={post.title}>
+      <section className="page-banner overlay page-banner--full" aria-label={displayTitle}>
         <picture className="media media-bg">
           <EditableMedia
             src={post.coverImage}
@@ -80,14 +141,56 @@ export default function EventDetailsBody({
         </picture>
         <div className="page-banner-content">
           <div className="container text-center">
+            {edit ? (
+              <div className="locale-edit-bar">
+                <LocaleEditTabs
+                  locale={editLocale}
+                  onChange={setEditLocale}
+                />
+                <AutoTranslateButton
+                  sources={[post.title, post.summary, post.body]}
+                  onTranslated={(target, values) => {
+                    const [titleVal, summaryVal, bodyVal] = values;
+                    edit.onChange((prev) => {
+                      if (target === "km") {
+                        return {
+                          ...prev,
+                          titleKm: titleVal ?? prev.titleKm,
+                          summaryKm: summaryVal ?? prev.summaryKm,
+                          bodyKm: bodyVal ?? prev.bodyKm,
+                        };
+                      }
+                      if (target === "zh") {
+                        return {
+                          ...prev,
+                          titleZh: titleVal ?? prev.titleZh,
+                          summaryZh: summaryVal ?? prev.summaryZh,
+                          bodyZh: bodyVal ?? prev.bodyZh,
+                        };
+                      }
+                      return prev;
+                    });
+                  }}
+                />
+              </div>
+            ) : null}
             <EditableField
               as="h1"
               className="heading text-80 fw-700"
-              value={post.title}
+              value={
+                edit
+                  ? String(post[titleKey] || post.title)
+                  : displayTitle
+              }
               aos="fade-up"
               label="Event title"
               edit={
-                edit ? { onChange: (title) => patch("title", title) } : undefined
+                edit
+                  ? {
+                      onChange: (value) =>
+                        patch(titleKey, value as EventPost[typeof titleKey]),
+                    }
+                  : undefined
               }
             />
             <ul
@@ -97,7 +200,7 @@ export default function EventDetailsBody({
             >
               <li>
                 <a href="/" className="text text-18">
-                  Home
+                  {uiT(ui.nav.home, locale)}
                 </a>
               </li>
               <li>
@@ -105,14 +208,14 @@ export default function EventDetailsBody({
               </li>
               <li>
                 <a href="/events" className="text text-18">
-                  Events
+                  {uiT(ui.nav.events, locale)}
                 </a>
               </li>
               <li>
                 <BreadcrumbChevron />
               </li>
               <li>
-                <span className="text text-18 active">{post.title}</span>
+                <span className="text text-18 active">{displayTitle}</span>
               </li>
             </ul>
           </div>
@@ -141,25 +244,42 @@ export default function EventDetailsBody({
               <EditableField
                 as="h2"
                 className="heading event-detail-title"
-                value={post.title}
+                value={
+                  edit
+                    ? String(post[titleKey] || post.title)
+                    : displayTitle
+                }
                 label="Event title"
                 edit={
                   edit
-                    ? { onChange: (title) => patch("title", title) }
+                    ? {
+                        onChange: (value) =>
+                          patch(titleKey, value as EventPost[typeof titleKey]),
+                      }
                     : undefined
                 }
               />
 
-              {edit || post.summary ? (
+              {edit || displaySummary ? (
                 <EditableField
                   as="p"
                   className="text text-18 event-detail-lead"
-                  value={post.summary}
+                  value={
+                    edit
+                      ? String(post[summaryKey] || post.summary)
+                      : displaySummary
+                  }
                   multiline
                   label="Short summary"
                   edit={
                     edit
-                      ? { onChange: (summary) => patch("summary", summary) }
+                      ? {
+                          onChange: (value) =>
+                            patch(
+                              summaryKey,
+                              value as EventPost[typeof summaryKey]
+                            ),
+                        }
                       : undefined
                   }
                 />
@@ -169,10 +289,13 @@ export default function EventDetailsBody({
                 <EditableField
                   as="p"
                   className="text text-16 event-detail-copy"
-                  value={post.body}
+                  value={String(post[bodyKey] || post.body)}
                   multiline
                   label="Full details"
-                  edit={{ onChange: (body) => patch("body", body) }}
+                  edit={{
+                    onChange: (value) =>
+                      patch(bodyKey, value as EventPost[typeof bodyKey]),
+                  }}
                 />
               ) : (
                 paragraphs.map((paragraph, index) => (
@@ -186,12 +309,14 @@ export default function EventDetailsBody({
             <aside className="event-detail-sidebar">
               <div className="event-info-card">
                 <h3 className="heading text-22 event-info-card-title">
-                  Information
+                  {uiT(ui.events.information, locale)}
                 </h3>
                 {edit ? (
                   <ul className="event-info-list list-unstyled">
                     <li>
-                      <span className="event-info-label">Category</span>
+                      <span className="event-info-label">
+                        {uiT(ui.events.category, locale)}
+                      </span>
                       <EditableField
                         as="span"
                         value={post.kind}
@@ -200,7 +325,9 @@ export default function EventDetailsBody({
                       />
                     </li>
                     <li>
-                      <span className="event-info-label">Start</span>
+                      <span className="event-info-label">
+                        {uiT(ui.events.start, locale)}
+                      </span>
                       <input
                         type="datetime-local"
                         className="admin-event-datetime text text-16"
@@ -216,7 +343,9 @@ export default function EventDetailsBody({
                       />
                     </li>
                     <li>
-                      <span className="event-info-label">End</span>
+                      <span className="event-info-label">
+                        {uiT(ui.events.end, locale)}
+                      </span>
                       <input
                         type="datetime-local"
                         className="admin-event-datetime text text-16"
@@ -231,7 +360,9 @@ export default function EventDetailsBody({
                       />
                     </li>
                     <li>
-                      <span className="event-info-label">Location</span>
+                      <span className="event-info-label">
+                        {uiT(ui.events.location, locale)}
+                      </span>
                       <EditableField
                         as="span"
                         value={post.location}
@@ -243,13 +374,17 @@ export default function EventDetailsBody({
                     </li>
                     {contact?.phone ? (
                       <li>
-                        <span className="event-info-label">Phone</span>
+                        <span className="event-info-label">
+                          {uiT(ui.events.phone, locale)}
+                        </span>
                         <span>{contact.phone}</span>
                       </li>
                     ) : null}
                     {contact?.email ? (
                       <li>
-                        <span className="event-info-label">E-mail</span>
+                        <span className="event-info-label">
+                          {uiT(ui.events.email, locale)}
+                        </span>
                         <span>{contact.email}</span>
                       </li>
                     ) : null}
@@ -257,11 +392,11 @@ export default function EventDetailsBody({
                 ) : (
                   <ul className="event-info-list list-unstyled">
                     {publicInfoRows.map((row) => (
-                      <li key={row.label}>
+                      <li key={row.key}>
                         <span className="event-info-label">{row.label}</span>
-                        {row.label === "E-mail" ? (
+                        {row.key === "email" ? (
                           <a href={`mailto:${row.value}`}>{row.value}</a>
-                        ) : row.label === "Phone" ? (
+                        ) : row.key === "phone" ? (
                           <a href={`tel:${row.value.replace(/\s+/g, "")}`}>
                             {row.value}
                           </a>
@@ -276,14 +411,15 @@ export default function EventDetailsBody({
 
               <div className="event-info-card event-register-card">
                 <h3 className="heading text-22 event-info-card-title">
-                  Get Involved
+                  {uiT(ui.events.getInvolved, locale)}
                 </h3>
                 <p className="text text-16">
-                  Interested in this {eventKindLabel(post.kind).toLowerCase()}?
-                  Reach out and we will share the next steps.
+                  {post.kind === "Announcement"
+                    ? uiT(ui.events.interestedAnnouncement, locale)
+                    : uiT(ui.events.interestedEvent, locale)}
                 </p>
-                <a href="/#contact" className="button button--primary">
-                  Contact Us
+                <a href="/contact" className="button button--primary">
+                  {uiT(ui.events.contactUs, locale)}
                 </a>
               </div>
             </aside>

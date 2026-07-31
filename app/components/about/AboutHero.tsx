@@ -1,5 +1,10 @@
+"use client";
+
+import LocalizedEditableField from "@/app/components/i18n/LocalizedEditableField";
+import LocalizedSection from "@/app/components/i18n/LocalizedSection";
 import type { AboutContent } from "@/lib/content/types";
-import { EditableField, EditableMedia } from "../admin/EditableField";
+import { asLocalized, setLocalized } from "@/lib/i18n/localized";
+import { EditableMedia } from "../admin/EditableField";
 
 type Hero = AboutContent["hero"];
 
@@ -9,14 +14,6 @@ type AboutHeroProps = {
 };
 
 export default function AboutHero({ content, edit }: AboutHeroProps) {
-  const text = (key: "title" | "text") =>
-    edit
-      ? {
-          onChange: (value: string) =>
-            edit.onChange((prev) => ({ ...prev, [key]: value })),
-        }
-      : undefined;
-
   const imageEdit = edit
     ? {
         onChange: (image: string) =>
@@ -25,39 +22,78 @@ export default function AboutHero({ content, edit }: AboutHeroProps) {
     : undefined;
 
   return (
-    <section className="page-banner overlay about-hero" aria-label="About VIKASA">
-      <picture className="media media-bg">
-        <EditableMedia
-          src={content.image}
-          width={1920}
-          height={520}
-          loading="eager"
-          alt="VIKASA team collaborating"
-          edit={imageEdit}
-        />
-      </picture>
-      <div className="page-banner-content">
-        <div className="container text-center">
-          <EditableField
-            as="h1"
-            className="heading text-80 fw-700 about-hero-title"
-            value={content.title}
-            aos="fade-up"
-            label="About hero title"
-            edit={text("title")}
-          />
-          <EditableField
-            as="p"
-            className="text text-18 about-hero-desc"
-            value={content.text}
-            multiline
-            aos="fade-up"
-            aosDelay={100}
-            label="About hero description"
-            edit={text("text")}
-          />
-        </div>
-      </div>
-    </section>
+    <LocalizedSection
+      edit={!!edit}
+      translateSources={[content.title.en, content.text.en]}
+      onAutoTranslated={(locale, values) => {
+        edit?.onChange((prev) => ({
+          ...prev,
+          title: setLocalized(asLocalized(prev.title), locale, values[0] ?? ""),
+          text: setLocalized(asLocalized(prev.text), locale, values[1] ?? ""),
+        }));
+      }}
+    >
+      {(locale) => (
+        <section
+          className="vikasa-hero-cinematic about-hero-cinematic"
+          aria-label="About VIKASA"
+        >
+          <div className="vikasa-hero-bg">
+            <EditableMedia
+              src={content.image}
+              width={1920}
+              height={1080}
+              loading="eager"
+              alt="VIKASA team collaborating"
+              className="vikasa-hero-bg-image"
+              edit={imageEdit}
+            />
+            <div className="vikasa-hero-overlay" aria-hidden />
+          </div>
+
+          <div className="vikasa-hero-content">
+            <div className="container">
+              <div className="vikasa-hero-copy section-headings">
+                <LocalizedEditableField
+                  as="h1"
+                  className="heading vikasa-hero-title"
+                  value={content.title}
+                  locale={locale}
+                  aos="fade-up"
+                  aosDelay={80}
+                  label="About hero title"
+                  edit={
+                    edit
+                      ? {
+                          onChange: (title) =>
+                            edit.onChange((prev) => ({ ...prev, title })),
+                        }
+                      : undefined
+                  }
+                />
+                <LocalizedEditableField
+                  as="p"
+                  className="text text-18 vikasa-hero-text"
+                  value={content.text}
+                  locale={locale}
+                  multiline
+                  aos="fade-up"
+                  aosDelay={140}
+                  label="About hero description"
+                  edit={
+                    edit
+                      ? {
+                          onChange: (text) =>
+                            edit.onChange((prev) => ({ ...prev, text })),
+                        }
+                      : undefined
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+    </LocalizedSection>
   );
 }

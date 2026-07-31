@@ -17,6 +17,8 @@ import {
   sortInsightsByLatest,
 } from "./insights";
 import type { InsightPost, InsightsContent } from "./types";
+import type { LocalizedString } from "@/lib/i18n/locale";
+import { asLocalized } from "@/lib/i18n/localized";
 
 /** Page chrome for the Insights listing lives here. */
 const INSIGHTS_PAGE_REF = ["pages", "insights"] as const;
@@ -31,8 +33,8 @@ const ENTRIES_COLLECTION = "entries";
 const LEGACY_TOP_LEVEL = "insights";
 
 type InsightsPageMeta = {
-  heroTitle?: string;
-  heading?: string;
+  heroTitle?: LocalizedString | string;
+  heading?: LocalizedString | string;
   /**
    * Once true, an empty entries collection means "user deleted everything",
    * not "fall back to demo defaults".
@@ -62,10 +64,14 @@ function entryDoc(id: string) {
 function insightDocPayload(post: InsightPost) {
   return {
     title: post.title,
+    titleKm: post.titleKm,
+    titleZh: post.titleZh,
     image: post.image,
     category: post.category,
     author: post.author,
     bodyHtml: post.bodyHtml,
+    bodyHtmlKm: post.bodyHtmlKm,
+    bodyHtmlZh: post.bodyHtmlZh,
     quote: post.quote,
     sectionTitle: post.sectionTitle,
     paragraphs: post.paragraphs,
@@ -116,8 +122,8 @@ export async function loadInsightsContent(): Promise<InsightsContent> {
   // Managed catalog: trust entries even when empty (deletes must stick).
   if (meta?.entriesReady) {
     return mergeInsightsContent({
-      heroTitle: meta.heroTitle,
-      heading: meta.heading,
+      heroTitle: asLocalized(meta.heroTitle),
+      heading: asLocalized(meta.heading),
       posts: sortInsightsByLatest(entryPosts),
     });
   }
@@ -137,8 +143,8 @@ export async function loadInsightsContent(): Promise<InsightsContent> {
   }
 
   return mergeInsightsContent({
-    heroTitle: meta?.heroTitle,
-    heading: meta?.heading,
+    heroTitle: asLocalized(meta?.heroTitle),
+    heading: asLocalized(meta?.heading),
     posts: sortInsightsByLatest(posts),
   });
 }

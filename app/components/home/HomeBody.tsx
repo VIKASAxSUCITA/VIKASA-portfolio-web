@@ -6,12 +6,13 @@ import HomeHero from "./HomeHero";
 import HomeInsights from "./HomeInsights";
 import HomeServices from "./HomeServices";
 import type { EventPost, HomeContent, InsightPost } from "@/lib/content/types";
+import type { LocalizedString } from "@/lib/i18n/locale";
 
 type HomeBodyProps = {
   content: HomeContent;
-  insightsHeading: string;
+  insightsHeading: LocalizedString | string;
   latestInsights: InsightPost[];
-  eventsHeading: string;
+  eventsHeading: LocalizedString | string;
   latestEvents: EventPost[];
 };
 
