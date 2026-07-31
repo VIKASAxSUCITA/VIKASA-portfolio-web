@@ -42,8 +42,8 @@ function insightDefaults(
   return {
     id,
     title,
-    titleKm: "",
-    titleZh: "",
+    titleKm: "ផ្តល់អំណាចដល់សហគ្រិន ជំរុញកំណើនតាមចំណេះដឹង",
+    titleZh: "赋能创业者，以知识驱动增长",
     image,
     category: "Insight",
     author: "VIKASA",
@@ -117,7 +117,7 @@ export const defaultHomeContent: HomeContent = {
     buttonLabel: L("CONTACT US", "ទាក់ទងយើង", "联系我们"),
   },
   services: {
-    heading: L("Our Services"),
+    heading: L("Our Services", "សេវាកម្មរបស់យើង", "我们的服务"),
     cards: [
       {
         title: L("Investment", "ការវិនិយោគ", "投资"),
@@ -175,27 +175,41 @@ export const defaultHomeContent: HomeContent = {
     ],
   },
   contact: {
-    badge: L("Get Proposal"),
-    title: L("Contact / Get Proposal"),
+    badge: L("Get Proposal", "ស្នើសុំសំណើសេវា", "获取方案"),
+    title: L(
+      "Contact / Get Proposal",
+      "ទំនាក់ទំនង / ស្នើសុំសំណើសេវា",
+      "联系 / 获取方案"
+    ),
     text: L(
-      "Tell us about your business goals. Request a proposal — reach us by form, WhatsApp, or email."
+      "Tell us about your business goals. Request a proposal — reach us by form, WhatsApp, or email.",
+      "ប្រាប់យើងអំពីគោលដៅអាជីវកម្មរបស់អ្នក។ ស្នើសុំសំណើសេវា — ទាក់ទងតាមសំណុំបែបបទ WhatsApp ឬអ៊ីមែល។",
+      "告诉我们您的业务目标。通过表单、WhatsApp 或邮件申请方案。"
     ),
     email: "hello@vikasa.com",
     whatsappNumber: "855000000000",
-    whatsappLabel: L("Chat on WhatsApp"),
-    formTitle: L("Request Proposal"),
-    formText: L(
-      "Share a few details and we will follow up with a tailored proposal."
+    whatsappLabel: L(
+      "Chat on WhatsApp",
+      "ជជែកតាម WhatsApp",
+      "通过 WhatsApp 聊天"
     ),
-    buttonLabel: L("Request Proposal"),
+    formTitle: L("Request Proposal", "ស្នើសុំសំណើសេវា", "申请方案"),
+    formText: L(
+      "Share a few details and we will follow up with a tailored proposal.",
+      "ចែករំលែកព័ត៌មានខ្លះ យើងនឹងតាមដានជាមួយសំណើសេវាដែលសមស្រប។",
+      "分享一些详情，我们将跟进定制方案。"
+    ),
+    buttonLabel: L("Request Proposal", "ស្នើសុំសំណើសេវា", "申请方案"),
   },
 };
 
 export const defaultAboutContent: AboutContent = {
   hero: {
-    title: L("About VIKASA"),
+    title: L("About VIKASA", "អំពី VIKASA", "关于 VIKASA"),
     text: L(
-      "Vikasa helps businesses grow through strategic consulting, innovation, and accountable solutions that create sustainable transformation."
+      "Vikasa helps businesses grow through strategic consulting, innovation, and accountable solutions that create sustainable transformation.",
+      "VIKASA ជួយអាជីវកម្មរីកចម្រើនតាមរយៈការពិគ្រោះយោបល់យុទ្ធសាស្ត្រ នវានុវត្តន៍ និងដំណោះស្រាយដែលមានទំនួលខុសត្រូវ ដើម្បីបំប្លែងប្រកបដោយចីរភាព។",
+      "VIKASA 通过战略咨询、创新与负责任的解决方案，助力企业实现可持续转型与成长。"
     ),
     image: "/assets/img/vikasa/aboutUS_Banner_Page.png",
   },
@@ -227,28 +241,38 @@ export const defaultAboutContent: AboutContent = {
     buttonLabel: L("More About Us", "ស្វែងយល់បន្ថែមអំពីយើង", "了解更多"),
   },
   story: {
-    title: L("Why Vikasa Exists"),
+    title: L("Why Vikasa Exists", "ហេតុអ្វី VIKASA មានវត្តមាន", "VIKASA 为何存在"),
     text: L(
-      "Vikasa was founded to help businesses overcome challenges, embrace innovation, and achieve sustainable growth. We believe that accountability, continuous improvement, and strategic thinking enable organizations to transform today while preparing for tomorrow."
+      "Vikasa was founded to help businesses overcome challenges, embrace innovation, and achieve sustainable growth. We believe that accountability, continuous improvement, and strategic thinking enable organizations to transform today while preparing for tomorrow.",
+      "VIKASA ត្រូវបានបង្កើតឡើងដើម្បីជួយអាជីវកម្មយកឈ្នះបញ្ហា ប្រកាន់យកនវានុវត្តន៍ និងសម្រេចកំណើនប្រកបដោយចីរភាព។ យើងជឿថាទំនួលខុសត្រូវ ការកែលម្អជាបន្ត និងការគិតយុទ្ធសាស្ត្រ អាចជួយអង្គភាពបំប្លែងថ្ងៃនេះ ខណៈត្រៀមខ្លួនសម្រាប់ថ្ងៃស្អែក។",
+      "VIKASA 的创立旨在帮助企业迎接挑战、拥抱创新并实现可持续增长。我们相信，问责、持续改进与战略思维能让组织在变革当下的同时，为未来做好准备。"
     ),
   },
   vision: {
-    title: L("Our Vision"),
+    title: L("Our Vision", "ចក្ខុវិស័យរបស់យើង", "我们的愿景"),
     text: L(
-      "To empower businesses by reshaping the future, refining excellence, and reimagining possibilities through accountable and innovative strategies that drive sustainable growth and transformation."
+      "To empower businesses by reshaping the future, refining excellence, and reimagining possibilities through accountable and innovative strategies that drive sustainable growth and transformation.",
+      "ផ្តល់អំណាចដល់អាជីវកម្មដោយរៀបចំអនាគតឡើងវិញ កែលម្អឧត្តមភាព និងស្រមៃឡើងវិញនូវលទ្ធភាពតាមរយៈយុទ្ធសាស្ត្រដែលមានទំនួលខុសត្រូវ និងនវានុវត្តន៍ ដើម្បីជំរុញកំណើន និងការបំប្លែងប្រកបដោយចីរភាព។",
+      "以负责任与创新的战略重塑未来、精进卓越、重新构想可能，赋能企业实现可持续增长与转型。"
     ),
   },
   mission: {
-    title: L("Our Mission"),
+    title: L("Our Mission", "បេសកកម្មរបស់យើង", "我们的使命"),
     text: L(
-      "Our mission is to provide businesses with actionable insights and transformative solutions by reinforcing accountability, driving continuous improvement, and fostering innovative strategies that unlock growth and reimagine new possibilities for success."
+      "Our mission is to provide businesses with actionable insights and transformative solutions by reinforcing accountability, driving continuous improvement, and fostering innovative strategies that unlock growth and reimagine new possibilities for success.",
+      "បេសកកម្មរបស់យើងគឺផ្តល់ឱ្យអាជីវកម្មនូវការយល់ដឹងដែលអាចអនុវត្តបាន និងដំណោះស្រាយផ្លាស់ប្តូរដោយពង្រឹងទំនួលខុសត្រូវ ជំរុញការកែលម្អជាបន្ត និងជំរុញយុទ្ធសាស្ត្រនវានុវត្តន៍ ដើម្បីបើកកំណើន និងស្រមៃឡើងវិញនូវលទ្ធភាពជោគជ័យថ្មី។",
+      "我们的使命是通过强化问责、推动持续改进并培育创新战略，为企业提供可执行洞察与变革方案，从而解锁增长并重新构想成功的可能。"
     ),
   },
 };
 
 export const defaultInsightsContent: InsightsContent = {
-  heroTitle: L("Insights"),
-  heading: L("Latest Insights From Us"),
+  heroTitle: L("Insights", "វិចារណកថា", "洞察"),
+  heading: L(
+    "Latest Insights From Us",
+    "វិចារណកថាថ្មីៗពីយើង",
+    "我们的最新洞察"
+  ),
   posts: [
     insightDefaults(
       "insight_1",
@@ -290,14 +314,18 @@ export const defaultInsightsContent: InsightsContent = {
 };
 
 export const defaultEventsContent: EventsContent = {
-  heroTitle: L("Events"),
-  heading: L("Upcoming Events & Announcements"),
+  heroTitle: L("Events", "ព្រឹត្តិការណ៍", "活动"),
+  heading: L(
+    "Upcoming Events & Announcements",
+    "ព្រឹត្តិការណ៍ និងសេចក្តីប្រកាសខាងមុខ",
+    "即将到来的活动与公告"
+  ),
   posts: [
     {
       id: "event_1",
       title: "VIKASA Business Growth Workshop",
-      titleKm: "",
-      titleZh: "",
+      titleKm: "សិក្ខាសាលាកំណើនអាជីវកម្ម VIKASA",
+      titleZh: "VIKASA 业务增长工作坊",
       coverImage: "/assets/img/blog/1.jpg",
       image: "/assets/img/blog/3.jpg",
       kind: "Event",
@@ -306,18 +334,22 @@ export const defaultEventsContent: EventsContent = {
       location: "Connexion, Koh Pich, Phnom Penh",
       summary:
         "Join us for a morning workshop on strategy, performance, and practical growth tools for owners and leadership teams.",
-      summaryKm: "",
-      summaryZh: "",
+      summaryKm:
+        "ចូលរួមសិក្ខាសាលាពេលព្រឹកអំពីយុទ្ធសាស្ត្រ ប្រសិទ្ធភាព និងឧបករណ៍កំណើនជាក់ស្តែងសម្រាប់ម្ចាស់អាជីវកម្ម និងក្រុមថ្នាក់ដឹកនាំ។",
+      summaryZh:
+        "欢迎参加上午工作坊，聚焦战略、绩效与实用增长工具，面向企业主与领导团队。",
       body: "Join VIKASA for a hands-on Business Growth Workshop designed for owners and top management.\n\nWe will cover market intelligence, financial clarity, and practical next steps you can apply immediately in your organization.\n\nSeats are limited. Register early to secure your place.",
-      bodyKm: "",
-      bodyZh: "",
+      bodyKm:
+        "ចូលរួមសិក្ខាសាលាកំណើនអាជីវកម្មរបស់ VIKASA ដែលរចនាឡើងសម្រាប់ម្ចាស់ និងថ្នាក់ដឹកនាំ។\n\nយើងនឹងគ្របដណ្តប់ព័ត៌មានទីផ្សារ ភាពច្បាស់លាស់ហិរញ្ញវត្ថុ និងជំហានបន្ទាប់ដែលអាចអនុវត្តភ្លាមៗ។\n\nកន្លែងមានកំណត់។ សូមចុះឈ្មោះមុនដើម្បីធានាកន្លែង។",
+      bodyZh:
+        "欢迎参加 VIKASA 业务增长实操工作坊，专为企业主与高管设计。\n\n我们将涵盖市场情报、财务清晰度，以及可立即落地的下一步行动。\n\n名额有限，请尽早报名。",
       createdAt: "2026-07-20T10:00:00.000Z",
     },
     {
       id: "event_2",
       title: "Office Hours Relocation Notice",
-      titleKm: "",
-      titleZh: "",
+      titleKm: "សេចក្តីជូនដំណឹងផ្លាស់ប្តូរទីតាំងការិយាល័យ",
+      titleZh: "办公时间地点变更通知",
       coverImage: "/assets/img/blog/2.jpg",
       image: "/assets/img/blog/1.jpg",
       kind: "Announcement",
@@ -326,11 +358,15 @@ export const defaultEventsContent: EventsContent = {
       location: "Connexion, Koh Pich, Phnom Penh",
       summary:
         "Our consulting team will operate from Connexion, Koh Pich starting later this month. Visit us by appointment.",
-      summaryKm: "",
-      summaryZh: "",
+      summaryKm:
+        "ក្រុមពិគ្រោះយោបល់របស់យើងនឹងដំណើរការពី Connexion, Koh Pich ចាប់ពីចុងខែនេះ។ សូមទស្សនាតាមការណាត់ជួប។",
+      summaryZh:
+        "我们的咨询团队将于本月晚些时候在金边钻石岛 Connexion 办公。请预约拜访。",
       body: "We are pleased to announce that VIKASA will welcome clients at Connexion, Koh Pich, Corner of Koh Pich Street, and Park Ave, Phnom Penh.\n\nPlease continue to reach us by email or WhatsApp to schedule meetings. We look forward to hosting you.",
-      bodyKm: "",
-      bodyZh: "",
+      bodyKm:
+        "យើងរីករាយជូនដំណឹងថា VIKASA នឹងទទួលភ្ញៀវនៅ Connexion, Koh Pich, ជ្រុងផ្លូវ Koh Pich និង Park Ave, ភ្នំពេញ។\n\nសូមបន្តទាក់ទងតាមអ៊ីមែល ឬ WhatsApp ដើម្បីកំណត់ការណាត់ជួប។ យើងរង់ចាំស្វាគមន៍អ្នក។",
+      bodyZh:
+        "我们很高兴宣布，VIKASA 将在金边钻石岛 Connexion（Koh Pich Street 与 Park Ave 路口）接待客户。\n\n请继续通过邮件或 WhatsApp 预约会面。期待与您见面。",
       createdAt: "2026-07-18T08:00:00.000Z",
     },
   ],

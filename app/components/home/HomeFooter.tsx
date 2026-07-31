@@ -1,4 +1,8 @@
+"use client";
+
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import type { FooterContent } from "@/lib/content/types";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 const SOCIALS = [
   {
@@ -55,6 +59,21 @@ const SOCIALS = [
   },
 ];
 
+const QUICK_LINKS = [
+  { href: "/", label: ui.nav.home },
+  { href: "/about", label: ui.nav.about },
+  { href: "/services", label: ui.nav.services },
+  { href: "/insights", label: ui.nav.insights },
+  { href: "/events", label: ui.nav.events },
+  { href: "/contact", label: ui.nav.contact },
+] as const;
+
+const SERVICE_LINKS = [
+  { href: "/services/investment", label: ui.services.investment },
+  { href: "/services/business-enhancement", label: ui.services.enhancement },
+  { href: "/services/business-academy", label: ui.services.academy },
+] as const;
+
 type HomeFooterProps = {
   content: FooterContent;
   showUtilities?: boolean;
@@ -64,6 +83,8 @@ export default function HomeFooter({
   content,
   showUtilities = true,
 }: HomeFooterProps) {
+  const { locale } = useLocale();
+
   return (
     <>
       <footer>
@@ -109,81 +130,44 @@ export default function HomeFooter({
                 <div className="col-12 col-md-6">
                   <div className="footer-widget footer-widget-menu">
                     <div className="widget-heading heading text-22">
-                      Quick Link
+                      {uiT(ui.footer.quickLink, locale)}
                     </div>
                     <ul className="footer-menu list-unstyled">
-                      <li>
-                        <a href="/" className="text text-16 link">
-                          Home
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/about" className="text text-16 link">
-                          About Us
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/services" className="text text-16 link">
-                          Services
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/insights" className="text text-16 link">
-                          Insights
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/events" className="text text-16 link">
-                          Events
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/contact" className="text text-16 link">
-                          Contact
-                        </a>
-                      </li>
+                      {QUICK_LINKS.map((link) => (
+                        <li key={link.href}>
+                          <a href={link.href} className="text text-16 link">
+                            {uiT(link.label, locale)}
+                          </a>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
                 <div className="col-12 col-md-6">
                   <div className="footer-widget footer-widget-menu">
                     <div className="widget-heading heading text-22">
-                      Services
+                      {uiT(ui.footer.services, locale)}
                     </div>
                     <ul className="footer-menu list-unstyled">
-                      <li>
-                        <a href="/services/investment" className="text text-16 link">
-                          Investment
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="/services/business-enhancement"
-                          className="text text-16 link"
-                        >
-                          Business Enhancement
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="/services/business-academy"
-                          className="text text-16 link"
-                        >
-                          Business Academy
-                        </a>
-                      </li>
+                      {SERVICE_LINKS.map((link) => (
+                        <li key={link.href}>
+                          <a href={link.href} className="text text-16 link">
+                            {uiT(link.label, locale)}
+                          </a>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
                 <div className="col-12 col-md-6">
                   <div className="footer-widget footer-widget-contact">
                     <div className="widget-heading heading text-22">
-                      Contact Info
+                      {uiT(ui.footer.contactInfo, locale)}
                     </div>
                     <ul className="footer-menu footer-contact-list list-unstyled">
                       <li>
                         <span className="footer-contact-label text text-14">
-                          Address
+                          {uiT(ui.footer.address, locale)}
                         </span>
                         <span className="text text-16">
                           {content.contact.address}
@@ -191,7 +175,7 @@ export default function HomeFooter({
                       </li>
                       <li>
                         <span className="footer-contact-label text text-14">
-                          Phone Number
+                          {uiT(ui.footer.phone, locale)}
                         </span>
                         <a
                           href={`tel:${content.contact.phone.replace(/\s+/g, "")}`}
@@ -202,7 +186,7 @@ export default function HomeFooter({
                       </li>
                       <li>
                         <span className="footer-contact-label text text-14">
-                          Email
+                          {uiT(ui.footer.email, locale)}
                         </span>
                         <a
                           href={`mailto:${content.contact.email}`}
@@ -222,8 +206,8 @@ export default function HomeFooter({
               <div className="row footer-bottom-row">
                 <div className="col-12 col-md-6 col-lg-6">
                   <div className="footer-copyright text text-16">
-                    Copyright ©<span className="current-year"></span>{" "}
-                    {content.copyright}
+                    {uiT(ui.footer.copyright, locale)}
+                    <span className="current-year"></span> {content.copyright}
                   </div>
                 </div>
               </div>

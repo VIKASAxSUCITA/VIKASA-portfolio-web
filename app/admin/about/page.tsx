@@ -8,7 +8,10 @@ import AboutWhatWeDo from "@/app/components/about/AboutWhatWeDo";
 import AboutStory from "@/app/components/about/AboutStory";
 import AboutVisionMission from "@/app/components/about/AboutVisionMission";
 import AboutCoreValues from "@/app/components/about/AboutCoreValues";
+import LogoMarquee from "@/app/components/home/LogoMarquee";
 import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
+import { CLIENT_LOGOS, PARTNER_LOGOS } from "@/lib/content/logos";
+import { ui } from "@/lib/i18n/ui";
 import type { AboutContent } from "@/lib/content/types";
 
 export default function AdminAboutEditorPage() {
@@ -65,6 +68,20 @@ export default function AdminAboutEditorPage() {
               editMission={sectionEdit("mission")}
             />
             <AboutCoreValues />
+            <LogoMarquee
+              id="partners"
+              title={ui.partners.title}
+              subtitle={ui.partners.subtitle}
+              items={PARTNER_LOGOS}
+              direction="forward"
+            />
+            <LogoMarquee
+              id="clients"
+              title={ui.clients.title}
+              subtitle={ui.clients.subtitle}
+              items={CLIENT_LOGOS}
+              direction="reverse"
+            />
           </main>
         </AdminSitePreview>
       </AdminShell>

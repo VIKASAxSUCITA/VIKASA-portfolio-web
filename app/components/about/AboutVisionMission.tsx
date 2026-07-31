@@ -27,7 +27,7 @@ function VisionMissionBlock({
   locale: "en" | "km" | "zh";
 }) {
   return (
-    <article className="about-vm-item" data-aos="fade-up">
+    <article className="about-vm-item">
       <LocalizedEditableField
         as="h2"
         className="heading text-36 about-vm-title"
@@ -105,7 +105,7 @@ export default function AboutVisionMission({
               {items.map((item, index) => (
                 <div
                   key={item.id}
-                  data-aos="fade-up"
+                  data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                   data-aos-delay={index * 100}
                 >
                   <VisionMissionBlock

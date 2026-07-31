@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import HomeContact from "@/app/components/home/HomeContact";
 import FooterSection from "@/app/components/home/FooterSection";
+import PageHeroCopy from "@/app/components/i18n/PageHeroCopy";
 import { loadPageContent } from "@/lib/content/firestore";
+import { ui } from "@/lib/i18n/ui";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -17,7 +19,7 @@ export default async function ContactPage() {
   return (
     <>
       <section
-        className="vikasa-hero-cinematic about-hero-cinematic page-hero-banner"
+        className="vikasa-hero-cinematic about-hero-cinematic page-hero-banner page-hero-banner--start"
         aria-label="Contact"
       >
         <div className="vikasa-hero-bg">
@@ -32,20 +34,11 @@ export default async function ContactPage() {
           <div className="vikasa-hero-overlay" aria-hidden />
         </div>
         <div className="vikasa-hero-content">
-          <div className="container text-center">
-            <div className="vikasa-hero-copy section-headings page-hero-copy">
-              <h1 className="heading vikasa-hero-title" data-aos="fade-up">
-                Contact
-              </h1>
-              <p
-                className="text text-18 vikasa-hero-text page-hero-text"
-                data-aos="fade-up"
-                data-aos-delay="80"
-              >
-                Tell us about your goals. We will follow up with a clear next
-                step.
-              </p>
-            </div>
+          <div className="container">
+            <PageHeroCopy
+              title={ui.pageHero.contactTitle}
+              text={ui.pageHero.contactText}
+            />
           </div>
         </div>
       </section>

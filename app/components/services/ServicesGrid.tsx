@@ -111,7 +111,7 @@ function ServiceCard({
   return (
     <article
       className="vikasa-service-card"
-      data-aos="fade-up"
+      data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
       data-aos-delay={index * 100}
     >
       <a

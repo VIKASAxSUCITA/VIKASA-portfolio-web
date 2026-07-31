@@ -20,6 +20,21 @@ export function asLocalized(
   return emptyLocalized(fallbackEn);
 }
 
+/** Prefer saved locale strings; fill empty km/zh from defaults when English matches. */
+export function mergeLocalized(
+  value: unknown,
+  fallback: LocalizedString
+): LocalizedString {
+  const saved = asLocalized(value, fallback.en);
+  const enMatches =
+    saved.en.trim().toLowerCase() === fallback.en.trim().toLowerCase();
+  return {
+    en: saved.en || fallback.en,
+    km: saved.km || (enMatches ? fallback.km : ""),
+    zh: saved.zh || (enMatches ? fallback.zh : ""),
+  };
+}
+
 export function setLocalized(
   value: LocalizedString,
   locale: Locale,

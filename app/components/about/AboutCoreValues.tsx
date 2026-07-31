@@ -217,7 +217,7 @@ export default function AboutCoreValues() {
             <article
               key={value.id}
               className="about-values-item"
-              data-aos="fade-up"
+              data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
               data-aos-delay={index * 80}
             >
               <div className="about-values-icon" aria-hidden="true">

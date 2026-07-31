@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import type { Locale } from "@/lib/i18n/locale";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 const LOCALE_NAMES: Record<Locale, string> = {
   en: "English",
@@ -90,7 +91,7 @@ export default function LocaleSwitcher() {
       <button
         type="button"
         className="locale-dropdown-toggle"
-        aria-label="Select language"
+        aria-label={uiT(ui.language.select, locale)}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
@@ -103,7 +104,11 @@ export default function LocaleSwitcher() {
       </button>
 
       {open ? (
-        <ul className="locale-dropdown-menu" role="listbox" aria-label="Languages">
+        <ul
+          className="locale-dropdown-menu"
+          role="listbox"
+          aria-label={uiT(ui.language.list, locale)}
+        >
           {locales.map((code) => (
             <li key={code} role="option" aria-selected={locale === code}>
               <button

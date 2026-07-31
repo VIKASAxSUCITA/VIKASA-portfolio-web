@@ -294,7 +294,7 @@ export default function HomeServices({ content, edit }: HomeServicesProps) {
                   <article
                     key={index}
                     className="vikasa-service-card"
-                    data-aos="fade-up"
+                    data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                     {...(delay ? { "data-aos-delay": String(delay) } : {})}
                   >
                     {edit ? (

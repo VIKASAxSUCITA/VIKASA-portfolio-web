@@ -43,7 +43,7 @@ export default function InsightDetailsBody({
 
   const displayTitle = insightText(post, "title", locale);
   const displayBody = insightText(post, "bodyHtml", locale);
-  const dateLabel = formatInsightDate(post.createdAt);
+  const dateLabel = formatInsightDate(post.createdAt, locale);
 
   const titleKey = titleKeyFor(locale);
   const bodyKey = bodyKeyFor(locale);

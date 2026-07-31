@@ -22,9 +22,7 @@ export default function InsightsBody({ content }: InsightsBodyProps) {
         <InsightsHero heroTitle={content.heroTitle} />
         <InsightsList heading={content.heading} posts={content.posts} />
       </main>
-      <div className="mt-100">
-        <FooterSection />
-      </div>
+      <FooterSection />
     </>
   );
 }

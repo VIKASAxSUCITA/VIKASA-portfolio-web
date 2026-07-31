@@ -3,6 +3,7 @@
 import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import type { InsightsContent } from "@/lib/content/types";
 import { readLocalized } from "@/lib/i18n/localized";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 type InsightsHeroProps = {
   heroTitle: InsightsContent["heroTitle"];
@@ -11,14 +12,10 @@ type InsightsHeroProps = {
 export default function InsightsHero({ heroTitle }: InsightsHeroProps) {
   const { locale } = useLocale();
   const title = readLocalized(heroTitle, locale);
-  const homeLabel =
-    locale === "km" ? "ទំព័រដើម" : locale === "zh" ? "首页" : "Home";
-  const insightsLabel =
-    locale === "km" ? "វិចារណកថា" : locale === "zh" ? "洞察" : "Insights";
 
   return (
     <section
-      className="vikasa-hero-cinematic about-hero-cinematic page-hero-banner"
+      className="vikasa-hero-cinematic about-hero-cinematic page-hero-banner page-hero-banner--start"
       aria-label="Insights"
     >
       <div className="vikasa-hero-bg">
@@ -33,26 +30,18 @@ export default function InsightsHero({ heroTitle }: InsightsHeroProps) {
         <div className="vikasa-hero-overlay" aria-hidden />
       </div>
       <div className="vikasa-hero-content">
-        <div className="container text-center">
+        <div className="container">
           <div className="vikasa-hero-copy section-headings page-hero-copy">
             <h1 className="heading vikasa-hero-title" data-aos="fade-up">
               {title}
             </h1>
-            <ul
-              className="breadcrumb list-unstyled page-hero-breadcrumb"
+            <p
+              className="text text-18 vikasa-hero-text page-hero-text"
               data-aos="fade-up"
-              data-aos-delay="100"
+              data-aos-delay="80"
             >
-              <li>
-                <a href="/" className="text text-18" aria-label="Home Page">
-                  {homeLabel}
-                </a>
-              </li>
-              <li aria-hidden="true">/</li>
-              <li>
-                <span className="text text-18 active">{insightsLabel}</span>
-              </li>
-            </ul>
+              {uiT(ui.pageHero.insightsText, locale)}
+            </p>
           </div>
         </div>
       </div>

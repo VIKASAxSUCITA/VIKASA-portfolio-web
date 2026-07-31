@@ -5,12 +5,14 @@ import { EditableMedia } from "@/app/components/admin/EditableField";
 type WhatWeDoMediaProps = {
   src: string;
   alt?: string;
+  aos?: string;
   edit?: { onChange: (image: string) => void };
 };
 
 export default function WhatWeDoMedia({
   src,
   alt = "What we do",
+  aos = "fade-right",
   edit,
 }: WhatWeDoMediaProps) {
   const imageEdit = edit
@@ -18,7 +20,7 @@ export default function WhatWeDoMedia({
     : undefined;
 
   return (
-    <div className="media-wrap vikasa-media-blob" data-aos="zoom-in-up">
+    <div className="media-wrap vikasa-media-blob" data-aos={aos}>
       <span className="vikasa-media-blob-back" aria-hidden />
       <span className="vikasa-media-blob-outline" aria-hidden />
       <span

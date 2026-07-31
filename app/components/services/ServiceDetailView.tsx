@@ -126,7 +126,7 @@ export default function ServiceDetailView({ service }: ServiceDetailViewProps) {
       <section className="section-padding service-detail-body">
         <div className="container">
           <div className="service-detail-layout">
-            <div className="service-detail-copy">
+            <div className="service-detail-copy" data-aos="fade-right">
               <h2 className="heading text-40">{t("overview", locale)}</h2>
               <p className="text text-18">{body}</p>
               <a
@@ -136,7 +136,7 @@ export default function ServiceDetailView({ service }: ServiceDetailViewProps) {
                 {t("cta", locale)}
               </a>
             </div>
-            <aside className="service-detail-aside">
+            <aside className="service-detail-aside" data-aos="fade-left">
               <h3 className="heading text-28">{t("cover", locale)}</h3>
               <ul className="service-detail-points list-unstyled">
                 {service.items.map((item, index) => (
@@ -163,7 +163,7 @@ export default function ServiceDetailView({ service }: ServiceDetailViewProps) {
                     <article
                       key={item.slug}
                       className="vikasa-service-card"
-                      data-aos="fade-up"
+                      data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                       data-aos-delay={index * 80}
                     >
                       <a

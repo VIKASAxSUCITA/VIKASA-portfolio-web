@@ -69,6 +69,7 @@ export default function HomeAbout({ content, edit }: HomeAboutProps) {
               <div className="col-lg-6 col-12">
                 <WhatWeDoMedia
                   src={content.image}
+                  aos="fade-right"
                   edit={
                     edit
                       ? {
@@ -86,7 +87,7 @@ export default function HomeAbout({ content, edit }: HomeAboutProps) {
                     className="heading text-50"
                     value={content.title}
                     locale={locale}
-                    aos="fade-up"
+                    aos="fade-left"
                     label="About title"
                     edit={
                       edit
@@ -102,7 +103,8 @@ export default function HomeAbout({ content, edit }: HomeAboutProps) {
                     value={content.text}
                     locale={locale}
                     multiline
-                    aos="fade-up"
+                    aos="fade-left"
+                    aosDelay={80}
                     label="About text"
                     edit={
                       edit
@@ -118,7 +120,8 @@ export default function HomeAbout({ content, edit }: HomeAboutProps) {
                       <li
                         key={index}
                         className="text-item text text-18"
-                        data-aos="fade-up"
+                        data-aos="fade-left"
+                        data-aos-delay={120 + index * 60}
                       >
                         <CheckIcon />
                         {edit ? (

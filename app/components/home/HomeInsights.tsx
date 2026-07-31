@@ -248,7 +248,7 @@ export default function HomeInsights({
           title={insightText(post, "title", locale)}
           image={post.image}
           category={post.category}
-          dateLabel={formatInsightDate(post.createdAt)}
+          dateLabel={formatInsightDate(post.createdAt, locale)}
           excerpt={insightExcerpt(post, 110, locale)}
           readMore={readMore}
         />

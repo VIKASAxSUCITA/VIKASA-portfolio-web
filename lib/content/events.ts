@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/locale";
-import { asLocalized } from "@/lib/i18n/localized";
+import { mergeLocalized } from "@/lib/i18n/localized";
+import { localeToBcp47, ui, uiT } from "@/lib/i18n/ui";
 import { defaultEventsContent } from "./defaults";
 import type { EventPost, EventsContent } from "./types";
 
@@ -85,17 +86,48 @@ export function eventText(
 export function mergeEventsContent(
   saved: Partial<EventsContent>
 ): EventsContent {
-  const posts = saved.posts?.map((post, index) =>
-    normalizeEventPost({
+  const posts = saved.posts?.map((post, index) => {
+    const normalized = normalizeEventPost({
       ...post,
       id: post.id || `event_${index + 1}`,
-    })
-  );
+    });
+    const fallback = defaultEventsContent.posts.find(
+      (item) => item.id === normalized.id
+    );
+    if (!fallback) return normalized;
+
+    const titleMatches =
+      normalized.title.trim().toLowerCase() ===
+      fallback.title.trim().toLowerCase();
+    const summaryMatches =
+      normalized.summary.trim().toLowerCase() ===
+      fallback.summary.trim().toLowerCase();
+    const bodyMatches =
+      normalized.body.trim().toLowerCase() ===
+      fallback.body.trim().toLowerCase();
+
+    return {
+      ...normalized,
+      titleKm:
+        normalized.titleKm || (titleMatches ? fallback.titleKm : ""),
+      titleZh:
+        normalized.titleZh || (titleMatches ? fallback.titleZh : ""),
+      summaryKm:
+        normalized.summaryKm || (summaryMatches ? fallback.summaryKm : ""),
+      summaryZh:
+        normalized.summaryZh || (summaryMatches ? fallback.summaryZh : ""),
+      bodyKm: normalized.bodyKm || (bodyMatches ? fallback.bodyKm : ""),
+      bodyZh: normalized.bodyZh || (bodyMatches ? fallback.bodyZh : ""),
+    };
+  });
 
   return {
-    heroTitle: asLocalized(saved.heroTitle, defaultEventsContent.heroTitle.en),
-    heading: asLocalized(saved.heading, defaultEventsContent.heading.en),
-    posts: posts ?? [],
+    heroTitle: mergeLocalized(
+      saved.heroTitle,
+      defaultEventsContent.heroTitle
+    ),
+    heading: mergeLocalized(saved.heading, defaultEventsContent.heading),
+    posts: posts ?? defaultEventsContent.posts,
   };
 }
 
@@ -129,12 +161,12 @@ export function findEventById(
   return posts.find((post) => post.id === id);
 }
 
-export function formatEventDateTime(iso: string): string {
+export function formatEventDateTime(iso: string, locale: Locale = "en"): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime()) || date.getFullYear() < 1971) {
     return "";
   }
-  return date.toLocaleString("en-US", {
+  return date.toLocaleString(localeToBcp47(locale), {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -144,12 +176,12 @@ export function formatEventDateTime(iso: string): string {
   });
 }
 
-export function formatEventDate(iso: string): string {
+export function formatEventDate(iso: string, locale: Locale = "en"): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime()) || date.getFullYear() < 1971) {
     return "";
   }
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(localeToBcp47(locale), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -157,47 +189,56 @@ export function formatEventDate(iso: string): string {
 }
 
 /** Compact badge date like "Jan 10, 2025". */
-export function formatEventBadgeDate(iso: string): string {
-  const parts = formatEventBadgeParts(iso);
+export function formatEventBadgeDate(iso: string, locale: Locale = "en"): string {
+  const parts = formatEventBadgeParts(iso, locale);
   if (!parts) return "";
   return `${parts.month} ${parts.day}, ${parts.year}`;
 }
 
 /** Split badge parts so month can sit above day/year. */
 export function formatEventBadgeParts(
-  iso: string
+  iso: string,
+  locale: Locale = "en"
 ): { month: string; day: string; year: string } | null {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime()) || date.getFullYear() < 1971) {
     return null;
   }
   return {
-    month: date.toLocaleDateString("en-US", { month: "short" }),
+    month: date.toLocaleDateString(localeToBcp47(locale), { month: "short" }),
     day: String(date.getDate()),
     year: String(date.getFullYear()),
   };
 }
 
-export function formatEventTime(iso: string): string {
+export function formatEventTime(iso: string, locale: Locale = "en"): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime()) || date.getFullYear() < 1971) {
     return "";
   }
-  return date.toLocaleTimeString("en-US", {
+  return date.toLocaleTimeString(localeToBcp47(locale), {
     hour: "numeric",
     minute: "2-digit",
   });
 }
 
-export function formatEventTimeRange(startsAt: string, endsAt?: string): string {
-  const start = formatEventTime(startsAt);
+export function formatEventTimeRange(
+  startsAt: string,
+  endsAt?: string,
+  locale: Locale = "en"
+): string {
+  const start = formatEventTime(startsAt, locale);
   if (!start) return "";
-  const end = endsAt ? formatEventTime(endsAt) : "";
+  const end = endsAt ? formatEventTime(endsAt, locale) : "";
   return end ? `${start} – ${end}` : start;
 }
 
-export function eventKindLabel(kind: string): string {
-  return normalizeEventKind(kind);
+export function eventKindLabel(kind: string, locale: Locale = "en"): string {
+  const normalized = normalizeEventKind(kind);
+  if (normalized === "Announcement") {
+    return uiT(ui.events.kindAnnouncement, locale);
+  }
+  return uiT(ui.events.kindEvent, locale);
 }
 
 export function eventExcerpt(

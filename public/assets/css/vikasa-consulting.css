@@ -215,6 +215,23 @@ body {
   color: var(--vk-gold) !important;
 }
 
+.header-1 .menu-link.is-active {
+  color: var(--vk-gold) !important;
+}
+
+.header-1 .menu-link.is-active::after {
+  width: 100%;
+  background: var(--vk-gold);
+}
+
+.header-1.is-over-hero:not(.is-scrolled) .menu-link.is-active {
+  color: var(--vk-gold) !important;
+}
+
+.header-1.is-over-hero:not(.is-scrolled) .menu-link.is-active::after {
+  background: var(--vk-gold);
+}
+
 .header-1 .header-logo img {
   display: block;
   height: 54px;
@@ -1175,6 +1192,31 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   background-image: none !important;
 }
 
+.page-content .insights-articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.15rem, 2.2vw, 1.5rem);
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.page-content .insights-articles-grid .insight-scroll-card {
+  height: 100%;
+}
+
+@media (max-width: 991px) {
+  .page-content .insights-articles-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page-content .insights-articles-grid {
+    grid-template-columns: 1fr;
+    max-width: 24rem;
+    margin-inline: auto;
+  }
+}
+
 /* Soft center lighting — only on section hover */
 .page-content .insights-tiles-section::before {
   content: "";
@@ -1785,7 +1827,8 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 
 /* Events listing page (kept for /events) */
 .page-content .events-schedule-section {
-  background: var(--vk-beige) !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
 }
 
 .page-content .event-list-card {
@@ -1899,6 +1942,26 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   text-align: center;
 }
 
+/* Services (and similar) — left-aligned like About hero */
+.page-content .page-hero-banner--start .vikasa-hero-copy,
+.page-content .page-hero-banner--start .page-hero-copy {
+  margin-inline: 0;
+  margin-inline-end: auto;
+  text-align: left;
+}
+
+.page-content .page-hero-banner--start .vikasa-hero-title,
+.page-content .page-hero-banner--start .vikasa-hero-text,
+.page-content .page-hero-banner--start .page-hero-text {
+  margin-inline: 0;
+  margin-inline-end: auto;
+  text-align: left;
+}
+
+.page-content .page-hero-banner--start .page-hero-breadcrumb {
+  justify-content: flex-start;
+}
+
 .page-content .page-hero-breadcrumb {
   display: flex;
   justify-content: center;
@@ -1964,6 +2027,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   --color-foreground-heading: var(--vk-white);
   background: var(--vk-espresso) !important;
   border-top: 0;
+  margin-top: 100px;
 }
 
 .footer-main .heading,
@@ -1976,9 +2040,9 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 
 .footer-main .widget-heading {
   font-family: var(--font-body);
-  font-size: 12px !important;
+  font-size: 16px !important;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--vk-gold) !important;
   margin-bottom: 1.15rem;
@@ -2035,6 +2099,10 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   color: var(--vk-espresso);
   font-size: 18px;
   font-weight: 600;
+}
+
+.vikasa-mobile-drawer-panel .menu-link.is-active {
+  color: var(--vk-gold);
 }
 
 .page-content .insight-detail-hero-overlay {

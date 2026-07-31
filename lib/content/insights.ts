@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/locale";
-import { asLocalized } from "@/lib/i18n/localized";
+import { mergeLocalized } from "@/lib/i18n/localized";
+import { localeToBcp47 } from "@/lib/i18n/ui";
 import {
   defaultInsightPairedImages,
   defaultInsightParagraphs,
@@ -117,20 +118,36 @@ export function insightText(
 export function mergeInsightsContent(
   saved: Partial<InsightsContent>
 ): InsightsContent {
-  const defaultsPosts = saved.posts?.map((post, index) =>
-    normalizeInsightPost({
+  const defaultsPosts = saved.posts?.map((post, index) => {
+    const normalized = normalizeInsightPost({
       ...post,
       id: post.id || String(index + 1),
-    })
-  );
+    });
+    const fallback = defaultInsightsContent.posts.find(
+      (item) => item.id === normalized.id
+    );
+    if (!fallback) return normalized;
+
+    const titleMatches =
+      normalized.title.trim().toLowerCase() ===
+      fallback.title.trim().toLowerCase();
+
+    return {
+      ...normalized,
+      titleKm:
+        normalized.titleKm || (titleMatches ? fallback.titleKm : ""),
+      titleZh:
+        normalized.titleZh || (titleMatches ? fallback.titleZh : ""),
+    };
+  });
 
   return {
-    heroTitle: asLocalized(
+    heroTitle: mergeLocalized(
       saved.heroTitle,
-      defaultInsightsContent.heroTitle.en
+      defaultInsightsContent.heroTitle
     ),
-    heading: asLocalized(saved.heading, defaultInsightsContent.heading.en),
-    posts: defaultsPosts ?? [],
+    heading: mergeLocalized(saved.heading, defaultInsightsContent.heading),
+    posts: defaultsPosts ?? defaultInsightsContent.posts,
   };
 }
 
@@ -156,12 +173,12 @@ export function findInsightById(
   return posts.find((post) => post.id === id);
 }
 
-export function formatInsightDate(iso: string): string {
+export function formatInsightDate(iso: string, locale: Locale = "en"): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime()) || date.getFullYear() < 1971) {
     return "";
   }
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(localeToBcp47(locale), {
     month: "short",
     day: "numeric",
     year: "numeric",

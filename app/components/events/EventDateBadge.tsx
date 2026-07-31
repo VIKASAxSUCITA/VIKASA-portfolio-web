@@ -1,4 +1,7 @@
+"use client";
+
 import { formatEventBadgeParts } from "@/lib/content/events";
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
 
 type EventDateBadgeProps = {
   startsAt: string;
@@ -6,7 +9,8 @@ type EventDateBadgeProps = {
 
 /** Month on top, day + year below — classic calendar badge. */
 export default function EventDateBadge({ startsAt }: EventDateBadgeProps) {
-  const parts = formatEventBadgeParts(startsAt);
+  const { locale } = useLocale();
+  const parts = formatEventBadgeParts(startsAt, locale);
   if (!parts) return null;
 
   return (

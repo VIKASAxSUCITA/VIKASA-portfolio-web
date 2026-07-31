@@ -4,12 +4,14 @@ import EventDateBadge from "@/app/components/events/EventDateBadge";
 import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import {
   eventExcerpt,
+  eventKindLabel,
   eventText,
   formatEventTimeRange,
 } from "@/lib/content/events";
 import type { EventPost } from "@/lib/content/types";
 import type { LocalizedString } from "@/lib/i18n/locale";
 import { readLocalized } from "@/lib/i18n/localized";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 type HomeEventsProps = {
   heading: LocalizedString | string;
@@ -125,8 +127,8 @@ export default function HomeEvents({
         {cards.length === 0 ? (
           <p className="text text-16 text-center" data-aos="fade-up">
             {adminLinks
-              ? "No events yet. Open Manage Events to create one."
-              : "No events or announcements yet. Check back soon."}
+              ? uiT(ui.events.emptyAdmin, locale)
+              : uiT(ui.events.empty, locale)}
           </p>
         ) : (
           <div className="home-events-grid">
@@ -134,7 +136,8 @@ export default function HomeEvents({
               const title = eventText(post, "title", locale);
               const timeRange = formatEventTimeRange(
                 post.startsAt,
-                post.endsAt
+                post.endsAt,
+                locale
               );
               const excerpt = eventExcerpt(post, 90, locale);
 
@@ -143,7 +146,7 @@ export default function HomeEvents({
                   key={post.id}
                   href={postHref(post.id)}
                   className="home-event-card"
-                  data-aos="fade-up"
+                  data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                   data-aos-delay={index * 70}
                   aria-label={title}
                 >
@@ -160,7 +163,9 @@ export default function HomeEvents({
 
                   <span className="home-event-card-body">
                     {post.kind ? (
-                      <span className="home-event-card-kind">{post.kind}</span>
+                      <span className="home-event-card-kind">
+                        {eventKindLabel(post.kind, locale)}
+                      </span>
                     ) : null}
                     <span className="home-event-card-title heading">
                       {title}

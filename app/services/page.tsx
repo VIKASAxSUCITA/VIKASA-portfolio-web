@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import ServicesGrid from "@/app/components/services/ServicesGrid";
 import FooterSection from "@/app/components/home/FooterSection";
+import PageHeroCopy from "@/app/components/i18n/PageHeroCopy";
+import { ui } from "@/lib/i18n/ui";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -12,7 +14,7 @@ export default function ServicesPage() {
   return (
     <>
       <section
-      className="vikasa-hero-cinematic about-hero-cinematic page-hero-banner"
+        className="vikasa-hero-cinematic about-hero-cinematic page-hero-banner page-hero-banner--start"
         aria-label="Services"
       >
         <div className="vikasa-hero-bg">
@@ -28,22 +30,10 @@ export default function ServicesPage() {
         </div>
         <div className="vikasa-hero-content">
           <div className="container">
-            <div className="vikasa-hero-copy section-headings">
-              <h1
-                className="heading vikasa-hero-title"
-                data-aos="fade-up"
-              >
-                Services
-              </h1>
-              <p
-                className="text text-18 vikasa-hero-text"
-                data-aos="fade-up"
-                data-aos-delay="80"
-              >
-                Practical consulting for investment, growth, and leadership
-                capability.
-              </p>
-            </div>
+            <PageHeroCopy
+              title={ui.pageHero.servicesTitle}
+              text={ui.pageHero.servicesText}
+            />
           </div>
         </div>
       </section>

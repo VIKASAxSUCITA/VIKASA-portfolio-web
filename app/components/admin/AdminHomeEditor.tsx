@@ -11,12 +11,10 @@ import HomeServices from "@/app/components/home/HomeServices";
 import HomeInsights from "@/app/components/home/HomeInsights";
 import HomeEvents from "@/app/components/home/HomeEvents";
 import HomeContact from "@/app/components/home/HomeContact";
-import LogoMarquee from "@/app/components/home/LogoMarquee";
 import { usePageEditor } from "@/app/components/admin/usePageEditor";
 import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
 import { getLatestEvents } from "@/lib/content/events";
 import { getLatestInsights } from "@/lib/content/insights";
-import { CLIENT_LOGOS, PARTNER_LOGOS } from "@/lib/content/logos";
 import type {
   EventsContent,
   HomeContent,
@@ -95,20 +93,6 @@ export default function AdminHomeEditor() {
             <HomeServices
               content={content.services}
               edit={sectionEdit("services")}
-            />
-            <LogoMarquee
-              id="partners"
-              title="Our Partners"
-              subtitle="Trusted collaborators across investment and growth."
-              items={PARTNER_LOGOS}
-              direction="forward"
-            />
-            <LogoMarquee
-              id="clients"
-              title="Our Clients"
-              subtitle="Organizations we support with clarity and execution."
-              items={CLIENT_LOGOS}
-              direction="reverse"
             />
             <HomeInsights
               heading={insightsHeading}

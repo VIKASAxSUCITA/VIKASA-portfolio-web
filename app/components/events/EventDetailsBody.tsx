@@ -18,6 +18,7 @@ import {
 } from "@/lib/content/events";
 import type { EventPost } from "@/lib/content/types";
 import type { Locale } from "@/lib/i18n/locale";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 type EventContactInfo = {
   email?: string;
@@ -74,8 +75,8 @@ export default function EventDetailsBody({
   const displaySummary = eventText(post, "summary", locale);
   const displayBody = eventText(post, "body", locale);
 
-  const dateLabel = formatEventBadgeDate(post.startsAt);
-  const timeRange = formatEventTimeRange(post.startsAt, post.endsAt);
+  const dateLabel = formatEventBadgeDate(post.startsAt, locale);
+  const timeRange = formatEventTimeRange(post.startsAt, post.endsAt, locale);
   const paragraphs = displayBody
     .split(/\n\s*\n/)
     .map((part) => part.trim())
@@ -89,12 +90,36 @@ export default function EventDetailsBody({
   const bodyKey = bodyKeyFor(locale);
 
   const publicInfoRows = [
-    { label: "Category", value: eventKindLabel(post.kind) },
-    { label: "Date", value: dateLabel },
-    { label: "Time", value: timeRange },
-    { label: "Phone", value: contact?.phone || "" },
-    { label: "Location", value: post.location },
-    { label: "E-mail", value: contact?.email || "" },
+    {
+      key: "category" as const,
+      label: uiT(ui.events.category, locale),
+      value: eventKindLabel(post.kind, locale),
+    },
+    {
+      key: "date" as const,
+      label: uiT(ui.events.date, locale),
+      value: dateLabel,
+    },
+    {
+      key: "time" as const,
+      label: uiT(ui.events.time, locale),
+      value: timeRange,
+    },
+    {
+      key: "phone" as const,
+      label: uiT(ui.events.phone, locale),
+      value: contact?.phone || "",
+    },
+    {
+      key: "location" as const,
+      label: uiT(ui.events.location, locale),
+      value: post.location,
+    },
+    {
+      key: "email" as const,
+      label: uiT(ui.events.email, locale),
+      value: contact?.email || "",
+    },
   ].filter((row) => row.value);
 
   return (
@@ -175,7 +200,7 @@ export default function EventDetailsBody({
             >
               <li>
                 <a href="/" className="text text-18">
-                  Home
+                  {uiT(ui.nav.home, locale)}
                 </a>
               </li>
               <li>
@@ -183,7 +208,7 @@ export default function EventDetailsBody({
               </li>
               <li>
                 <a href="/events" className="text text-18">
-                  Events
+                  {uiT(ui.nav.events, locale)}
                 </a>
               </li>
               <li>
@@ -284,12 +309,14 @@ export default function EventDetailsBody({
             <aside className="event-detail-sidebar">
               <div className="event-info-card">
                 <h3 className="heading text-22 event-info-card-title">
-                  Information
+                  {uiT(ui.events.information, locale)}
                 </h3>
                 {edit ? (
                   <ul className="event-info-list list-unstyled">
                     <li>
-                      <span className="event-info-label">Category</span>
+                      <span className="event-info-label">
+                        {uiT(ui.events.category, locale)}
+                      </span>
                       <EditableField
                         as="span"
                         value={post.kind}
@@ -298,7 +325,9 @@ export default function EventDetailsBody({
                       />
                     </li>
                     <li>
-                      <span className="event-info-label">Start</span>
+                      <span className="event-info-label">
+                        {uiT(ui.events.start, locale)}
+                      </span>
                       <input
                         type="datetime-local"
                         className="admin-event-datetime text text-16"
@@ -314,7 +343,9 @@ export default function EventDetailsBody({
                       />
                     </li>
                     <li>
-                      <span className="event-info-label">End</span>
+                      <span className="event-info-label">
+                        {uiT(ui.events.end, locale)}
+                      </span>
                       <input
                         type="datetime-local"
                         className="admin-event-datetime text text-16"
@@ -329,7 +360,9 @@ export default function EventDetailsBody({
                       />
                     </li>
                     <li>
-                      <span className="event-info-label">Location</span>
+                      <span className="event-info-label">
+                        {uiT(ui.events.location, locale)}
+                      </span>
                       <EditableField
                         as="span"
                         value={post.location}
@@ -341,13 +374,17 @@ export default function EventDetailsBody({
                     </li>
                     {contact?.phone ? (
                       <li>
-                        <span className="event-info-label">Phone</span>
+                        <span className="event-info-label">
+                          {uiT(ui.events.phone, locale)}
+                        </span>
                         <span>{contact.phone}</span>
                       </li>
                     ) : null}
                     {contact?.email ? (
                       <li>
-                        <span className="event-info-label">E-mail</span>
+                        <span className="event-info-label">
+                          {uiT(ui.events.email, locale)}
+                        </span>
                         <span>{contact.email}</span>
                       </li>
                     ) : null}
@@ -355,11 +392,11 @@ export default function EventDetailsBody({
                 ) : (
                   <ul className="event-info-list list-unstyled">
                     {publicInfoRows.map((row) => (
-                      <li key={row.label}>
+                      <li key={row.key}>
                         <span className="event-info-label">{row.label}</span>
-                        {row.label === "E-mail" ? (
+                        {row.key === "email" ? (
                           <a href={`mailto:${row.value}`}>{row.value}</a>
-                        ) : row.label === "Phone" ? (
+                        ) : row.key === "phone" ? (
                           <a href={`tel:${row.value.replace(/\s+/g, "")}`}>
                             {row.value}
                           </a>
@@ -374,14 +411,15 @@ export default function EventDetailsBody({
 
               <div className="event-info-card event-register-card">
                 <h3 className="heading text-22 event-info-card-title">
-                  Get Involved
+                  {uiT(ui.events.getInvolved, locale)}
                 </h3>
                 <p className="text text-16">
-                  Interested in this {eventKindLabel(post.kind).toLowerCase()}?
-                  Reach out and we will share the next steps.
+                  {post.kind === "Announcement"
+                    ? uiT(ui.events.interestedAnnouncement, locale)
+                    : uiT(ui.events.interestedEvent, locale)}
                 </p>
                 <a href="/contact" className="button button--primary">
-                  Contact Us
+                  {uiT(ui.events.contactUs, locale)}
                 </a>
               </div>
             </aside>

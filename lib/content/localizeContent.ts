@@ -1,26 +1,11 @@
 import type { LocalizedString } from "@/lib/i18n/locale";
-import { asLocalized, fromTriple } from "@/lib/i18n/localized";
+import { fromTriple, mergeLocalized } from "@/lib/i18n/localized";
 import type {
   AboutContent,
   HomeContent,
   InsightsContent,
 } from "./types";
 import { defaultAboutContent, defaultHomeContent } from "./defaults";
-
-/** Prefer saved locale strings; fill empty km/zh from defaults when English matches. */
-function mergeLocalized(
-  value: unknown,
-  fallback: LocalizedString
-): LocalizedString {
-  const saved = asLocalized(value, fallback.en);
-  const enMatches =
-    saved.en.trim().toLowerCase() === fallback.en.trim().toLowerCase();
-  return {
-    en: saved.en || fallback.en,
-    km: saved.km || (enMatches ? fallback.km : ""),
-    zh: saved.zh || (enMatches ? fallback.zh : ""),
-  };
-}
 
 function migrateServiceCard(
   card: Record<string, unknown> | undefined,
@@ -31,11 +16,11 @@ function migrateServiceCard(
   // New shape: LocalizedString fields
   if (card.title && typeof card.title === "object") {
     return {
-      title: asLocalized(card.title, fallback.title.en),
-      description: asLocalized(card.description, fallback.description.en),
+      title: mergeLocalized(card.title, fallback.title),
+      description: mergeLocalized(card.description, fallback.description),
       items: Array.isArray(card.items) && card.items.length
         ? card.items.map((item, i) =>
-            asLocalized(item, fallback.items[i]?.en ?? "")
+            mergeLocalized(item, fallback.items[i] ?? { en: "", km: "", zh: "" })
           )
         : fallback.items,
     };
@@ -140,24 +125,24 @@ export function normalizeHomeContent(saved: Partial<HomeContent> | Record<string
       buttonLabel: mergeLocalized(cta.buttonLabel, d.cta.buttonLabel),
     },
     services: {
-      heading: asLocalized(services.heading, d.services.heading.en),
+      heading: mergeLocalized(services.heading, d.services.heading),
       cards: d.services.cards.map((fallback, index) =>
         migrateServiceCard(services.cards?.[index], fallback)
       ),
     },
     contact: {
-      badge: asLocalized(contact.badge, d.contact.badge.en),
-      title: asLocalized(contact.title, d.contact.title.en),
-      text: asLocalized(contact.text, d.contact.text.en),
+      badge: mergeLocalized(contact.badge, d.contact.badge),
+      title: mergeLocalized(contact.title, d.contact.title),
+      text: mergeLocalized(contact.text, d.contact.text),
       email: String(contact.email ?? d.contact.email),
       whatsappNumber: String(contact.whatsappNumber ?? d.contact.whatsappNumber),
-      whatsappLabel: asLocalized(
+      whatsappLabel: mergeLocalized(
         contact.whatsappLabel,
-        d.contact.whatsappLabel.en
+        d.contact.whatsappLabel
       ),
-      formTitle: asLocalized(contact.formTitle, d.contact.formTitle.en),
-      formText: asLocalized(contact.formText, d.contact.formText.en),
-      buttonLabel: asLocalized(contact.buttonLabel, d.contact.buttonLabel.en),
+      formTitle: mergeLocalized(contact.formTitle, d.contact.formTitle),
+      formText: mergeLocalized(contact.formText, d.contact.formText),
+      buttonLabel: mergeLocalized(contact.buttonLabel, d.contact.buttonLabel),
     },
   };
 }
@@ -185,8 +170,8 @@ export function normalizeAboutContent(
 
   return {
     hero: {
-      title: asLocalized(hero.title, d.hero.title.en),
-      text: asLocalized(hero.text, d.hero.text.en),
+      title: mergeLocalized(hero.title, d.hero.title),
+      text: mergeLocalized(hero.text, d.hero.text),
       image: String(hero.image ?? d.hero.image),
     },
     whatWeDo: {
@@ -202,16 +187,16 @@ export function normalizeAboutContent(
       ),
     },
     story: {
-      title: asLocalized(story.title, d.story.title.en),
-      text: asLocalized(story.text, d.story.text.en),
+      title: mergeLocalized(story.title, d.story.title),
+      text: mergeLocalized(story.text, d.story.text),
     },
     vision: {
-      title: asLocalized(vision.title, d.vision.title.en),
-      text: asLocalized(vision.text, d.vision.text.en),
+      title: mergeLocalized(vision.title, d.vision.title),
+      text: mergeLocalized(vision.text, d.vision.text),
     },
     mission: {
-      title: asLocalized(mission.title, d.mission.title.en),
-      text: asLocalized(mission.text, d.mission.text.en),
+      title: mergeLocalized(mission.title, d.mission.title),
+      text: mergeLocalized(mission.text, d.mission.text),
     },
   };
 }
@@ -221,7 +206,7 @@ export function normalizePageHeadings(
   defaults: { heroTitle: LocalizedString; heading: LocalizedString }
 ): Pick<InsightsContent, "heroTitle" | "heading"> {
   return {
-    heroTitle: asLocalized(saved.heroTitle, defaults.heroTitle.en),
-    heading: asLocalized(saved.heading, defaults.heading.en),
+    heroTitle: mergeLocalized(saved.heroTitle, defaults.heroTitle),
+    heading: mergeLocalized(saved.heading, defaults.heading),
   };
 }

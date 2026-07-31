@@ -7,14 +7,15 @@ import LocaleSwitcher from "@/app/components/i18n/LocaleSwitcher";
 import { useLocale } from "@/app/components/i18n/LocaleProvider";
 import SiteSearch from "@/app/components/home/SiteSearch";
 import type { Locale } from "@/lib/i18n/locale";
+import { ui } from "@/lib/i18n/ui";
 
 const navLinks = [
-  { href: "/", labels: { en: "Home", km: "ទំព័រដើម", zh: "首页" } },
-  { href: "/about", labels: { en: "About Us", km: "អំពីយើង", zh: "关于我们" } },
-  { href: "/services", labels: { en: "Services", km: "សេវាកម្ម", zh: "服务" } },
-  { href: "/insights", labels: { en: "Insights", km: "វិចារណកថា", zh: "洞察" } },
-  { href: "/events", labels: { en: "Events", km: "ព្រឹត្តិការណ៍", zh: "活动" } },
-  { href: "/contact", labels: { en: "Contact", km: "ទំនាក់ទំនង", zh: "联系" } },
+  { href: "/", labels: ui.nav.home },
+  { href: "/about", labels: ui.nav.about },
+  { href: "/services", labels: ui.nav.services },
+  { href: "/insights", labels: ui.nav.insights },
+  { href: "/events", labels: ui.nav.events },
+  { href: "/contact", labels: ui.nav.contact },
 ] as const;
 
 function scrollToHash(hash: string) {
@@ -78,28 +79,39 @@ function CloseIcon() {
   );
 }
 
+function isNavActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 function NavLinks({
   links,
   locale,
+  pathname,
   onNavigate,
 }: {
   links: readonly { href: string; labels: Record<Locale, string> }[];
   locale: Locale;
+  pathname: string;
   onNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
 }) {
   return (
     <ul className="header-menu list-unstyled">
-      {links.map(({ href, labels }) => (
-        <li key={href} className="nav-item">
-          <a
-            className="menu-link menu-link-main"
-            href={href}
-            onClick={(event) => onNavigate(event, href)}
-          >
-            {labels[locale]}
-          </a>
-        </li>
-      ))}
+      {links.map(({ href, labels }) => {
+        const active = isNavActive(pathname, href);
+        return (
+          <li key={href} className={`nav-item${active ? " is-active" : ""}`}>
+            <a
+              className={`menu-link menu-link-main${active ? " is-active" : ""}`}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              onClick={(event) => onNavigate(event, href)}
+            >
+              {labels[locale]}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -244,7 +256,12 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
               <CloseIcon />
             </button>
           </div>
-          <NavLinks links={links} locale={locale} onNavigate={handleNavClick} />
+          <NavLinks
+            links={links}
+            locale={locale}
+            pathname={pathname}
+            onNavigate={handleNavClick}
+          />
         </nav>
       </div>,
       document.body
@@ -276,6 +293,7 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
                 <NavLinks
                   links={links}
                   locale={locale}
+                  pathname={pathname}
                   onNavigate={handleNavClick}
                 />
               </nav>

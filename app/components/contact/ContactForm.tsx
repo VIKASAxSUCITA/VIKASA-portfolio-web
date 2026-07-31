@@ -5,6 +5,7 @@ import LocalizedEditableField from "@/app/components/i18n/LocalizedEditableField
 import LocalizedSection from "@/app/components/i18n/LocalizedSection";
 import type { HomeContent } from "@/lib/content/types";
 import { asLocalized, readLocalized, setLocalized } from "@/lib/i18n/localized";
+import { ui, uiT } from "@/lib/i18n/ui";
 import { ArrowIcon } from "../admin/EditableField";
 import EditableText from "../admin/EditableText";
 
@@ -41,31 +42,6 @@ type ContactFormProps = {
 
 export default function ContactForm({ content, edit }: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "sent">("idle");
-
-  const whatsappHref = `https://wa.me/${content.whatsappNumber}?text=${encodeURIComponent(
-    "Hello VIKASA, I would like to request a proposal."
-  )}`;
-  const mailtoHref = `mailto:${content.email}?subject=${encodeURIComponent(
-    "VIKASA — Request Proposal"
-  )}`;
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
-    const name = String(data.get("name") || "").trim();
-    const email = String(data.get("email") || "").trim();
-    const message = String(data.get("message") || "").trim();
-
-    const body = [`Name: ${name}`, `Email: ${email}`, "", message].join("\n");
-
-    window.location.href = `mailto:${content.email}?subject=${encodeURIComponent(
-      "VIKASA — Request Proposal"
-    )}&body=${encodeURIComponent(body)}`;
-
-    setStatus("sent");
-    form.reset();
-  }
 
   return (
     <LocalizedSection
@@ -108,7 +84,38 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
         }));
       }}
     >
-      {(locale) => (
+      {(locale) => {
+        const whatsappHref = `https://wa.me/${content.whatsappNumber}?text=${encodeURIComponent(
+          uiT(ui.contact.whatsappPreset, locale)
+        )}`;
+        const mailtoHref = `mailto:${content.email}?subject=${encodeURIComponent(
+          uiT(ui.contact.mailSubject, locale)
+        )}`;
+
+        function handleSubmit(event: FormEvent<HTMLFormElement>) {
+          event.preventDefault();
+          const form = event.currentTarget;
+          const data = new FormData(form);
+          const name = String(data.get("name") || "").trim();
+          const email = String(data.get("email") || "").trim();
+          const message = String(data.get("message") || "").trim();
+
+          const body = [
+            `${uiT(ui.contact.mailName, locale)} ${name}`,
+            `${uiT(ui.contact.mailEmail, locale)} ${email}`,
+            "",
+            message,
+          ].join("\n");
+
+          window.location.href = `mailto:${content.email}?subject=${encodeURIComponent(
+            uiT(ui.contact.mailSubject, locale)
+          )}&body=${encodeURIComponent(body)}`;
+
+          setStatus("sent");
+          form.reset();
+        }
+
+        return (
         <div className="section-contact-form section-padding">
           <div className="container">
             <div id="contact" className="contact-box radius18">
@@ -174,7 +181,9 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                           <EmailIcon />
                         </div>
                         <div className="content">
-                          <h2 className="heading text-24 fw-700">Email</h2>
+                          <h2 className="heading text-24 fw-700">
+                            {uiT(ui.contact.email, locale)}
+                          </h2>
                           <EditableText
                             className="text text-16"
                             value={content.email}
@@ -190,13 +199,15 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                         href={mailtoHref}
                         className="card-icon-text card-icon-text-horizontal contact-channel"
                         data-aos="fade-up"
-                        aria-label={`Email ${content.email}`}
+                        aria-label={`${uiT(ui.contact.email, locale)} ${content.email}`}
                       >
                         <div className="svg-wrapper">
                           <EmailIcon />
                         </div>
                         <div className="content">
-                          <h2 className="heading text-24 fw-700">Email</h2>
+                          <h2 className="heading text-24 fw-700">
+                            {uiT(ui.contact.email, locale)}
+                          </h2>
                           <p className="text text-16">{content.email}</p>
                         </div>
                       </a>
@@ -208,7 +219,9 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                           <WhatsAppIcon />
                         </div>
                         <div className="content">
-                          <h2 className="heading text-24 fw-700">WhatsApp</h2>
+                          <h2 className="heading text-24 fw-700">
+                            {uiT(ui.contact.whatsapp, locale)}
+                          </h2>
                           <LocalizedEditableField
                             className="text text-16"
                             value={content.whatsappLabel}
@@ -242,13 +255,15 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                         data-aos="fade-up"
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="Chat on WhatsApp"
+                        aria-label={uiT(ui.contact.chatAria, locale)}
                       >
                         <div className="svg-wrapper">
                           <WhatsAppIcon />
                         </div>
                         <div className="content">
-                          <h2 className="heading text-24 fw-700">WhatsApp</h2>
+                          <h2 className="heading text-24 fw-700">
+                            {uiT(ui.contact.whatsapp, locale)}
+                          </h2>
                           <p className="text text-16">
                             {readLocalized(content.whatsappLabel, locale)}
                           </p>
@@ -309,13 +324,13 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                           htmlFor="ContactForm-name"
                           className="visually-hidden"
                         >
-                          Your Name
+                          {uiT(ui.contact.nameLabel, locale)}
                         </label>
                         <input
                           id="ContactForm-name"
                           className="contact-form-control"
                           type="text"
-                          placeholder="Your Name *"
+                          placeholder={uiT(ui.contact.namePlaceholder, locale)}
                           name="name"
                           required
                           autoComplete="name"
@@ -327,13 +342,13 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                           htmlFor="ContactForm-email"
                           className="visually-hidden"
                         >
-                          Email
+                          {uiT(ui.contact.email, locale)}
                         </label>
                         <input
                           id="ContactForm-email"
                           className="contact-form-control"
                           type="email"
-                          placeholder="Email *"
+                          placeholder={uiT(ui.contact.emailPlaceholder, locale)}
                           name="email"
                           required
                           autoComplete="email"
@@ -345,13 +360,13 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                           htmlFor="ContactForm-body"
                           className="visually-hidden"
                         >
-                          Project details
+                          {uiT(ui.contact.messageLabel, locale)}
                         </label>
                         <textarea
                           id="ContactForm-body"
                           className="contact-form-control"
                           rows={4}
-                          placeholder="Tell us about your project *"
+                          placeholder={uiT(ui.contact.messagePlaceholder, locale)}
                           name="message"
                           required
                           disabled={Boolean(edit)}
@@ -391,7 +406,7 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                       </div>
                       {status === "sent" ? (
                         <p className="text text-14 contact-form-note">
-                          Opening your email app to send the proposal request…
+                          {uiT(ui.contact.sentNote, locale)}
                         </p>
                       ) : null}
                     </form>
@@ -401,7 +416,8 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
             </div>
           </div>
         </div>
-      )}
+        );
+      }}
     </LocalizedSection>
   );
 }

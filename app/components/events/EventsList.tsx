@@ -9,6 +9,7 @@ import {
 } from "@/lib/content/events";
 import type { EventsContent } from "@/lib/content/types";
 import { readLocalized } from "@/lib/i18n/localized";
+import { ui, uiT } from "@/lib/i18n/ui";
 
 type EventsListProps = {
   heading: EventsContent["heading"];
@@ -76,7 +77,7 @@ export default function EventsList({ heading, posts }: EventsListProps) {
 
         {posts.length === 0 ? (
           <p className="text text-18 text-center" data-aos="fade-up">
-            No events or announcements yet. Check back soon.
+            {uiT(ui.events.empty, locale)}
           </p>
         ) : (
           <div className="events-card-list">
@@ -84,14 +85,15 @@ export default function EventsList({ heading, posts }: EventsListProps) {
               const title = eventText(post, "title", locale);
               const timeRange = formatEventTimeRange(
                 post.startsAt,
-                post.endsAt
+                post.endsAt,
+                locale
               );
 
               return (
                 <article
                   key={post.id}
                   className="event-list-card"
-                  data-aos="fade-up"
+                  data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                   data-aos-delay={index * 60}
                 >
                   <div className="event-list-card-media">
@@ -134,7 +136,7 @@ export default function EventsList({ heading, posts }: EventsListProps) {
                         href={`/events/${post.id}`}
                         className="button button--primary event-list-card-cta"
                       >
-                        View Details
+                        {uiT(ui.events.viewDetails, locale)}
                         <span className="svg-wrapper" aria-hidden>
                           <ArrowIcon />
                         </span>
