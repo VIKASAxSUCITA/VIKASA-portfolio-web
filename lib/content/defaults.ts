@@ -241,7 +241,7 @@ export const defaultAboutContent: AboutContent = {
     buttonLabel: L("More About Us", "ស្វែងយល់បន្ថែមអំពីយើង", "了解更多"),
   },
   story: {
-    title: L("Why Vikasa Exists", "ហេតុអ្វី VIKASA មានវត្តមាន", "VIKASA 为何存在"),
+    title: L("Why Vikasa Exists", "ហេតុអ្វីមានវត្តមាន VIKASA", "为何存在 VIKASA"),
     text: L(
       "Vikasa was founded to help businesses overcome challenges, embrace innovation, and achieve sustainable growth. We believe that accountability, continuous improvement, and strategic thinking enable organizations to transform today while preparing for tomorrow.",
       "VIKASA ត្រូវបានបង្កើតឡើងដើម្បីជួយអាជីវកម្មយកឈ្នះបញ្ហា ប្រកាន់យកនវានុវត្តន៍ និងសម្រេចកំណើនប្រកបដោយចីរភាព។ យើងជឿថាទំនួលខុសត្រូវ ការកែលម្អជាបន្ត និងការគិតយុទ្ធសាស្ត្រ អាចជួយអង្គភាពបំប្លែងថ្ងៃនេះ ខណៈត្រៀមខ្លួនសម្រាប់ថ្ងៃស្អែក។",
