@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale } from "@/app/components/i18n/LocaleProvider";
+import { ArrowIcon } from "@/app/components/admin/EditableField";
 import {
   SERVICE_DETAILS,
   type ServiceDetail,
@@ -28,7 +29,6 @@ function CheckIcon() {
 }
 
 const LABELS = {
-  services: { en: "Services", km: "សេវាកម្ម", zh: "服务" },
   overview: { en: "Overview", km: "ទិដ្ឋភាពទូទៅ", zh: "概览" },
   cover: { en: "What we cover", km: "អ្វីដែលយើងគ្របដណ្តប់", zh: "涵盖内容" },
   cta: {
@@ -83,39 +83,41 @@ export default function ServiceDetailView({ service }: ServiceDetailViewProps) {
         <div className="vikasa-hero-content">
           <div className="container">
             <div className="vikasa-hero-copy section-headings">
-              <p className="consulting-eyebrow" data-aos="fade-up">
-                {t("services", locale)}
-              </p>
               <h1
                 className="heading vikasa-hero-title"
                 data-aos="fade-up"
-                data-aos-delay="60"
               >
                 {title}
               </h1>
               <p
                 className="text text-18 vikasa-hero-text"
                 data-aos="fade-up"
-                data-aos-delay="120"
+                data-aos-delay="60"
               >
                 {description}
               </p>
               <div
                 className="buttons vikasa-hero-actions"
                 data-aos="fade-up"
-                data-aos-delay="180"
+                data-aos-delay="120"
               >
                 <a
                   href="/contact"
                   className="button button--secondary vikasa-btn-ghost"
                 >
                   {t("cta", locale)}
+                  <span className="svg-wrapper" aria-hidden>
+                    <ArrowIcon />
+                  </span>
                 </a>
                 <a
                   href="/services"
                   className="button button--secondary vikasa-btn-ghost"
                 >
                   {t("back", locale)}
+                  <span className="svg-wrapper" aria-hidden>
+                    <ArrowIcon />
+                  </span>
                 </a>
               </div>
             </div>

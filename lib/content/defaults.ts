@@ -264,6 +264,45 @@ export const defaultAboutContent: AboutContent = {
       "我们的使命是通过强化问责、推动持续改进并培育创新战略，为企业提供可执行洞察与变革方案，从而解锁增长并重新构想成功的可能。"
     ),
   },
+  partners: [
+    {
+      id: "p1",
+      name: "Company Buildings",
+      logo: "/assets/img/partner_logo/partner-1.jpg",
+    },
+    {
+      id: "p2",
+      name: "Company Emblem",
+      logo: "/assets/img/partner_logo/partner-2.jpg",
+    },
+    {
+      id: "p3",
+      name: "Rolex",
+      logo: "/assets/img/partner_logo/partner-3.png",
+    },
+    {
+      id: "p4",
+      name: "Glycon",
+      logo: "/assets/img/partner_logo/partner-4.png",
+    },
+  ],
+  clients: [
+    {
+      id: "c1",
+      name: "Corporate",
+      logo: "/assets/img/client_logo/client-1.jpg",
+    },
+    {
+      id: "c2",
+      name: "ArrowPrime Financial",
+      logo: "/assets/img/client_logo/client-2.jpg",
+    },
+    {
+      id: "c3",
+      name: "Tech Company",
+      logo: "/assets/img/client_logo/client-3.jpg",
+    },
+  ],
 };
 
 export const defaultInsightsContent: InsightsContent = {

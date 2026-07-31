@@ -12,6 +12,7 @@ type InsightRichTextEditorProps = {
   content: string;
   onChange: (html: string) => void;
   editable?: boolean;
+  placeholder?: string;
 };
 
 function ToolbarButton({
@@ -42,6 +43,7 @@ export default function InsightRichTextEditor({
   content,
   onChange,
   editable = true,
+  placeholder = "Write your insight article…",
 }: InsightRichTextEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const lastEmitted = useRef(content);
@@ -65,7 +67,7 @@ export default function InsightRichTextEditor({
         },
       }),
       Placeholder.configure({
-        placeholder: "Write your insight article…",
+        placeholder,
       }),
     ],
     content,

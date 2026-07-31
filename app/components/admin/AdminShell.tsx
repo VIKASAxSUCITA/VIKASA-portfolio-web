@@ -14,11 +14,9 @@ type AdminShellProps = {
 };
 
 const NAV_PAGES = [
-  { href: "/admin", label: "Home" },
-  { href: "/admin/about", label: "About" },
   { href: "/admin/insights", label: "Insights" },
   { href: "/admin/events", label: "Events" },
-  { href: "/admin/footer", label: "Footer" },
+  { href: "/admin/logos", label: "Partners & Clients" },
 ] as const;
 
 export default function AdminShell({
@@ -29,18 +27,19 @@ export default function AdminShell({
   message = "",
 }: AdminShellProps) {
   const { user, logout } = useAuth();
-  const pathname = usePathname() ?? "/admin";
+  const pathname = usePathname() ?? "/admin/insights";
 
   const isActive = (href: string) =>
-    href === "/admin"
-      ? pathname === "/admin" || pathname === "/admin/home"
-      : pathname === href || pathname.startsWith(`${href}/`);
+    pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <div className="admin-shell">
       <header className="admin-wp-bar" role="banner">
         <div className="admin-wp-bar-left">
-          <Link href="/admin" className="admin-wp-bar-item admin-wp-bar-brand">
+          <Link
+            href="/admin/insights"
+            className="admin-wp-bar-item admin-wp-bar-brand"
+          >
             VIKASA
           </Link>
           <nav className="admin-wp-bar-nav" aria-label="Pages">

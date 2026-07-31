@@ -81,6 +81,10 @@ export type AboutContent = {
     title: LocalizedString;
     text: LocalizedString;
   };
+  /** Partner logo images (image-only CMS). */
+  partners: Array<{ id: string; name: string; logo: string }>;
+  /** Client logo images (image-only CMS). */
+  clients: Array<{ id: string; name: string; logo: string }>;
 };
 
 export type InsightPost = {

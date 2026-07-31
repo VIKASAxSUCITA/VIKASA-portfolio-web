@@ -1,7 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import EventDetailsBody from "@/app/components/events/EventDetailsBody";
+import AutoTranslateButton from "@/app/components/i18n/AutoTranslateButton";
+import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
 import type { EventPost } from "@/lib/content/types";
+import type { Locale } from "@/lib/i18n/locale";
 
 type AdminEventDetailEditorProps = {
   post: EventPost;
@@ -20,6 +24,8 @@ export default function AdminEventDetailEditor({
   onDelete,
   saving = false,
 }: AdminEventDetailEditorProps) {
+  const [editLocale, setEditLocale] = useState<Locale>("en");
+
   return (
     <div className="admin-detail-editor">
       <div className="admin-detail-toolbar">
@@ -31,8 +37,37 @@ export default function AdminEventDetailEditor({
         >
           ← Back to Events
         </button>
+        <div className="admin-detail-toolbar-locale">
+          <LocaleEditTabs locale={editLocale} onChange={setEditLocale} />
+          <AutoTranslateButton
+            sources={[post.title, post.summary, post.body]}
+            onTranslated={(target, values) => {
+              const [titleVal, summaryVal, bodyVal] = values;
+              onChange((prev) => {
+                if (target === "km") {
+                  return {
+                    ...prev,
+                    titleKm: titleVal ?? prev.titleKm,
+                    summaryKm: summaryVal ?? prev.summaryKm,
+                    bodyKm: bodyVal ?? prev.bodyKm,
+                  };
+                }
+                if (target === "zh") {
+                  return {
+                    ...prev,
+                    titleZh: titleVal ?? prev.titleZh,
+                    summaryZh: summaryVal ?? prev.summaryZh,
+                    bodyZh: bodyVal ?? prev.bodyZh,
+                  };
+                }
+                return prev;
+              });
+            }}
+          />
+        </div>
         <p className="text text-14 admin-detail-toolbar-hint">
-          Edit inline like the live page. Click Save in the top bar to publish.
+          Write in English first. Save auto-fills empty Khmer/Chinese. Switch
+          language above to edit translations. Body supports TipTap images.
         </p>
         <button
           type="button"
@@ -47,6 +82,9 @@ export default function AdminEventDetailEditor({
         post={post}
         contact={contact}
         edit={{ onChange }}
+        editLocale={editLocale}
+        onEditLocaleChange={setEditLocale}
+        hideLocaleBar
       />
     </div>
   );

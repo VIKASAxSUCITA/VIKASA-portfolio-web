@@ -1,183 +1,210 @@
 "use client";
 
-import { useState } from "react";
-import {
-  EditableField,
-  EditableMedia,
-} from "@/app/components/admin/EditableField";
-import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
-import AutoTranslateButton from "@/app/components/i18n/AutoTranslateButton";
-import { useLocale } from "@/app/components/i18n/LocaleProvider";
-import InsightRichTextEditor from "@/app/components/insights/InsightRichTextEditor";
+import Link from "next/link";
+import { useMemo } from "react";
+import type { InsightPost } from "@/lib/content/insights";
 import {
   formatInsightDate,
   insightText,
+  insightTitle,
 } from "@/lib/content/insights";
-import type { InsightPost } from "@/lib/content/types";
-import type { Locale } from "@/lib/i18n/locale";
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
+import { t } from "@/lib/i18n/ui";
+import { EditableField, EditableMedia } from "@/app/components/admin/EditableField";
+import type { TextEdit, ImageEdit } from "@/app/components/admin/usePageEditor";
 
-type InsightDetailsBodyProps = {
+type Props = {
   post: InsightPost;
-  edit?: { onChange: (updater: (prev: InsightPost) => InsightPost) => void };
+  related: InsightPost[];
+  edits?: {
+    category?: TextEdit;
+    title?: TextEdit;
+    author?: TextEdit;
+    dateLabel?: TextEdit;
+    image?: ImageEdit;
+    bodyHtml?: TextEdit;
+  };
 };
 
-function titleKeyFor(locale: Locale): keyof InsightPost {
-  if (locale === "km") return "titleKm";
-  if (locale === "zh") return "titleZh";
-  return "title";
-}
+export default function InsightDetailsBody({ post, related, edits }: Props) {
+  const { locale } = useLocale();
+  const title = insightTitle(post, locale);
+  const category = insightText(post.category, post.categoryKm, post.categoryZh, locale);
+  const author = insightText(post.author, post.authorKm, post.authorZh, locale);
+  const dateLabel =
+    insightText(post.dateLabel, post.dateLabelKm, post.dateLabelZh, locale) ||
+    formatInsightDate(post.date);
+  const bodyHtml = insightText(post.bodyHtml, post.bodyHtmlKm, post.bodyHtmlZh, locale);
+  const titleKey =
+    locale === "km" ? "titleKm" : locale === "zh" ? "titleZh" : "title";
+  const categoryKey =
+    locale === "km" ? "categoryKm" : locale === "zh" ? "categoryZh" : "category";
+  const authorKey =
+    locale === "km" ? "authorKm" : locale === "zh" ? "authorZh" : "author";
+  const dateLabelKey =
+    locale === "km"
+      ? "dateLabelKm"
+      : locale === "zh"
+        ? "dateLabelZh"
+        : "dateLabel";
+  const bodyKey =
+    locale === "km" ? "bodyHtmlKm" : locale === "zh" ? "bodyHtmlZh" : "bodyHtml";
 
-function bodyKeyFor(locale: Locale): keyof InsightPost {
-  if (locale === "km") return "bodyHtmlKm";
-  if (locale === "zh") return "bodyHtmlZh";
-  return "bodyHtml";
-}
-
-export default function InsightDetailsBody({
-  post,
-  edit,
-}: InsightDetailsBodyProps) {
-  const { locale: siteLocale } = useLocale();
-  const [editLocale, setEditLocale] = useState<Locale>("en");
-  const locale = edit ? editLocale : siteLocale;
-
-  const displayTitle = insightText(post, "title", locale);
-  const displayBody = insightText(post, "bodyHtml", locale);
-  const dateLabel = formatInsightDate(post.createdAt, locale);
-
-  const titleKey = titleKeyFor(locale);
-  const bodyKey = bodyKeyFor(locale);
-
-  const patch = <K extends keyof InsightPost>(key: K, value: InsightPost[K]) =>
-    edit?.onChange((prev) => ({ ...prev, [key]: value }));
+  const relatedCards = useMemo(
+    () =>
+      related.map((item) => ({
+        ...item,
+        title: insightTitle(item, locale),
+        category: insightText(item.category, item.categoryKm, item.categoryZh, locale),
+        dateLabel:
+          insightText(item.dateLabel, item.dateLabelKm, item.dateLabelZh, locale) ||
+          formatInsightDate(item.date),
+      })),
+    [locale, related],
+  );
 
   return (
-    <main className="insight-detail">
+    <>
       <section
-        className={`insight-detail-hero${edit ? " is-editing" : ""}`}
-        style={edit ? undefined : { backgroundImage: `url(${post.image})` }}
-        aria-label={displayTitle}
+        className={`vikasa-hero-cinematic about-hero-cinematic page-hero-banner page-hero-banner--start insight-detail-banner${edits?.image ? " is-editing" : ""}`}
+        aria-label={title}
       >
-        {edit ? (
-          <picture className="media media-bg insight-detail-hero-media">
+        <div className="vikasa-hero-bg">
+          {edits?.image ? (
             <EditableMedia
               src={post.image}
-              width={1920}
-              height={900}
-              loading="eager"
-              alt=""
-              edit={{ onChange: (image) => patch("image", image) }}
-            />
-          </picture>
-        ) : null}
-        <div className="insight-detail-hero-overlay" aria-hidden />
-        <div className="container insight-detail-hero-content">
-          {edit ? (
-            <div className="locale-edit-bar">
-              <LocaleEditTabs
-                locale={editLocale}
-                onChange={setEditLocale}
-              />
-              <AutoTranslateButton
-                sources={[post.title, post.bodyHtml]}
-                onTranslated={(target, values) => {
-                  const [titleVal, bodyVal] = values;
-                  edit.onChange((prev) => {
-                    if (target === "km") {
-                      return {
-                        ...prev,
-                        titleKm: titleVal ?? prev.titleKm,
-                        bodyHtmlKm: bodyVal ?? prev.bodyHtmlKm,
-                      };
-                    }
-                    if (target === "zh") {
-                      return {
-                        ...prev,
-                        titleZh: titleVal ?? prev.titleZh,
-                        bodyHtmlZh: bodyVal ?? prev.bodyHtmlZh,
-                      };
-                    }
-                    return prev;
-                  });
-                }}
-              />
-            </div>
-          ) : null}
-          {edit ? (
-            <EditableField
-              as="span"
-              className="insight-detail-tag"
-              value={post.category}
-              label="Category"
-              edit={{ onChange: (category) => patch("category", category) }}
+              alt={title}
+              edit={edits.image}
+              className="vikasa-hero-bg-image insight-detail-banner-media"
             />
           ) : (
-            <span className="insight-detail-tag">{post.category}</span>
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={post.image}
+              alt=""
+              className="vikasa-hero-bg-image"
+              width={1920}
+              height={1080}
+              loading="eager"
+            />
           )}
-          <EditableField
-            as="h1"
-            className="heading insight-detail-hero-title"
-            value={
-              edit ? String(post[titleKey] || post.title) : displayTitle
-            }
-            label="Insight title"
-            edit={
-              edit
-                ? {
-                    onChange: (value) =>
-                      patch(titleKey, value as InsightPost[typeof titleKey]),
-                  }
-                : undefined
-            }
-          />
-          <div className="insight-detail-hero-meta text text-14">
-            {edit ? (
-              <EditableField
-                as="span"
-                className="insight-detail-author"
-                value={post.author}
-                label="Author"
-                edit={{ onChange: (author) => patch("author", author) }}
-              />
-            ) : (
-              <span className="insight-detail-author">{post.author}</span>
-            )}
-            {dateLabel ? <span>{dateLabel}</span> : null}
+          <div className="vikasa-hero-overlay" aria-hidden />
+        </div>
+        <div className="vikasa-hero-content">
+          <div className="container">
+            <div className="vikasa-hero-copy section-headings page-hero-copy">
+              {edits?.category ? (
+                <EditableField
+                  as="p"
+                  className="insight-detail-banner-tag"
+                  value={category}
+                  edit={edits.category}
+                  label={`Insight ${categoryKey}`}
+                />
+              ) : (
+                <p className="insight-detail-banner-tag">{category}</p>
+              )}
+              {edits?.title ? (
+                <EditableField
+                  as="h1"
+                  className="heading vikasa-hero-title insight-detail-banner-title"
+                  value={title}
+                  edit={edits.title}
+                  label={`Insight ${titleKey}`}
+                  multiline
+                />
+              ) : (
+                <h1 className="heading vikasa-hero-title insight-detail-banner-title">
+                  {title}
+                </h1>
+              )}
+              <div className="insight-detail-banner-meta">
+                {edits?.author ? (
+                  <EditableField
+                    as="span"
+                    className="insight-detail-author"
+                    value={author}
+                    edit={edits.author}
+                    label={`Insight ${authorKey}`}
+                  />
+                ) : (
+                  <span className="insight-detail-author">{author}</span>
+                )}
+                <span aria-hidden>·</span>
+                {edits?.dateLabel ? (
+                  <EditableField
+                    as="span"
+                    value={dateLabel}
+                    edit={edits.dateLabel}
+                    label={`Insight ${dateLabelKey}`}
+                  />
+                ) : (
+                  <span>{dateLabel}</span>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <article className="insight-detail-article">
-        <div className="insight-detail-inner">
-          {edit ? (
-            <InsightRichTextEditor
-              content={String(post[bodyKey] || post.bodyHtml)}
-              onChange={(value) =>
-                patch(bodyKey, value as InsightPost[typeof bodyKey])
-              }
-            />
-          ) : (
-            <div
-              className="insight-rich-body"
-              dangerouslySetInnerHTML={{ __html: displayBody }}
-            />
-          )}
-
-          <p className="insight-detail-byline text text-16">
-            By{" "}
-            {edit ? (
+      <section className="insight-detail-article">
+        <div className="container">
+          <div className="insight-detail-prose">
+            {edits?.bodyHtml ? (
               <EditableField
-                as="strong"
-                value={post.author}
-                label="Author"
-                edit={{ onChange: (author) => patch("author", author) }}
+                as="div"
+                className="insight-detail-body"
+                value={bodyHtml}
+                edit={edits.bodyHtml}
+                label={`Insight ${bodyKey}`}
+                multiline
               />
             ) : (
-              <strong>{post.author}</strong>
+              <div
+                className="insight-detail-body"
+                dangerouslySetInnerHTML={{ __html: bodyHtml }}
+              />
             )}
-          </p>
+          </div>
         </div>
-      </article>
-    </main>
+      </section>
+
+      {relatedCards.length > 0 ? (
+        <section className="insight-related">
+          <div className="container">
+            <div className="insight-related-head">
+              <h2>{t(locale, "insights.relatedTitle")}</h2>
+              <p>{t(locale, "insights.relatedText")}</p>
+            </div>
+            <div className="row g-4">
+              {relatedCards.map((item) => (
+                <div key={item.slug} className="col-md-6 col-xl-4">
+                  <article className="insight-card h-100">
+                    <Link href={`/insights/${item.slug}`} className="insight-card-media">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={item.image} alt={item.title} loading="lazy" />
+                    </Link>
+                    <div className="insight-card-body">
+                      <div className="insight-card-meta">
+                        <span>{item.category}</span>
+                        <span aria-hidden>·</span>
+                        <span>{item.dateLabel}</span>
+                      </div>
+                      <h3>
+                        <Link href={`/insights/${item.slug}`}>{item.title}</Link>
+                      </h3>
+                      <p>{item.excerpt}</p>
+                      <Link href={`/insights/${item.slug}`} className="insight-card-link">
+                        {t(locale, "common.readMore")}
+                      </Link>
+                    </div>
+                  </article>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+    </>
   );
 }

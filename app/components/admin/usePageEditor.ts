@@ -2,6 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  fillEventsContentLocales,
+  fillInsightsContentLocales,
+} from "@/lib/content/autoTranslate";
+import {
   getDefaultContent,
   loadPageContent,
   savePageContent,
@@ -61,15 +65,26 @@ export function usePageEditor<T extends PageId>(pageId: T) {
       setMessage("");
       const previous = savedRef.current;
       try {
-        // 1) Upload new previews → permanent Blob URLs
-        const resolved = await resolvePendingImages(snapshot);
-        // 2) Persist content first so the site never points at deleted files
+        let resolved = await resolvePendingImages(snapshot);
+
+        if (pageId === "insights") {
+          setMessage("Translating empty KM/ZH…");
+          resolved = (await fillInsightsContentLocales(
+            resolved as PageContentMap["insights"]
+          )) as PageContentMap[T];
+        }
+        if (pageId === "events") {
+          setMessage("Translating empty KM/ZH…");
+          resolved = (await fillEventsContentLocales(
+            resolved as PageContentMap["events"]
+          )) as PageContentMap[T];
+        }
+
         await savePageContent(pageId, resolved);
         setContent(resolved);
         savedRef.current = resolved;
         setDirty(false);
         setMessage("Saved.");
-        // 3) Remove replaced/orphaned Blob files (home, about, insights, events, …)
         await deleteRemovedBlobs(previous, resolved);
         return resolved;
       } catch (error) {

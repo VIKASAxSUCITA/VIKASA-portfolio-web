@@ -6,7 +6,6 @@ import AboutWhatWeDo from "./AboutWhatWeDo";
 import AboutStory from "./AboutStory";
 import AboutVisionMission from "./AboutVisionMission";
 import AboutCoreValues from "./AboutCoreValues";
-import { CLIENT_LOGOS, PARTNER_LOGOS } from "@/lib/content/logos";
 import type { AboutContent } from "@/lib/content/types";
 import { ui } from "@/lib/i18n/ui";
 
@@ -21,6 +20,9 @@ type AboutBodyProps = {
 };
 
 export default function AboutBody({ content }: AboutBodyProps) {
+  const partners = content.partners ?? [];
+  const clients = content.clients ?? [];
+
   return (
     <>
       <HomePageStyles />
@@ -33,20 +35,24 @@ export default function AboutBody({ content }: AboutBodyProps) {
           mission={content.mission}
         />
         <AboutCoreValues />
-        <LogoMarquee
-          id="partners"
-          title={ui.partners.title}
-          subtitle={ui.partners.subtitle}
-          items={PARTNER_LOGOS}
-          direction="forward"
-        />
-        <LogoMarquee
-          id="clients"
-          title={ui.clients.title}
-          subtitle={ui.clients.subtitle}
-          items={CLIENT_LOGOS}
-          direction="reverse"
-        />
+        {partners.length ? (
+          <LogoMarquee
+            id="partners"
+            title={ui.partners.title}
+            subtitle={ui.partners.subtitle}
+            items={partners}
+            direction="forward"
+          />
+        ) : null}
+        {clients.length ? (
+          <LogoMarquee
+            id="clients"
+            title={ui.clients.title}
+            subtitle={ui.clients.subtitle}
+            items={clients}
+            direction="reverse"
+          />
+        ) : null}
       </main>
       <FooterSection />
     </>

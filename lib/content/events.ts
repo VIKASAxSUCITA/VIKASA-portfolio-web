@@ -45,6 +45,29 @@ export function normalizeEventPost(
   post: Partial<EventPost> & { id: string }
 ): EventPost {
   const fallbackImage = post.image || "/assets/img/blog/1.jpg";
+  const bodyRaw = post.body?.trim() || "";
+  const bodyKmRaw = post.bodyKm?.trim() || "";
+  const bodyZhRaw = post.bodyZh?.trim() || "";
+
+  // TipTap stores HTML; migrate legacy plain text on read.
+  const toHtml = (value: string) => {
+    if (!value) return "";
+    if (/<[a-z][\s\S]*>/i.test(value)) return value;
+    return value
+      .split(/\n\s*\n/)
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .map(
+        (part) =>
+          `<p>${part
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\n/g, "<br />")}</p>`
+      )
+      .join("");
+  };
+
   return {
     id: post.id,
     title: post.title?.trim() || "New Event",
@@ -59,9 +82,9 @@ export function normalizeEventPost(
     summary: post.summary?.trim() || "",
     summaryKm: post.summaryKm?.trim() || "",
     summaryZh: post.summaryZh?.trim() || "",
-    body: post.body?.trim() || "",
-    bodyKm: post.bodyKm?.trim() || "",
-    bodyZh: post.bodyZh?.trim() || "",
+    body: toHtml(bodyRaw),
+    bodyKm: toHtml(bodyKmRaw),
+    bodyZh: toHtml(bodyZhRaw),
     createdAt: post.createdAt || "1970-01-01T00:00:00.000Z",
   };
 }
@@ -246,7 +269,10 @@ export function eventExcerpt(
   max = 160,
   locale: Locale = "en"
 ): string {
-  const text = (eventText(post, "summary", locale) || eventText(post, "body", locale))
+  const raw =
+    eventText(post, "summary", locale) || eventText(post, "body", locale);
+  const text = raw
+    .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
   if (text.length <= max) return text;

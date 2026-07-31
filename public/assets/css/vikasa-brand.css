@@ -514,72 +514,49 @@
   outline-offset: 2px;
 }
 
-/* Insight detail page */
-.insight-detail-hero {
-  position: relative;
-  min-height: min(68vh, 620px);
-  display: grid;
-  place-items: center;
-  background-size: cover;
-  background-position: center;
-  color: #fff;
-  text-align: center;
-  overflow: hidden;
+/* Insight detail page — same cinematic banner as other page heroes */
+.insight-detail-banner.page-hero-banner {
+  min-height: min(58vh, 520px);
 }
 
-.insight-detail-hero.is-editing .insight-detail-hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.insight-detail-hero.is-editing .insight-detail-hero-media .admin-editable-image,
-.insight-detail-hero.is-editing .insight-detail-hero-media .admin-editable-image img {
+.insight-detail-banner .vikasa-hero-bg .insight-detail-banner-media,
+.insight-detail-banner .vikasa-hero-bg .admin-editable-image,
+.insight-detail-banner .vikasa-hero-bg .admin-editable-image img,
+.insight-detail-banner .vikasa-hero-bg img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.insight-detail-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(94, 49, 35, 0.62);
-}
-
-.insight-detail-hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 880px;
-  padding: 100px 16px 80px;
-}
-
-.insight-detail-tag {
+.insight-detail-banner-tag {
   display: inline-block;
-  padding: 8px 14px;
-  margin-bottom: 22px;
-  background: var(--vikasa-gold, #bb9759);
+  margin: 0 0 1rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(187, 151, 89, 0.92);
   color: #fff;
-  font-size: 12px;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.insight-detail-hero-title {
-  margin: 0 0 22px;
-  color: #fff;
-  font-size: clamp(2rem, 4.5vw, 3.4rem);
-  line-height: 1.15;
+.insight-detail-banner-title {
+  max-width: 18ch;
+  margin-bottom: 1.1rem;
 }
 
-.insight-detail-hero-meta {
+.insight-detail-banner-meta {
   display: inline-flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px 18px;
+  align-items: center;
+  gap: 0.45rem 0.85rem;
+  margin: 0;
   color: rgba(255, 255, 255, 0.88);
-  letter-spacing: 0.06em;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -2045,15 +2022,15 @@
 .admin-site .hero-slider .admin-editable-text,
 .admin-site .page-banner .admin-editable-text,
 .admin-site .text-banner .admin-editable-text,
-.admin-site .insight-detail-hero .admin-editable-text,
+.admin-site .insight-detail-banner .admin-editable-text,
 .admin-site .hero-slider input.admin-editable-text,
 .admin-site .page-banner input.admin-editable-text,
 .admin-site .text-banner input.admin-editable-text,
-.admin-site .insight-detail-hero input.admin-editable-text,
+.admin-site .insight-detail-banner input.admin-editable-text,
 .admin-site .hero-slider textarea.admin-editable-text,
 .admin-site .page-banner textarea.admin-editable-text,
 .admin-site .text-banner textarea.admin-editable-text,
-.admin-site .insight-detail-hero textarea.admin-editable-text {
+.admin-site .insight-detail-banner textarea.admin-editable-text {
   color: #fff;
   caret-color: #fff;
 }
@@ -2061,15 +2038,15 @@
 .admin-site .hero-slider .admin-editable-text:hover,
 .admin-site .page-banner .admin-editable-text:hover,
 .admin-site .text-banner .admin-editable-text:hover,
-.admin-site .insight-detail-hero .admin-editable-text:hover,
+.admin-site .insight-detail-banner .admin-editable-text:hover,
 .admin-site .hero-slider input.admin-editable-text:hover,
 .admin-site .page-banner input.admin-editable-text:hover,
 .admin-site .text-banner input.admin-editable-text:hover,
-.admin-site .insight-detail-hero input.admin-editable-text:hover,
+.admin-site .insight-detail-banner input.admin-editable-text:hover,
 .admin-site .hero-slider textarea.admin-editable-text:hover,
 .admin-site .page-banner textarea.admin-editable-text:hover,
 .admin-site .text-banner textarea.admin-editable-text:hover,
-.admin-site .insight-detail-hero textarea.admin-editable-text:hover {
+.admin-site .insight-detail-banner textarea.admin-editable-text:hover {
   background: rgba(255, 255, 255, 0.1);
   background-color: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.45);
@@ -2079,15 +2056,15 @@
 .admin-site .hero-slider .admin-editable-text:focus,
 .admin-site .page-banner .admin-editable-text:focus,
 .admin-site .text-banner .admin-editable-text:focus,
-.admin-site .insight-detail-hero .admin-editable-text:focus,
+.admin-site .insight-detail-banner .admin-editable-text:focus,
 .admin-site .hero-slider input.admin-editable-text:focus,
 .admin-site .page-banner input.admin-editable-text:focus,
 .admin-site .text-banner input.admin-editable-text:focus,
-.admin-site .insight-detail-hero input.admin-editable-text:focus,
+.admin-site .insight-detail-banner input.admin-editable-text:focus,
 .admin-site .hero-slider textarea.admin-editable-text:focus,
 .admin-site .page-banner textarea.admin-editable-text:focus,
 .admin-site .text-banner textarea.admin-editable-text:focus,
-.admin-site .insight-detail-hero textarea.admin-editable-text:focus {
+.admin-site .insight-detail-banner textarea.admin-editable-text:focus {
   color: #fff;
   background: rgba(0, 0, 0, 0.25);
   background-color: rgba(0, 0, 0, 0.25);
@@ -2386,17 +2363,108 @@
   z-index: 40;
   display: flex;
   align-items: center;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 12px 16px;
   padding: 12px 20px;
   background: rgba(255, 255, 255, 0.96);
   border-bottom: 1px solid rgba(94, 49, 35, 0.12);
   backdrop-filter: blur(8px);
 }
 
+.admin-detail-toolbar-locale {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .admin-detail-toolbar-hint {
-  flex: 1;
+  flex: 1 1 220px;
   margin: 0;
   color: rgba(94, 49, 35, 0.72);
+}
+
+.admin-logos-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.admin-logos-intro {
+  margin: 0 0 1.75rem;
+  color: rgba(94, 49, 35, 0.75);
+}
+
+.admin-logos-section + .admin-logos-section {
+  margin-top: 2.5rem;
+}
+
+.admin-logos-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-logos-head .heading {
+  margin: 0 0 0.35rem;
+}
+
+.admin-logos-head .text {
+  margin: 0;
+  color: rgba(94, 49, 35, 0.7);
+}
+
+.admin-logos-add {
+  cursor: pointer;
+}
+
+.admin-logos-empty {
+  margin: 0;
+  color: rgba(94, 49, 35, 0.65);
+}
+
+.admin-logos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-logos-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(94, 49, 35, 0.12);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-logos-card img {
+  width: 100%;
+  height: 88px;
+  object-fit: contain;
+  background: #faf8f6;
+  border-radius: 8px;
+}
+
+.admin-logos-delete {
+  width: 100%;
+}
+
+.admin-logos-about-note {
+  max-width: 48rem;
+  margin: 1.5rem auto 3rem;
+  text-align: center;
+  color: rgba(94, 49, 35, 0.72);
+}
+
+.admin-logos-about-note a {
+  color: var(--vikasa-brown, #5e3023);
+  text-decoration: underline;
 }
 
 .admin-detail-back {

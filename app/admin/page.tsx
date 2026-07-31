@@ -1,5 +1,6 @@
-import AdminHomeEditor from "@/app/components/admin/AdminHomeEditor";
+import { redirect } from "next/navigation";
 
+/** Admin only manages Insights, Events, and Partners & Clients. */
 export default function AdminHomePage() {
-  return <AdminHomeEditor />;
+  redirect("/admin/insights");
 }
