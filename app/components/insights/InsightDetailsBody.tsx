@@ -1,210 +1,232 @@
 "use client";
 
-import Link from "next/link";
-import { useMemo } from "react";
-import type { InsightPost } from "@/lib/content/insights";
+import { useMemo, useState } from "react";
+import {
+  EditableField,
+  EditableMedia,
+} from "@/app/components/admin/EditableField";
+import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
+import { useLocale } from "@/app/components/i18n/LocaleProvider";
+import InsightImageGallery from "@/app/components/insights/InsightImageGallery";
+import InsightRichTextEditor from "@/app/components/insights/InsightRichTextEditor";
+import {
+  extractBodyImageSrcs,
+  stripImagesFromBodyHtml,
+} from "@/lib/content/insightHtml";
 import {
   formatInsightDate,
   insightText,
-  insightTitle,
 } from "@/lib/content/insights";
-import { useLocale } from "@/app/components/i18n/LocaleProvider";
-import { t } from "@/lib/i18n/ui";
-import { EditableField, EditableMedia } from "@/app/components/admin/EditableField";
-import type { TextEdit, ImageEdit } from "@/app/components/admin/usePageEditor";
+import type { InsightPost } from "@/lib/content/types";
+import type { Locale } from "@/lib/i18n/locale";
 
-type Props = {
+type InsightDetailsBodyProps = {
   post: InsightPost;
-  related: InsightPost[];
-  edits?: {
-    category?: TextEdit;
-    title?: TextEdit;
-    author?: TextEdit;
-    dateLabel?: TextEdit;
-    image?: ImageEdit;
-    bodyHtml?: TextEdit;
-  };
+  related?: InsightPost[];
+  edit?: { onChange: (updater: (prev: InsightPost) => InsightPost) => void };
+  editLocale?: Locale;
+  onEditLocaleChange?: (locale: Locale) => void;
+  hideLocaleBar?: boolean;
 };
 
-export default function InsightDetailsBody({ post, related, edits }: Props) {
-  const { locale } = useLocale();
-  const title = insightTitle(post, locale);
-  const category = insightText(post.category, post.categoryKm, post.categoryZh, locale);
-  const author = insightText(post.author, post.authorKm, post.authorZh, locale);
-  const dateLabel =
-    insightText(post.dateLabel, post.dateLabelKm, post.dateLabelZh, locale) ||
-    formatInsightDate(post.date);
-  const bodyHtml = insightText(post.bodyHtml, post.bodyHtmlKm, post.bodyHtmlZh, locale);
-  const titleKey =
-    locale === "km" ? "titleKm" : locale === "zh" ? "titleZh" : "title";
-  const categoryKey =
-    locale === "km" ? "categoryKm" : locale === "zh" ? "categoryZh" : "category";
-  const authorKey =
-    locale === "km" ? "authorKm" : locale === "zh" ? "authorZh" : "author";
-  const dateLabelKey =
-    locale === "km"
-      ? "dateLabelKm"
-      : locale === "zh"
-        ? "dateLabelZh"
-        : "dateLabel";
-  const bodyKey =
-    locale === "km" ? "bodyHtmlKm" : locale === "zh" ? "bodyHtmlZh" : "bodyHtml";
+function titleKeyFor(locale: Locale): keyof InsightPost {
+  if (locale === "km") return "titleKm";
+  if (locale === "zh") return "titleZh";
+  return "title";
+}
 
-  const relatedCards = useMemo(
-    () =>
-      related.map((item) => ({
-        ...item,
-        title: insightTitle(item, locale),
-        category: insightText(item.category, item.categoryKm, item.categoryZh, locale),
-        dateLabel:
-          insightText(item.dateLabel, item.dateLabelKm, item.dateLabelZh, locale) ||
-          formatInsightDate(item.date),
-      })),
-    [locale, related],
+function bodyKeyFor(locale: Locale): keyof InsightPost {
+  if (locale === "km") return "bodyHtmlKm";
+  if (locale === "zh") return "bodyHtmlZh";
+  return "bodyHtml";
+}
+
+export default function InsightDetailsBody({
+  post,
+  related = [],
+  edit,
+  editLocale: editLocaleProp,
+  onEditLocaleChange,
+  hideLocaleBar = false,
+}: InsightDetailsBodyProps) {
+  const { locale: siteLocale } = useLocale();
+  const [editLocaleState, setEditLocaleState] = useState<Locale>("en");
+  const editLocale = editLocaleProp ?? editLocaleState;
+  const setEditLocale = onEditLocaleChange ?? setEditLocaleState;
+  const locale = edit ? editLocale : siteLocale;
+
+  const title = insightText(post, "title", locale);
+  const bodyHtml = insightText(post, "bodyHtml", locale);
+  const dateLabel = formatInsightDate(post.createdAt, locale);
+  const titleKey = titleKeyFor(locale);
+  const bodyKey = bodyKeyFor(locale);
+
+  const galleryImages = useMemo(
+    () => extractBodyImageSrcs(bodyHtml),
+    [bodyHtml]
+  );
+  const proseHtml = useMemo(
+    () => stripImagesFromBodyHtml(bodyHtml),
+    [bodyHtml]
   );
 
-  return (
-    <>
-      <section
-        className={`vikasa-hero-cinematic about-hero-cinematic page-hero-banner page-hero-banner--start insight-detail-banner${edits?.image ? " is-editing" : ""}`}
-        aria-label={title}
-      >
-        <div className="vikasa-hero-bg">
-          {edits?.image ? (
-            <EditableMedia
-              src={post.image}
-              alt={title}
-              edit={edits.image}
-              className="vikasa-hero-bg-image insight-detail-banner-media"
-            />
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={post.image}
-              alt=""
-              className="vikasa-hero-bg-image"
-              width={1920}
-              height={1080}
-              loading="eager"
-            />
-          )}
-          <div className="vikasa-hero-overlay" aria-hidden />
-        </div>
-        <div className="vikasa-hero-content">
-          <div className="container">
-            <div className="vikasa-hero-copy section-headings page-hero-copy">
-              {edits?.category ? (
-                <EditableField
-                  as="p"
-                  className="insight-detail-banner-tag"
-                  value={category}
-                  edit={edits.category}
-                  label={`Insight ${categoryKey}`}
-                />
-              ) : (
-                <p className="insight-detail-banner-tag">{category}</p>
-              )}
-              {edits?.title ? (
-                <EditableField
-                  as="h1"
-                  className="heading vikasa-hero-title insight-detail-banner-title"
-                  value={title}
-                  edit={edits.title}
-                  label={`Insight ${titleKey}`}
-                  multiline
-                />
-              ) : (
-                <h1 className="heading vikasa-hero-title insight-detail-banner-title">
-                  {title}
-                </h1>
-              )}
-              <div className="insight-detail-banner-meta">
-                {edits?.author ? (
-                  <EditableField
-                    as="span"
-                    className="insight-detail-author"
-                    value={author}
-                    edit={edits.author}
-                    label={`Insight ${authorKey}`}
-                  />
-                ) : (
-                  <span className="insight-detail-author">{author}</span>
-                )}
-                <span aria-hidden>·</span>
-                {edits?.dateLabel ? (
-                  <EditableField
-                    as="span"
-                    value={dateLabel}
-                    edit={edits.dateLabel}
-                    label={`Insight ${dateLabelKey}`}
-                  />
-                ) : (
-                  <span>{dateLabel}</span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+  const patch = <K extends keyof InsightPost>(key: K, value: InsightPost[K]) =>
+    edit?.onChange((prev) => ({ ...prev, [key]: value }));
 
-      <section className="insight-detail-article">
+  return (
+    <main className="insight-detail-page">
+      {edit && !hideLocaleBar ? (
+        <div className="container admin-inline-locale-bar">
+          <LocaleEditTabs locale={editLocale} onChange={setEditLocale} />
+        </div>
+      ) : null}
+
+      <article className="insight-article">
         <div className="container">
-          <div className="insight-detail-prose">
-            {edits?.bodyHtml ? (
+          <div className="insight-article-inner">
+            <header className="insight-article-header">
+              <div className="insight-article-meta">
+                {edit ? (
+                  <EditableField
+                    as="span"
+                    className="insight-article-category"
+                    value={post.category}
+                    edit={{
+                      onChange: (category) => patch("category", category),
+                    }}
+                    label="Insight category"
+                  />
+                ) : post.category ? (
+                  <span className="insight-article-category">
+                    {post.category}
+                  </span>
+                ) : null}
+                {edit ? (
+                  <EditableField
+                    as="span"
+                    className="insight-article-author"
+                    value={post.author}
+                    edit={{ onChange: (author) => patch("author", author) }}
+                    label="Insight author"
+                  />
+                ) : post.author ? (
+                  <span className="insight-article-author">{post.author}</span>
+                ) : null}
+                {dateLabel ? (
+                  <span className="insight-article-date">{dateLabel}</span>
+                ) : null}
+              </div>
+
               <EditableField
-                as="div"
-                className="insight-detail-body"
-                value={bodyHtml}
-                edit={edits.bodyHtml}
-                label={`Insight ${bodyKey}`}
+                as="h1"
+                className="heading insight-article-title"
+                value={edit ? String(post[titleKey] || post.title) : title}
+                edit={
+                  edit
+                    ? {
+                        onChange: (value) =>
+                          patch(
+                            titleKey,
+                            value as InsightPost[typeof titleKey]
+                          ),
+                      }
+                    : undefined
+                }
+                label="Insight title"
                 multiline
               />
-            ) : (
-              <div
-                className="insight-detail-body"
-                dangerouslySetInnerHTML={{ __html: bodyHtml }}
+            </header>
+
+            <figure className="insight-article-cover">
+              <EditableMedia
+                src={post.image}
+                alt={title}
+                className="insight-article-cover-media"
+                width={1200}
+                height={675}
+                loading="eager"
+                edit={
+                  edit
+                    ? { onChange: (image) => patch("image", image) }
+                    : undefined
+                }
               />
+            </figure>
+
+            {edit ? (
+              <div className="insight-article-editor">
+                <InsightRichTextEditor
+                  content={String(post[bodyKey] || post.bodyHtml)}
+                  placeholder="Write your insight article…"
+                  onChange={(value) =>
+                    patch(bodyKey, value as InsightPost[typeof bodyKey])
+                  }
+                />
+              </div>
+            ) : (
+              <>
+                <div
+                  className="insight-article-body insight-rich-body"
+                  dangerouslySetInnerHTML={{ __html: proseHtml }}
+                />
+                {galleryImages.length > 0 ? (
+                  <InsightImageGallery
+                    images={galleryImages}
+                    altPrefix={title}
+                  />
+                ) : null}
+              </>
             )}
           </div>
         </div>
-      </section>
+      </article>
 
-      {relatedCards.length > 0 ? (
+      {!edit && related.length > 0 ? (
         <section className="insight-related">
           <div className="container">
             <div className="insight-related-head">
-              <h2>{t(locale, "insights.relatedTitle")}</h2>
-              <p>{t(locale, "insights.relatedText")}</p>
+              <h2>
+                {locale === "km"
+                  ? "អត្ថបទពាក់ព័ន្ធ"
+                  : locale === "zh"
+                    ? "相关洞察"
+                    : "Related Insights"}
+              </h2>
             </div>
             <div className="row g-4">
-              {relatedCards.map((item) => (
-                <div key={item.slug} className="col-md-6 col-xl-4">
-                  <article className="insight-card h-100">
-                    <Link href={`/insights/${item.slug}`} className="insight-card-media">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={item.image} alt={item.title} loading="lazy" />
-                    </Link>
-                    <div className="insight-card-body">
-                      <div className="insight-card-meta">
-                        <span>{item.category}</span>
-                        <span aria-hidden>·</span>
-                        <span>{item.dateLabel}</span>
+              {related.map((item) => {
+                const itemTitle = insightText(item, "title", locale);
+                const itemDate = formatInsightDate(item.createdAt, locale);
+                return (
+                  <div key={item.id} className="col-md-6 col-xl-4">
+                    <article className="insight-card h-100">
+                      <a
+                        href={`/insights/${item.id}`}
+                        className="insight-card-media"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={item.image} alt={itemTitle} loading="lazy" />
+                      </a>
+                      <div className="insight-card-body">
+                        <div className="insight-card-meta">
+                          {item.category ? <span>{item.category}</span> : null}
+                          {item.category && itemDate ? (
+                            <span aria-hidden>·</span>
+                          ) : null}
+                          {itemDate ? <span>{itemDate}</span> : null}
+                        </div>
+                        <h3>
+                          <a href={`/insights/${item.id}`}>{itemTitle}</a>
+                        </h3>
                       </div>
-                      <h3>
-                        <Link href={`/insights/${item.slug}`}>{item.title}</Link>
-                      </h3>
-                      <p>{item.excerpt}</p>
-                      <Link href={`/insights/${item.slug}`} className="insight-card-link">
-                        {t(locale, "common.readMore")}
-                      </Link>
-                    </div>
-                  </article>
-                </div>
-              ))}
+                    </article>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
       ) : null}
-    </>
+    </main>
   );
 }

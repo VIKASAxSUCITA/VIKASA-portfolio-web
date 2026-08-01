@@ -24,12 +24,6 @@ const VIEW_DETAILS: Record<Locale, string> = {
   zh: "了解服务",
 };
 
-const ADVISORY: Record<Locale, string> = {
-  en: "Advisory",
-  km: "ការពិគ្រោះយោបល់",
-  zh: "咨询服务",
-};
-
 const SUBTITLE: Record<Locale, string> = {
   en: "Investment, enhancement, and academy — three advisory paths for ambitious organizations.",
   km: "ការវិនិយោគ ការពង្រឹង និងបណ្ឌិត្យសភា — ផ្លូវពិគ្រោះយោបល់បីសម្រាប់អង្គភាពដែលមានមហិច្ឆតា។",
@@ -221,25 +215,22 @@ export default function HomeServices({ content, edit }: HomeServicesProps) {
                       <span className="vikasa-service-card-glyph" aria-hidden>
                         <ServiceGlyph index={index} />
                       </span>
-                      <span className="vikasa-service-card-label">
-                        {ADVISORY[locale]}
-                      </span>
+                      <LocalizedEditableField
+                        as="h3"
+                        className="heading text-28 vikasa-service-card-title"
+                        value={service.title}
+                        locale={locale}
+                        label="Service title"
+                        edit={
+                          edit
+                            ? {
+                                onChange: (title) =>
+                                  updateCard(index, { title }),
+                              }
+                            : undefined
+                        }
+                      />
                     </div>
-                    <LocalizedEditableField
-                      as="h3"
-                      className="heading text-28"
-                      value={service.title}
-                      locale={locale}
-                      label="Service title"
-                      edit={
-                        edit
-                          ? {
-                              onChange: (title) =>
-                                updateCard(index, { title }),
-                            }
-                          : undefined
-                      }
-                    />
                     <LocalizedEditableField
                       className="text text-16"
                       value={service.description}

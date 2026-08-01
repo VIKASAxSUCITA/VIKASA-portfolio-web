@@ -56,7 +56,6 @@ function insightDefaults(
       pairedImages,
       sectionTitle,
       quote,
-      featureImage: image,
     }),
     bodyHtmlKm: "",
     bodyHtmlZh: "",

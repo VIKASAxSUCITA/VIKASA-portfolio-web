@@ -14,7 +14,6 @@ export function buildInsightBodyHtmlFromLegacy(input: {
   pairedImages: string[];
   sectionTitle?: string;
   quote?: string;
-  featureImage?: string;
 }): string {
   const [lead = "", second = "", third = "", fourth = ""] = input.paragraphs;
   const chunks: string[] = [];
@@ -45,11 +44,57 @@ export function buildInsightBodyHtmlFromLegacy(input: {
   if (fourth.trim()) {
     chunks.push(`<p>${escapeHtml(fourth.trim())}</p>`);
   }
-  if (input.featureImage?.trim()) {
-    chunks.push(`<img src="${escapeHtml(input.featureImage.trim())}" alt="">`);
-  }
 
   return chunks.join("") || "<p></p>";
+}
+
+/**
+ * Remove cover/hero image duplicates from body HTML.
+ * Older migrations appended the feature image at the end of the article.
+ */
+export function stripCoverImageFromBodyHtml(
+  html: string,
+  coverImage: string
+): string {
+  const cover = coverImage.trim();
+  if (!html.trim()) return html;
+  if (!cover) return html;
+
+  const escaped = cover.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(
+    `<img\\b[^>]*\\bsrc=["']${escaped}["'][^>]*/?>`,
+    "gi"
+  );
+  const cleaned = html.replace(pattern, "").replace(/(<p>\s*<\/p>)+/gi, "");
+  const trimmed = cleaned.trim();
+  if (!trimmed) return html.trim() ? "<p></p>" : "";
+  return trimmed;
+}
+
+/** Collect unique image URLs from insight body HTML. */
+export function extractBodyImageSrcs(html: string): string[] {
+  const srcs: string[] = [];
+  const seen = new Set<string>();
+  const pattern = /<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(html)) !== null) {
+    const src = match[1]?.trim();
+    if (!src || seen.has(src)) continue;
+    seen.add(src);
+    srcs.push(src);
+  }
+  return srcs;
+}
+
+/** Remove all images from body HTML, keeping text/structure. */
+export function stripImagesFromBodyHtml(html: string): string {
+  if (!html.trim()) return html;
+  const cleaned = html
+    .replace(/<img\b[^>]*>/gi, "")
+    .replace(/<figure\b[^>]*>\s*<\/figure>/gi, "")
+    .replace(/(<p>\s*<\/p>)+/gi, "");
+  const trimmed = cleaned.trim();
+  return trimmed || "<p></p>";
 }
 
 /** Plain-text excerpt for cards / SEO snippets. */

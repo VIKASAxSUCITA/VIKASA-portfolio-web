@@ -24,6 +24,10 @@ import {
   normalizeAboutContent,
   normalizeHomeContent,
 } from "./localizeContent";
+import {
+  defaultServicesContent,
+  normalizeServicesContent,
+} from "./services";
 import type {
   AboutContent,
   FooterContent,
@@ -55,6 +59,7 @@ const defaults: PageContentMap = {
   about: defaultAboutContent,
   insights: defaultInsightsContent,
   events: defaultEventsContent,
+  services: defaultServicesContent,
   footer: defaultFooterContent,
 };
 
@@ -87,6 +92,11 @@ export async function loadPageContent<T extends PageId>(
   if (pageId === "footer") {
     return mergeFooterContent(data as Partial<FooterContent>) as PageContentMap[T];
   }
+  if (pageId === "services") {
+    return normalizeServicesContent(
+      data as Partial<PageContentMap["services"]>
+    ) as PageContentMap[T];
+  }
   return data;
 }
 
@@ -103,12 +113,42 @@ export async function savePageContent<T extends PageId>(
     return;
   }
 
+  const toSave =
+    pageId === "services"
+      ? normalizeServicesContent(content as PageContentMap["services"])
+      : content;
+
   await setDoc(
     doc(getFirebaseDb(), "pages", pageId),
     {
-      content,
+      content: toSave,
       updatedAt: serverTimestamp(),
     },
     { merge: true }
   );
+
+  // Keep home service cards in sync with the services CMS.
+  if (pageId === "services") {
+    const services = (toSave as PageContentMap["services"]).services;
+    const home = await loadPageContent("home");
+    const nextHome: HomeContent = {
+      ...home,
+      services: {
+        ...home.services,
+        cards: services.map((service) => ({
+          title: service.title,
+          description: service.description,
+          items: service.items,
+        })),
+      },
+    };
+    await setDoc(
+      doc(getFirebaseDb(), "pages", "home"),
+      {
+        content: nextHome,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  }
 }

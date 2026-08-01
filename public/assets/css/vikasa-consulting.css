@@ -1059,12 +1059,11 @@ a.vikasa-service-card-inner:focus {
   flex-shrink: 0;
 }
 
-.vikasa-service-card-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--vk-gold);
+.vikasa-service-card-title {
+  margin: 0 !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--vk-espresso) !important;
 }
 
 .vikasa-service-card-inner .heading {
@@ -1165,6 +1164,18 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   color: var(--vk-espresso);
 }
 
+.service-detail-aside-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.service-detail-aside-head .heading {
+  margin-bottom: 0;
+}
+
 .service-detail-points {
   display: flex;
   flex-direction: column;
@@ -1188,6 +1199,61 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   flex-shrink: 0;
   margin-top: 0.1rem;
   color: var(--vk-gold);
+}
+
+.service-detail-point-edit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem;
+  align-items: start;
+  flex: 1;
+  min-width: 0;
+}
+
+.service-detail-point-text,
+.service-detail-point-edit .admin-editable-text {
+  width: 100%;
+}
+
+.service-detail-point-remove {
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(94, 48, 35, 0.45);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.service-detail-point-remove:hover {
+  background: rgba(94, 48, 35, 0.08);
+  color: var(--vk-espresso);
+}
+
+/* TipTap on service overview — toolbar above content, never overlapping */
+.service-detail-rte {
+  margin: 0 0 1.5rem;
+}
+
+.service-detail-rte .insight-rte {
+  margin: 0;
+}
+
+.service-detail-rte .insight-rte-toolbar {
+  position: static;
+  top: auto;
+  margin: 0 0 12px;
+  background: #fff;
+}
+
+.service-detail-rte .insight-rte .ProseMirror {
+  min-height: 180px;
+  padding: 0.15rem 0.1rem;
+  color: var(--vk-espresso);
+  font-size: 18px;
+  line-height: 1.7;
 }
 
 .service-detail-related {
@@ -2326,19 +2392,17 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   color: var(--vk-gold);
 }
 
-.page-content .insight-detail-banner .vikasa-hero-overlay {
-  background: linear-gradient(
-    105deg,
-    rgba(20, 12, 10, 0.72) 0%,
-    rgba(94, 48, 35, 0.45) 48%,
-    rgba(20, 12, 10, 0.28) 100%
-  );
+.page-content .insight-article-title {
+  color: var(--vk-espresso) !important;
 }
 
-.page-content .insight-detail-banner .vikasa-hero-title,
-.page-content .insight-detail-banner .insight-detail-banner-meta,
-.page-content .insight-detail-banner .insight-detail-banner-meta span {
-  color: #fff;
+.page-content .insight-article-body.insight-rich-body p,
+.page-content .insight-article-body.insight-rich-body li {
+  color: rgba(40, 40, 40, 0.86);
+}
+
+.page-content .insight-gallery-frame {
+  box-shadow: var(--vk-shadow);
 }
 
 .page-content .event-info-card {

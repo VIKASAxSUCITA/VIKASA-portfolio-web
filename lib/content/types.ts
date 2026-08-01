@@ -1,4 +1,5 @@
 import type { LocalizedString } from "@/lib/i18n/locale";
+import type { ServicesContent } from "./services";
 
 export type FooterContent = {
   social: {
@@ -137,12 +138,19 @@ export type EventsContent = {
   posts: EventPost[];
 };
 
-export type PageId = "home" | "about" | "insights" | "events" | "footer";
+export type PageId =
+  | "home"
+  | "about"
+  | "insights"
+  | "events"
+  | "services"
+  | "footer";
 
 export type PageContentMap = {
   home: HomeContent;
   about: AboutContent;
   insights: InsightsContent;
   events: EventsContent;
+  services: ServicesContent;
   footer: FooterContent;
 };

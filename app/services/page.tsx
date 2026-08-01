@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ServicesGrid from "@/app/components/services/ServicesGrid";
 import FooterSection from "@/app/components/home/FooterSection";
 import PageHeroCopy from "@/app/components/i18n/PageHeroCopy";
+import { loadPageContent } from "@/lib/content/firestore";
 import { ui } from "@/lib/i18n/ui";
 
 export const metadata: Metadata = {
@@ -10,7 +11,12 @@ export const metadata: Metadata = {
     "VIKASA services — Investment, Business Enhancement, and Business Academy.",
 };
 
-export default function ServicesPage() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function ServicesPage() {
+  const content = await loadPageContent("services");
+
   return (
     <>
       <section
@@ -37,7 +43,7 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
-      <ServicesGrid />
+      <ServicesGrid services={content.services} />
       <FooterSection />
     </>
   );

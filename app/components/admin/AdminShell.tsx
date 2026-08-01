@@ -16,6 +16,7 @@ type AdminShellProps = {
 const NAV_PAGES = [
   { href: "/admin/insights", label: "Insights" },
   { href: "/admin/events", label: "Events" },
+  { href: "/admin/services", label: "Services" },
   { href: "/admin/logos", label: "Partners & Clients" },
 ] as const;
 

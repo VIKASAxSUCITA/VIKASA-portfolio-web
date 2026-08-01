@@ -1,19 +1,25 @@
 import type { LocalizedString } from "@/lib/i18n/locale";
 import { localizedFromEn } from "@/lib/i18n/locale";
+import { asLocalized, mergeLocalized } from "@/lib/i18n/localized";
 
 export type ServiceSlug =
   | "investment"
   | "business-enhancement"
-  | "business-academy";
+  | "business-academy"
+  | (string & {});
 
 export type ServiceDetail = {
-  slug: ServiceSlug;
+  slug: string;
   icon: string;
   title: LocalizedString;
   description: LocalizedString;
   items: LocalizedString[];
   heroImage: string;
   body: LocalizedString;
+};
+
+export type ServicesContent = {
+  services: ServiceDetail[];
 };
 
 export function slugifyServiceTitle(title: string): string {
@@ -145,17 +151,89 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
   },
 ];
 
-export function getServiceBySlug(slug: string): ServiceDetail | undefined {
-  return SERVICE_DETAILS.find((service) => service.slug === slug);
+export const defaultServicesContent: ServicesContent = {
+  services: structuredClone(SERVICE_DETAILS),
+};
+
+function normalizeServiceDetail(
+  saved: Partial<ServiceDetail> | undefined,
+  fallback: ServiceDetail
+): ServiceDetail {
+  const itemsRaw = Array.isArray(saved?.items) ? saved.items : fallback.items;
+  const items =
+    itemsRaw.length > 0
+      ? itemsRaw.map((item, index) =>
+          mergeLocalized(item, fallback.items[index] ?? localizedFromEn(""))
+        )
+      : fallback.items.map((item) => ({ ...item }));
+
+  return {
+    slug: (saved?.slug || fallback.slug).trim() || fallback.slug,
+    icon: saved?.icon?.trim() || fallback.icon,
+    heroImage: saved?.heroImage?.trim() || fallback.heroImage,
+    title: mergeLocalized(saved?.title, fallback.title),
+    description: mergeLocalized(saved?.description, fallback.description),
+    body: mergeLocalized(saved?.body, fallback.body),
+    items,
+  };
+}
+
+/** Merge Firestore services with defaults (keeps the three default slots). */
+export function normalizeServicesContent(
+  saved?: Partial<ServicesContent> | null
+): ServicesContent {
+  const savedList = Array.isArray(saved?.services) ? saved.services : [];
+  const bySlug = new Map(
+    savedList
+      .filter((item): item is ServiceDetail => Boolean(item?.slug))
+      .map((item) => [item.slug, item])
+  );
+
+  const services = SERVICE_DETAILS.map((fallback) =>
+    normalizeServiceDetail(bySlug.get(fallback.slug), fallback)
+  );
+
+  for (const item of savedList) {
+    if (!item?.slug) continue;
+    if (SERVICE_DETAILS.some((fallback) => fallback.slug === item.slug)) {
+      continue;
+    }
+    services.push(
+      normalizeServiceDetail(item, {
+        slug: item.slug,
+        icon: item.icon || "/assets/img/vikasa/services/investment.jpg",
+        heroImage:
+          item.heroImage ||
+          item.icon ||
+          "/assets/img/vikasa/services/investment.jpg",
+        title: asLocalized(item.title),
+        description: asLocalized(item.description),
+        body: asLocalized(item.body),
+        items: Array.isArray(item.items)
+          ? item.items.map((entry) => asLocalized(entry))
+          : [],
+      })
+    );
+  }
+
+  return { services };
+}
+
+export function getServiceBySlug(
+  slug: string,
+  services: ServiceDetail[] = SERVICE_DETAILS
+): ServiceDetail | undefined {
+  return services.find((service) => service.slug === slug);
 }
 
 export function resolveServiceSlug(
   title: string | LocalizedString,
-  index: number
-): ServiceSlug {
+  index: number,
+  services: ServiceDetail[] = SERVICE_DETAILS
+): string {
   const label = typeof title === "string" ? title : title?.en ?? "";
   const fromTitle = slugifyServiceTitle(label);
-  const match = SERVICE_DETAILS.find((service) => service.slug === fromTitle);
+  const match = services.find((service) => service.slug === fromTitle);
   if (match) return match.slug;
-  return SERVICE_DETAILS[index]?.slug ?? "investment";
+  return services[index]?.slug ?? "investment";
 }
