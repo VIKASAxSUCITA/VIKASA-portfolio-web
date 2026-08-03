@@ -36,10 +36,17 @@ function TranslateIcon() {
 }
 
 async function translateBatch(texts: string[], to: Locale): Promise<string[]> {
+  // Images don't need translation and burn MyMemory's daily char quota.
+  const prepared = texts.map((text) =>
+    text
+      .replace(/<img\b[^>]*>/gi, "")
+      .replace(/\bblob:[^\s"']+/g, "")
+      .trim()
+  );
   const res = await fetch("/api/admin/translate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ texts, from: "en", to }),
+    body: JSON.stringify({ texts: prepared, from: "en", to }),
   });
   const data = (await res.json()) as {
     translations?: string[];
@@ -72,11 +79,10 @@ export default function AutoTranslateButton({
     setBusy(true);
     setMessage(null);
     try {
-      const [km, zh] = await Promise.all([
-        translateBatch(cleaned, "km"),
-        translateBatch(cleaned, "zh"),
-      ]);
+      // Sequential: MyMemory free tier rate-limits parallel KM+ZH hard.
+      const km = await translateBatch(cleaned, "km");
       onTranslated("km", km);
+      const zh = await translateBatch(cleaned, "zh");
       onTranslated("zh", zh);
       setMessage("Khmer and Chinese filled. Review before saving.");
     } catch (error) {

@@ -8,6 +8,10 @@ import { usePageEditor } from "@/app/components/admin/usePageEditor";
 import AutoTranslateButton from "@/app/components/i18n/AutoTranslateButton";
 import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
 import { excerptText } from "@/lib/content/adminFormat";
+import {
+  extractBodyImageSrcs,
+  withSyncedBodyImages,
+} from "@/lib/content/insightHtml";
 import type { ServiceDetail } from "@/lib/content/services";
 import type { Locale } from "@/lib/i18n/locale";
 import { readLocalized, setLocalized } from "@/lib/i18n/localized";
@@ -229,31 +233,48 @@ function ServiceEditShell({
             disabled={saving}
             onTranslated={(target, values) => {
               const [titleVal, subtitleVal, bodyVal, ...itemVals] = values;
-              onChange((prev) => ({
-                ...prev,
-                title: setLocalized(
-                  prev.title,
-                  target,
-                  titleVal ?? readLocalized(prev.title, target)
-                ),
-                description: setLocalized(
-                  prev.description,
-                  target,
-                  subtitleVal ?? readLocalized(prev.description, target)
-                ),
-                body: setLocalized(
-                  prev.body,
-                  target,
-                  bodyVal ?? readLocalized(prev.body, target)
-                ),
-                items: prev.items.map((item, index) =>
-                  setLocalized(
-                    item,
+              onChange((prev) => {
+                const images = extractBodyImageSrcs(
+                  readLocalized(prev.body, "en")
+                );
+                const translatedBody = withSyncedBodyImages(
+                  bodyVal ?? "",
+                  images
+                );
+                return {
+                  ...prev,
+                  title: setLocalized(
+                    prev.title,
                     target,
-                    itemVals[index] ?? readLocalized(item, target)
-                  )
-                ),
-              }));
+                    titleVal ?? readLocalized(prev.title, target)
+                  ),
+                  description: setLocalized(
+                    prev.description,
+                    target,
+                    subtitleVal ?? readLocalized(prev.description, target)
+                  ),
+                  body: {
+                    ...prev.body,
+                    [target]: translatedBody,
+                    en: withSyncedBodyImages(prev.body.en || "<p></p>", images),
+                    km:
+                      target === "km"
+                        ? translatedBody
+                        : withSyncedBodyImages(prev.body.km || "<p></p>", images),
+                    zh:
+                      target === "zh"
+                        ? translatedBody
+                        : withSyncedBodyImages(prev.body.zh || "<p></p>", images),
+                  },
+                  items: prev.items.map((item, index) =>
+                    setLocalized(
+                      item,
+                      target,
+                      itemVals[index] ?? readLocalized(item, target)
+                    )
+                  ),
+                };
+              });
             }}
           />
         </>

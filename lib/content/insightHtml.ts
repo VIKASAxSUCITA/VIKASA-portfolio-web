@@ -97,6 +97,46 @@ export function stripImagesFromBodyHtml(html: string): string {
   return trimmed || "<p></p>";
 }
 
+function escapeAttr(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * Keep locale text, but force the shared image list (EN/KM/ZH share media).
+ * Images are appended after prose so every language shows the same gallery.
+ */
+export function withSyncedBodyImages(
+  html: string,
+  imageSrcs: string[]
+): string {
+  const prose = stripImagesFromBodyHtml(html || "");
+  if (imageSrcs.length === 0) return prose;
+  const imgs = imageSrcs
+    .map(
+      (src) =>
+        `<img src="${escapeAttr(src)}" alt="" class="insight-rte-image">`
+    )
+    .join("");
+  return `${prose}${imgs}`;
+}
+
+/** Copy image list from a source body onto one or more target bodies. */
+export function syncBodiesToSharedImages(
+  sourceHtml: string,
+  targets: Record<string, string>
+): Record<string, string> {
+  const images = extractBodyImageSrcs(sourceHtml);
+  const next: Record<string, string> = {};
+  for (const [key, html] of Object.entries(targets)) {
+    next[key] = withSyncedBodyImages(html, images);
+  }
+  return next;
+}
+
 /** Plain-text excerpt for cards / SEO snippets. */
 export function insightBodyPlainText(html: string): string {
   return html

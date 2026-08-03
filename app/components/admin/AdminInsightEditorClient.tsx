@@ -9,6 +9,10 @@ import { usePageEditor } from "@/app/components/admin/usePageEditor";
 import AutoTranslateButton from "@/app/components/i18n/AutoTranslateButton";
 import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
 import { createEmptyInsight } from "@/lib/content/insights";
+import {
+  extractBodyImageSrcs,
+  withSyncedBodyImages,
+} from "@/lib/content/insightHtml";
 import { applyUploadedBlobCache } from "@/lib/content/pendingImages";
 import type { InsightPost } from "@/lib/content/types";
 import type { Locale } from "@/lib/i18n/locale";
@@ -150,18 +154,31 @@ export default function AdminInsightEditorClient({ postId }: Props) {
               onTranslated={(target, values) => {
                 const [titleVal, bodyVal] = values;
                 patchDraft((prev) => {
+                  const images = extractBodyImageSrcs(prev.bodyHtml || "");
+                  const translatedBody = withSyncedBodyImages(
+                    bodyVal ?? "",
+                    images
+                  );
                   if (target === "km") {
                     return {
                       ...prev,
                       titleKm: titleVal ?? prev.titleKm,
-                      bodyHtmlKm: bodyVal ?? prev.bodyHtmlKm,
+                      bodyHtmlKm: translatedBody,
+                      bodyHtmlZh: withSyncedBodyImages(
+                        prev.bodyHtmlZh || "<p></p>",
+                        images
+                      ),
                     };
                   }
                   if (target === "zh") {
                     return {
                       ...prev,
                       titleZh: titleVal ?? prev.titleZh,
-                      bodyHtmlZh: bodyVal ?? prev.bodyHtmlZh,
+                      bodyHtmlZh: translatedBody,
+                      bodyHtmlKm: withSyncedBodyImages(
+                        prev.bodyHtmlKm || "<p></p>",
+                        images
+                      ),
                     };
                   }
                   return prev;

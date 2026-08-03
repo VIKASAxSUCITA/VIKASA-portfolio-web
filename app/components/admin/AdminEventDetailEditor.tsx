@@ -1,8 +1,13 @@
 "use client";
 
+import { useMemo } from "react";
 import EditableImage from "@/app/components/admin/EditableImage";
 import EditableText from "@/app/components/admin/EditableText";
 import InsightRichTextEditor from "@/app/components/insights/InsightRichTextEditor";
+import {
+  extractBodyImageSrcs,
+  withSyncedBodyImages,
+} from "@/lib/content/insightHtml";
 import type { EventPost } from "@/lib/content/types";
 import type { Locale } from "@/lib/i18n/locale";
 
@@ -30,6 +35,14 @@ function bodyKeyFor(locale: Locale): keyof EventPost {
   return "body";
 }
 
+function sharedImages(post: EventPost): string[] {
+  const en = extractBodyImageSrcs(post.body || "");
+  if (en.length) return en;
+  const km = extractBodyImageSrcs(post.bodyKm || "");
+  if (km.length) return km;
+  return extractBodyImageSrcs(post.bodyZh || "");
+}
+
 const TITLE_MAX = 120;
 const SUMMARY_MAX = 280;
 
@@ -47,13 +60,35 @@ export default function AdminEventDetailEditor({
   const summaryValue = String(
     post[summaryKey] || (editLocale === "en" ? post.summary : "")
   );
-  const bodyValue = String(
-    post[bodyKey] || (editLocale === "en" ? post.body : "") || "<p></p>"
-  );
+  const bodyValue = useMemo(() => {
+    const raw = String(
+      post[bodyKey] || (editLocale === "en" ? post.body : "") || "<p></p>"
+    );
+    return withSyncedBodyImages(raw, sharedImages(post));
+  }, [bodyKey, editLocale, post]);
   const cover = post.coverImage || post.image || "";
 
   function patch<K extends keyof EventPost>(key: K, value: EventPost[K]) {
     onChange((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function patchBody(html: string) {
+    const images = extractBodyImageSrcs(html);
+    onChange((prev) => ({
+      ...prev,
+      body:
+        editLocale === "en"
+          ? html
+          : withSyncedBodyImages(prev.body || "<p></p>", images),
+      bodyKm:
+        editLocale === "km"
+          ? html
+          : withSyncedBodyImages(prev.bodyKm || "<p></p>", images),
+      bodyZh:
+        editLocale === "zh"
+          ? html
+          : withSyncedBodyImages(prev.bodyZh || "<p></p>", images),
+    }));
   }
 
   return (
@@ -195,9 +230,7 @@ export default function AdminEventDetailEditor({
                 key={`${post.id}-${editLocale}`}
                 content={bodyValue}
                 placeholder="Write the event details…"
-                onChange={(html) =>
-                  patch(bodyKey, html as EventPost[typeof bodyKey])
-                }
+                onChange={patchBody}
               />
             </div>
           </div>

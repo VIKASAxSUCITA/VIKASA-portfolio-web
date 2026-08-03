@@ -99,7 +99,11 @@ export default function ServiceDetailView({
   const body = readLocalized(service.body, locale);
   const related = allServices.filter((item) => item.slug !== service.slug);
 
-  const galleryImages = useMemo(() => extractBodyImageSrcs(body), [body]);
+  const galleryImages = useMemo(() => {
+    const local = extractBodyImageSrcs(body);
+    if (local.length) return local;
+    return extractBodyImageSrcs(readLocalized(service.body, "en"));
+  }, [body, service.body]);
   const proseHtml = useMemo(() => stripImagesFromBodyHtml(body), [body]);
 
   function patchLocalized(

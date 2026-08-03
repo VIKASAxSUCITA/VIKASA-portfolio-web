@@ -61,10 +61,11 @@ export default function InsightDetailsBody({
   const titleKey = titleKeyFor(locale);
   const bodyKey = bodyKeyFor(locale);
 
-  const galleryImages = useMemo(
-    () => extractBodyImageSrcs(bodyHtml),
-    [bodyHtml]
-  );
+  const galleryImages = useMemo(() => {
+    const local = extractBodyImageSrcs(bodyHtml);
+    if (local.length) return local;
+    return extractBodyImageSrcs(insightText(post, "bodyHtml", "en"));
+  }, [bodyHtml, post]);
   const proseHtml = useMemo(
     () => stripImagesFromBodyHtml(bodyHtml),
     [bodyHtml]

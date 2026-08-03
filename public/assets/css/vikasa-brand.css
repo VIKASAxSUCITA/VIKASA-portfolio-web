@@ -1000,9 +1000,76 @@
   width: 100%;
   max-width: 100%;
   height: auto;
-  margin: 28px 0;
+  margin: 0;
   border-radius: 12px;
   object-fit: cover;
+}
+
+.insight-rte-image-wrap {
+  display: block;
+  margin: 28px 0;
+}
+
+.insight-rte-image-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #efe8e1;
+}
+
+.insight-rte-image-wrap.is-selected .insight-rte-image-frame {
+  outline: 2px solid rgba(94, 48, 35, 0.35);
+  outline-offset: 2px;
+}
+
+.insight-rte-image-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: flex;
+  gap: 0.4rem;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.insight-rte-image-frame:hover .insight-rte-image-actions,
+.insight-rte-image-wrap.is-selected .insight-rte-image-actions,
+.insight-rte-image-frame:focus-within .insight-rte-image-actions {
+  opacity: 1;
+}
+
+.insight-rte-image-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 0.7rem;
+  border: 0;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #1a1210;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  cursor: default;
+}
+
+button.insight-rte-image-chip {
+  cursor: pointer;
+}
+
+button.insight-rte-image-chip:hover:not(:disabled) {
+  background: #fff;
+}
+
+button.insight-rte-image-chip:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.insight-rte-image-chip.is-danger {
+  color: #b42318;
 }
 
 .insight-rte {
@@ -3218,55 +3285,100 @@ button.admin-article-image-chip {
   background: rgba(94, 48, 35, 0.05);
 }
 
-/* Admin TipTap: body images as compact 3-up thumbnails */
+/* Admin TipTap: body images as compact 3-up thumbnails (grid — TipTap block
+   node views ignore inline-block in contenteditable). */
+.admin-composer--embedded .admin-composer-editor .ProseMirror {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 0.7rem;
+  row-gap: 0.7rem;
+  align-items: start;
+}
+
+.admin-composer--embedded .admin-composer-editor .ProseMirror > p,
+.admin-composer--embedded .admin-composer-editor .ProseMirror > h2,
+.admin-composer--embedded .admin-composer-editor .ProseMirror > h3,
+.admin-composer--embedded .admin-composer-editor .ProseMirror > blockquote,
+.admin-composer--embedded .admin-composer-editor .ProseMirror > ul,
+.admin-composer--embedded .admin-composer-editor .ProseMirror > ol,
+.admin-composer--embedded .admin-composer-editor .ProseMirror > hr,
+.admin-composer--embedded .admin-composer-editor .ProseMirror > pre {
+  grid-column: 1 / -1;
+}
+
+.admin-composer--embedded .admin-composer-editor .ProseMirror > p:has(> img:only-child) {
+  grid-column: auto;
+  margin: 0 !important;
+}
+
+.admin-composer--embedded .admin-composer-editor .ProseMirror > .react-renderer.node-image,
+.admin-composer--embedded .admin-composer-editor .ProseMirror > .insight-rte-image-wrap {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  white-space: normal !important;
+}
+
+.admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer.node-image .insight-rte-image-wrap {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-frame {
+  height: 168px;
+}
+
+.admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-wrap img.insight-rte-image,
+.admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer.node-image img,
 .admin-composer--embedded .admin-composer-editor .ProseMirror img.insight-rte-image,
-.admin-composer--embedded .admin-composer-editor .ProseMirror img {
-  display: inline-block !important;
-  width: calc(33.333% - 0.65rem) !important;
-  max-width: calc(33.333% - 0.65rem) !important;
-  height: 168px !important;
-  margin: 0.35rem 0.65rem 0.35rem 0 !important;
-  vertical-align: top;
-  border-radius: 10px !important;
-  object-fit: cover !important;
-}
-
-.admin-composer--embedded .admin-composer-editor .ProseMirror p:has(> img:only-child) {
-  display: inline-block;
-  width: calc(33.333% - 0.65rem);
-  max-width: calc(33.333% - 0.65rem);
-  margin: 0.35rem 0.65rem 0.35rem 0;
-  vertical-align: top;
-}
-
-.admin-composer--embedded .admin-composer-editor .ProseMirror p:has(> img:only-child) img {
+.admin-composer--embedded .admin-composer-editor .ProseMirror > p:has(> img:only-child) img {
   display: block !important;
   width: 100% !important;
   max-width: 100% !important;
   height: 168px !important;
   margin: 0 !important;
+  border-radius: 10px !important;
+  object-fit: cover !important;
+}
+
+.admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-actions {
+  top: 8px;
+  right: 8px;
+  left: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  opacity: 1;
+}
+
+.admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-chip {
+  min-height: 26px;
+  max-width: 100%;
+  padding: 0 0.5rem;
+  overflow: hidden;
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (max-width: 900px) {
-  .admin-composer--embedded .admin-composer-editor .ProseMirror img.insight-rte-image,
-  .admin-composer--embedded .admin-composer-editor .ProseMirror img,
-  .admin-composer--embedded .admin-composer-editor .ProseMirror p:has(> img:only-child) {
-    width: calc(50% - 0.45rem) !important;
-    max-width: calc(50% - 0.45rem) !important;
+  .admin-composer--embedded .admin-composer-editor .ProseMirror {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 560px) {
-  .admin-composer--embedded .admin-composer-editor .ProseMirror img.insight-rte-image,
-  .admin-composer--embedded .admin-composer-editor .ProseMirror img,
-  .admin-composer--embedded .admin-composer-editor .ProseMirror p:has(> img:only-child) {
-    width: 100% !important;
-    max-width: 100% !important;
+  .admin-composer--embedded .admin-composer-editor .ProseMirror {
+    grid-template-columns: 1fr;
   }
 
+  .admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-frame,
+  .admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-wrap img.insight-rte-image,
+  .admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer.node-image img,
   .admin-composer--embedded .admin-composer-editor .ProseMirror img.insight-rte-image,
-  .admin-composer--embedded .admin-composer-editor .ProseMirror img,
-  .admin-composer--embedded .admin-composer-editor .ProseMirror p:has(> img:only-child) img {
+  .admin-composer--embedded .admin-composer-editor .ProseMirror > p:has(> img:only-child) img {
     height: 200px !important;
   }
 }

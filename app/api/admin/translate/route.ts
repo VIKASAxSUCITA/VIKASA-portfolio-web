@@ -13,10 +13,25 @@ type TranslateBody = {
 
 type MyMemoryResponse = {
   responseData?: { translatedText?: string };
-  responseStatus?: number;
+  responseStatus?: number | string;
+  responseDetails?: string;
+  quotaFinished?: boolean;
 };
 
 const CHUNK = 420;
+const CHUNK_DELAY_MS = 250;
+
+/** Serialize outbound MyMemory calls so admin clicks don't stampede the free API. */
+let translateQueue: Promise<void> = Promise.resolve();
+
+function enqueueTranslate<T>(task: () => Promise<T>): Promise<T> {
+  const run = translateQueue.then(task, task);
+  translateQueue = run.then(
+    () => undefined,
+    () => undefined
+  );
+  return run;
+}
 
 function splitChunks(text: string): string[] {
   const trimmed = text.trim();
@@ -49,10 +64,20 @@ function splitChunks(text: string): string[] {
   return chunks;
 }
 
+function limitMessage(detail?: string) {
+  const base =
+    "Daily free translation limit reached (MyMemory). Try again later";
+  const tip =
+    "or set MYMEMORY_EMAIL in .env.local for a higher daily quota (50k chars).";
+  if (detail?.trim()) return `${detail.trim()} — ${tip}`;
+  return `${base}, ${tip}`;
+}
+
 async function translateChunk(
   text: string,
   from: Locale,
-  to: Locale
+  to: Locale,
+  attempt = 1
 ): Promise<string> {
   const langMap: Record<Locale, string> = {
     en: "en",
@@ -63,11 +88,21 @@ async function translateChunk(
   const url = new URL("https://api.mymemory.translated.net/get");
   url.searchParams.set("q", text);
   url.searchParams.set("langpair", `${langMap[from]}|${langMap[to]}`);
+  const email = process.env.MYMEMORY_EMAIL?.trim();
+  if (email) url.searchParams.set("de", email);
 
   const res = await fetch(url.toString(), {
     headers: { Accept: "application/json" },
     cache: "no-store",
   });
+
+  if (res.status === 429) {
+    if (attempt < 3) {
+      await new Promise((resolve) => setTimeout(resolve, 800 * attempt));
+      return translateChunk(text, from, to, attempt + 1);
+    }
+    throw new Error(limitMessage("Too many translation requests"));
+  }
 
   if (!res.ok) {
     throw new Error(`Translate request failed (${res.status})`);
@@ -75,11 +110,23 @@ async function translateChunk(
 
   const data = (await res.json()) as MyMemoryResponse;
   const translated = data.responseData?.translatedText?.trim();
+  const status = Number(data.responseStatus);
+  const details = String(data.responseDetails || translated || "");
+
+  if (
+    data.quotaFinished ||
+    status === 429 ||
+    /MYMEMORY WARNING/i.test(details) ||
+    /YOU USED ALL AVAILABLE/i.test(details)
+  ) {
+    throw new Error(limitMessage(details));
+  }
+
   if (!translated) {
     throw new Error("Empty translation response");
   }
 
-  if (/^INVALID\b/i.test(translated) || /MYMEMORY WARNING/i.test(translated)) {
+  if (/^INVALID\b/i.test(translated)) {
     throw new Error(translated);
   }
 
@@ -98,14 +145,16 @@ async function translateOne(
   const chunks = splitChunks(trimmed);
   const out: string[] = [];
   for (let i = 0; i < chunks.length; i += 1) {
-    if (i > 0) await new Promise((resolve) => setTimeout(resolve, 140));
+    if (i > 0) {
+      await new Promise((resolve) => setTimeout(resolve, CHUNK_DELAY_MS));
+    }
     out.push(await translateChunk(chunks[i], from, to));
   }
   return out.join(trimmed.includes("</p>") ? "" : "\n\n");
 }
 
 /**
- * Admin helper: translate English into KM / ZH for Insights + Events.
+ * Admin helper: translate English into KM / ZH.
  * Free MyMemory API — review translations before publishing.
  */
 export async function POST(request: Request) {
@@ -146,13 +195,16 @@ export async function POST(request: Request) {
   }
 
   try {
-    const translations: string[] = [];
-    for (const text of texts) {
-      if (translations.length > 0) {
-        await new Promise((resolve) => setTimeout(resolve, 120));
+    const translations = await enqueueTranslate(async () => {
+      const next: string[] = [];
+      for (const text of texts) {
+        if (next.length > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 180));
+        }
+        next.push(await translateOne(text, from, to as Locale));
       }
-      translations.push(await translateOne(text, from, to as Locale));
-    }
+      return next;
+    });
 
     return NextResponse.json({
       from,
@@ -163,6 +215,10 @@ export async function POST(request: Request) {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Translation failed";
-    return NextResponse.json({ error: message }, { status: 502 });
+    const limited = /limit|429|MYMEMORY WARNING|TOO MANY/i.test(message);
+    return NextResponse.json(
+      { error: message },
+      { status: limited ? 429 : 502 }
+    );
   }
 }

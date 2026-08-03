@@ -9,6 +9,10 @@ import { usePageEditor } from "@/app/components/admin/usePageEditor";
 import AutoTranslateButton from "@/app/components/i18n/AutoTranslateButton";
 import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
 import { createEmptyEvent } from "@/lib/content/events";
+import {
+  extractBodyImageSrcs,
+  withSyncedBodyImages,
+} from "@/lib/content/insightHtml";
 import { applyUploadedBlobCache } from "@/lib/content/pendingImages";
 import type { EventPost } from "@/lib/content/types";
 import type { Locale } from "@/lib/i18n/locale";
@@ -149,12 +153,21 @@ export default function AdminEventEditorClient({ postId }: Props) {
               onTranslated={(target, values) => {
                 const [titleVal, summaryVal, bodyVal] = values;
                 patchDraft((prev) => {
+                  const images = extractBodyImageSrcs(prev.body || "");
+                  const translatedBody = withSyncedBodyImages(
+                    bodyVal ?? "",
+                    images
+                  );
                   if (target === "km") {
                     return {
                       ...prev,
                       titleKm: titleVal ?? prev.titleKm,
                       summaryKm: summaryVal ?? prev.summaryKm,
-                      bodyKm: bodyVal ?? prev.bodyKm,
+                      bodyKm: translatedBody,
+                      bodyZh: withSyncedBodyImages(
+                        prev.bodyZh || "<p></p>",
+                        images
+                      ),
                     };
                   }
                   if (target === "zh") {
@@ -162,7 +175,11 @@ export default function AdminEventEditorClient({ postId }: Props) {
                       ...prev,
                       titleZh: titleVal ?? prev.titleZh,
                       summaryZh: summaryVal ?? prev.summaryZh,
-                      bodyZh: bodyVal ?? prev.bodyZh,
+                      bodyZh: translatedBody,
+                      bodyKm: withSyncedBodyImages(
+                        prev.bodyKm || "<p></p>",
+                        images
+                      ),
                     };
                   }
                   return prev;

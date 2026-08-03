@@ -3,10 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { EditorContent, useEditor, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { stageImageFile } from "@/lib/content/pendingImages";
+import {
+  InsightEditableImage,
+  insertEditorImage,
+} from "@/app/components/insights/InsightEditableImage";
 
 type InsightRichTextEditorProps = {
   content: string;
@@ -72,7 +75,7 @@ export function InsightRichTextToolbar({
     if (!file) return;
     try {
       const src = await stageImageFile(file);
-      activeEditor.chain().focus().setImage({ src }).run();
+      insertEditorImage(activeEditor, src);
     } catch (error) {
       console.error(error);
       window.alert(
@@ -170,7 +173,7 @@ export default function InsightRichTextEditor({
       StarterKit.configure({
         heading: { levels: [2, 3] },
       }),
-      Image.configure({
+      InsightEditableImage.configure({
         HTMLAttributes: {
           class: "insight-rte-image",
         },
@@ -220,7 +223,7 @@ export default function InsightRichTextEditor({
     if (!file || !editor) return;
     try {
       const src = await stageImageFile(file);
-      editor.chain().focus().setImage({ src }).run();
+      insertEditorImage(editor, src);
     } catch (error) {
       console.error(error);
       window.alert(
