@@ -35,10 +35,10 @@ export function createEmptyInsight(): InsightPost {
   const stamp = Date.now().toString(36);
   return {
     id: `new_insight_${stamp}`,
-    title: "New Insight",
+    title: "",
     titleKm: "",
     titleZh: "",
-    image: "/assets/img/blog/1.jpg",
+    image: "",
     category: "Insight",
     author: "VIKASA",
     quote: "",

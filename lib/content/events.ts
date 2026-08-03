@@ -11,11 +11,11 @@ export function createEmptyEvent(): EventPost {
 
   return {
     id: `new_event_${stamp}`,
-    title: "New Event",
+    title: "",
     titleKm: "",
     titleZh: "",
-    coverImage: "/assets/img/blog/1.jpg",
-    image: "/assets/img/blog/2.jpg",
+    coverImage: "",
+    image: "",
     kind: "Event",
     startsAt: startsAt.toISOString(),
     endsAt: "",

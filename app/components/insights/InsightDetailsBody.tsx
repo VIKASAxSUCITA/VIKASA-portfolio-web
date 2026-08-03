@@ -86,32 +86,6 @@ export default function InsightDetailsBody({
           <div className="insight-article-inner">
             <header className="insight-article-header">
               <div className="insight-article-meta">
-                {edit ? (
-                  <EditableField
-                    as="span"
-                    className="insight-article-category"
-                    value={post.category}
-                    edit={{
-                      onChange: (category) => patch("category", category),
-                    }}
-                    label="Insight category"
-                  />
-                ) : post.category ? (
-                  <span className="insight-article-category">
-                    {post.category}
-                  </span>
-                ) : null}
-                {edit ? (
-                  <EditableField
-                    as="span"
-                    className="insight-article-author"
-                    value={post.author}
-                    edit={{ onChange: (author) => patch("author", author) }}
-                    label="Insight author"
-                  />
-                ) : post.author ? (
-                  <span className="insight-article-author">{post.author}</span>
-                ) : null}
                 {dateLabel ? (
                   <span className="insight-article-date">{dateLabel}</span>
                 ) : null}
@@ -209,10 +183,6 @@ export default function InsightDetailsBody({
                       </a>
                       <div className="insight-card-body">
                         <div className="insight-card-meta">
-                          {item.category ? <span>{item.category}</span> : null}
-                          {item.category && itemDate ? (
-                            <span aria-hidden>·</span>
-                          ) : null}
                           {itemDate ? <span>{itemDate}</span> : null}
                         </div>
                         <h3>

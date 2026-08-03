@@ -2,7 +2,7 @@
 
 import AdminGuard from "@/app/components/admin/AdminGuard";
 import AdminShell from "@/app/components/admin/AdminShell";
-import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
+import { usePageEditor } from "@/app/components/admin/usePageEditor";
 import { stageImageFile } from "@/lib/content/pendingImages";
 import type { AboutContent } from "@/lib/content/types";
 
@@ -24,7 +24,7 @@ function LogoGrid({
   disabled?: boolean;
 }) {
   return (
-    <section className="admin-logos-section">
+    <section className="admin-cms-panel admin-logos-section">
       <div className="admin-logos-head">
         <div>
           <h2 className="heading text-28">{title}</h2>
@@ -47,11 +47,12 @@ function LogoGrid({
       </div>
 
       {items.length === 0 ? (
-        <p className="text text-16 admin-logos-empty">No logos yet.</p>
+        <p className="admin-cms-empty">No logos yet.</p>
       ) : (
         <ul className="admin-logos-grid list-unstyled">
           {items.map((item) => (
             <li key={item.id} className="admin-logos-card">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={item.logo} alt={item.name} loading="lazy" />
               <button
                 type="button"
@@ -70,15 +71,8 @@ function LogoGrid({
 }
 
 export default function AdminLogosPage() {
-  const {
-    content,
-    loading,
-    saving,
-    dirty,
-    message,
-    update,
-    save,
-  } = usePageWithFooterEditor("about");
+  const { content, loading, saving, dirty, message, update, save } =
+    usePageEditor("about");
 
   const shellProps = {
     pageTitle: "Partners & Clients",
@@ -106,7 +100,7 @@ export default function AdminLogosPage() {
 
   function handleDelete(group: LogoGroup, id: string) {
     const confirmed = window.confirm(
-      "Remove this logo? Click Save in the top bar to publish."
+      "Remove this logo? Click Save to publish."
     );
     if (!confirmed) return;
     update((prev) => ({
@@ -119,7 +113,7 @@ export default function AdminLogosPage() {
     return (
       <AdminGuard>
         <AdminShell {...shellProps}>
-          <p className="admin-main text text-16">Loading logos…</p>
+          <p className="admin-cms admin-cms-empty">Loading logos…</p>
         </AdminShell>
       </AdminGuard>
     );
@@ -128,10 +122,9 @@ export default function AdminLogosPage() {
   return (
     <AdminGuard>
       <AdminShell {...shellProps}>
-        <div className="admin-main admin-logos-page">
-          <p className="text text-16 admin-logos-intro">
-            Image-only Create and Delete. No edit — upload a new image or remove
-            an existing one, then Save.
+        <div className="admin-cms admin-logos-page">
+          <p className="admin-logos-intro">
+            Upload or remove partner and client logos, then Save.
           </p>
           <LogoGrid
             title="Partners"

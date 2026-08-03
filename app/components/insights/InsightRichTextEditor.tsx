@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { useEffect, useRef, useState } from "react";
+import { EditorContent, useEditor, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -13,6 +13,10 @@ type InsightRichTextEditorProps = {
   onChange: (html: string) => void;
   editable?: boolean;
   placeholder?: string;
+  /** When false, render body only — use InsightRichTextToolbar separately. */
+  showToolbar?: boolean;
+  toolbarClassName?: string;
+  onReady?: (editor: Editor | null) => void;
 };
 
 function ToolbarButton({
@@ -39,11 +43,122 @@ function ToolbarButton({
   );
 }
 
+export function InsightRichTextToolbar({
+  editor,
+  className = "",
+}: {
+  editor: Editor | null;
+  className?: string;
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    if (!editor) return;
+    const refresh = () => setTick((n) => n + 1);
+    editor.on("selectionUpdate", refresh);
+    editor.on("transaction", refresh);
+    return () => {
+      editor.off("selectionUpdate", refresh);
+      editor.off("transaction", refresh);
+    };
+  }, [editor]);
+
+  if (!editor) return null;
+
+  const activeEditor = editor;
+
+  async function handleImageFile(file: File | undefined) {
+    if (!file) return;
+    try {
+      const src = await stageImageFile(file);
+      activeEditor.chain().focus().setImage({ src }).run();
+    } catch (error) {
+      console.error(error);
+      window.alert(
+        error instanceof Error
+          ? error.message
+          : "Could not process that image. Try another file."
+      );
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
+
+  function setLink() {
+    const previous = activeEditor.getAttributes("link").href as
+      | string
+      | undefined;
+    const next = window.prompt("Link URL", previous || "https://");
+    if (next === null) return;
+    if (next.trim() === "") {
+      activeEditor.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+    activeEditor
+      .chain()
+      .focus()
+      .extendMarkRange("link")
+      .setLink({ href: next.trim() })
+      .run();
+  }
+
+  return (
+    <div
+      className={`insight-rte-toolbar ${className}`.trim()}
+      role="toolbar"
+      aria-label="Formatting"
+    >
+      <ToolbarButton
+        label="Mid Image"
+        onClick={() => fileInputRef.current?.click()}
+      />
+      <ToolbarButton
+        label="Quote"
+        active={activeEditor.isActive("blockquote")}
+        onClick={() => activeEditor.chain().focus().toggleBlockquote().run()}
+      />
+      <ToolbarButton
+        label="Subtitle"
+        active={activeEditor.isActive("heading", { level: 2 })}
+        onClick={() =>
+          activeEditor.chain().focus().toggleHeading({ level: 2 }).run()
+        }
+      />
+      <ToolbarButton
+        label="Link"
+        active={activeEditor.isActive("link")}
+        onClick={setLink}
+      />
+      <ToolbarButton
+        label="i"
+        active={activeEditor.isActive("italic")}
+        onClick={() => activeEditor.chain().focus().toggleItalic().run()}
+      />
+      <ToolbarButton
+        label="B"
+        active={activeEditor.isActive("bold")}
+        onClick={() => activeEditor.chain().focus().toggleBold().run()}
+      />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={(event) => void handleImageFile(event.target.files?.[0])}
+      />
+    </div>
+  );
+}
+
 export default function InsightRichTextEditor({
   content,
   onChange,
   editable = true,
   placeholder = "Write your insight article…",
+  showToolbar = true,
+  toolbarClassName = "",
+  onReady,
 }: InsightRichTextEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const lastEmitted = useRef(content);
@@ -82,6 +197,11 @@ export default function InsightRichTextEditor({
       },
     },
   });
+
+  useEffect(() => {
+    onReady?.(editor);
+    return () => onReady?.(null);
+  }, [editor, onReady]);
 
   useEffect(() => {
     if (!editor) return;
@@ -140,8 +260,12 @@ export default function InsightRichTextEditor({
 
   return (
     <div className={`insight-rte${editable ? "" : " is-readonly"}`}>
-      {editable ? (
-        <div className="insight-rte-toolbar" role="toolbar" aria-label="Formatting">
+      {editable && showToolbar ? (
+        <div
+          className={`insight-rte-toolbar ${toolbarClassName}`.trim()}
+          role="toolbar"
+          aria-label="Formatting"
+        >
           <ToolbarButton
             label="Bold"
             active={editor.isActive("bold")}
@@ -181,7 +305,11 @@ export default function InsightRichTextEditor({
             active={editor.isActive("orderedList")}
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
           />
-          <ToolbarButton label="Link" active={editor.isActive("link")} onClick={setLink} />
+          <ToolbarButton
+            label="Link"
+            active={editor.isActive("link")}
+            onClick={setLink}
+          />
           <ToolbarButton
             label="Image"
             onClick={() => fileInputRef.current?.click()}

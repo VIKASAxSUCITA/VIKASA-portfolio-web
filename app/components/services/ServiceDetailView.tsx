@@ -1,12 +1,18 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   EditableField,
   EditableMedia,
   ArrowIcon,
 } from "@/app/components/admin/EditableField";
 import { useLocale } from "@/app/components/i18n/LocaleProvider";
+import InsightImageGallery from "@/app/components/insights/InsightImageGallery";
 import InsightRichTextEditor from "@/app/components/insights/InsightRichTextEditor";
+import {
+  extractBodyImageSrcs,
+  stripImagesFromBodyHtml,
+} from "@/lib/content/insightHtml";
 import {
   SERVICE_DETAILS,
   type ServiceDetail,
@@ -92,6 +98,9 @@ export default function ServiceDetailView({
   const description = readLocalized(service.description, locale);
   const body = readLocalized(service.body, locale);
   const related = allServices.filter((item) => item.slug !== service.slug);
+
+  const galleryImages = useMemo(() => extractBodyImageSrcs(body), [body]);
+  const proseHtml = useMemo(() => stripImagesFromBodyHtml(body), [body]);
 
   function patchLocalized(
     field: "title" | "description" | "body",
@@ -213,22 +222,32 @@ export default function ServiceDetailView({
                     onChange={(html) => patchLocalized("body", html)}
                   />
                 </div>
-              ) : /<[a-z][\s\S]*>/i.test(body) ? (
-                <div
-                  className="text text-18 insight-rich-body"
-                  dangerouslySetInnerHTML={{ __html: body }}
-                />
               ) : (
-                <p className="text text-18">{body}</p>
+                <>
+                  {/<[a-z][\s\S]*>/i.test(proseHtml) ? (
+                    <div
+                      className="text text-18 insight-rich-body"
+                      dangerouslySetInnerHTML={{ __html: proseHtml }}
+                    />
+                  ) : (
+                    <p className="text text-18">{proseHtml}</p>
+                  )}
+                  {galleryImages.length > 0 ? (
+                    <div className="service-detail-gallery">
+                      <InsightImageGallery
+                        images={galleryImages}
+                        altPrefix={title || "Service"}
+                      />
+                    </div>
+                  ) : null}
+                  <a
+                    href="/contact"
+                    className="button button--secondary vikasa-btn-ghost vikasa-btn-ghost--espresso"
+                  >
+                    {t("cta", locale)}
+                  </a>
+                </>
               )}
-              {!edit ? (
-                <a
-                  href="/contact"
-                  className="button button--secondary vikasa-btn-ghost vikasa-btn-ghost--espresso"
-                >
-                  {t("cta", locale)}
-                </a>
-              ) : null}
             </div>
             <aside
               className="service-detail-aside"

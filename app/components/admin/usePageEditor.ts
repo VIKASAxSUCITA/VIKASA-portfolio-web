@@ -13,6 +13,7 @@ import {
 import {
   deleteRemovedBlobs,
   resolvePendingImages,
+  applyUploadedBlobCache,
 } from "@/lib/content/pendingImages";
 import type { PageContentMap, PageId } from "@/lib/content/types";
 
@@ -89,6 +90,8 @@ export function usePageEditor<T extends PageId>(pageId: T) {
         return resolved;
       } catch (error) {
         console.error(error);
+        // Keep any images that already uploaded so retry doesn't ask to re-pick them.
+        setContent(applyUploadedBlobCache(snapshot));
         const text =
           error instanceof Error ? error.message : "Save failed.";
         setMessage(text);
@@ -104,6 +107,12 @@ export function usePageEditor<T extends PageId>(pageId: T) {
     await saveSnapshot(content);
   }, [content, saveSnapshot]);
 
+  const discard = useCallback(() => {
+    setContent(savedRef.current);
+    setDirty(false);
+    setMessage("");
+  }, []);
+
   return {
     content,
     loading,
@@ -113,5 +122,6 @@ export function usePageEditor<T extends PageId>(pageId: T) {
     update,
     save,
     saveSnapshot,
+    discard,
   };
 }

@@ -10,6 +10,7 @@ type EditableTextProps = {
   label?: string;
   id?: string;
   autoFocus?: boolean;
+  placeholder?: string;
 };
 
 const EditableText = forwardRef<
@@ -24,6 +25,7 @@ const EditableText = forwardRef<
     label,
     id,
     autoFocus = false,
+    placeholder,
   },
   ref
 ) {
@@ -31,6 +33,7 @@ const EditableText = forwardRef<
     id,
     className: `admin-editable-text ${multiline ? "is-multiline" : ""} ${className}`.trim(),
     value,
+    placeholder,
     onChange: (
       event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => onChange(event.target.value),

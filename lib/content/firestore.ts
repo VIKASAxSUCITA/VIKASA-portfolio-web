@@ -1,10 +1,10 @@
 import {
   doc,
-  getDoc,
   setDoc,
   serverTimestamp,
   getFirebaseDb,
 } from "@/lib/firebase/firestore";
+import { getDocSafe } from "@/lib/firebase/safeRead";
 import {
   defaultAboutContent,
   defaultEventsContent,
@@ -77,27 +77,32 @@ export async function loadPageContent<T extends PageId>(
     return (await loadEventsContent()) as PageContentMap[T];
   }
 
-  const snap = await getDoc(doc(getFirebaseDb(), "pages", pageId));
-  if (!snap.exists()) {
+  try {
+    const snap = await getDocSafe(doc(getFirebaseDb(), "pages", pageId));
+    if (!snap.exists()) {
+      return getDefaultContent(pageId);
+    }
+    const data = snap.data()?.content as PageContentMap[T] | undefined;
+    if (!data) return getDefaultContent(pageId);
+    if (pageId === "home") {
+      return mergeHomeContent(data as Partial<HomeContent>) as PageContentMap[T];
+    }
+    if (pageId === "about") {
+      return mergeAboutContent(data as Partial<AboutContent>) as PageContentMap[T];
+    }
+    if (pageId === "footer") {
+      return mergeFooterContent(data as Partial<FooterContent>) as PageContentMap[T];
+    }
+    if (pageId === "services") {
+      return normalizeServicesContent(
+        data as Partial<PageContentMap["services"]>
+      ) as PageContentMap[T];
+    }
+    return data;
+  } catch (error) {
+    console.error(`loadPageContent(${pageId}) failed; using defaults.`, error);
     return getDefaultContent(pageId);
   }
-  const data = snap.data()?.content as PageContentMap[T] | undefined;
-  if (!data) return getDefaultContent(pageId);
-  if (pageId === "home") {
-    return mergeHomeContent(data as Partial<HomeContent>) as PageContentMap[T];
-  }
-  if (pageId === "about") {
-    return mergeAboutContent(data as Partial<AboutContent>) as PageContentMap[T];
-  }
-  if (pageId === "footer") {
-    return mergeFooterContent(data as Partial<FooterContent>) as PageContentMap[T];
-  }
-  if (pageId === "services") {
-    return normalizeServicesContent(
-      data as Partial<PageContentMap["services"]>
-    ) as PageContentMap[T];
-  }
-  return data;
 }
 
 export async function savePageContent<T extends PageId>(

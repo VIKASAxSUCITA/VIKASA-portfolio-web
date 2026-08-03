@@ -2,14 +2,13 @@ import {
   collection,
   deleteField,
   doc,
-  getDoc,
-  getDocs,
   serverTimestamp,
   setDoc,
   updateDoc,
   writeBatch,
   getFirebaseDb,
 } from "@/lib/firebase/firestore";
+import { getDocSafe, getDocsSafe } from "@/lib/firebase/safeRead";
 import { defaultInsightsContent } from "./defaults";
 import {
   mergeInsightsContent,
@@ -91,7 +90,7 @@ function fromLegacyPosts(meta: InsightsPageMeta | undefined): InsightPost[] {
 }
 
 async function loadPostsFromEntries(): Promise<InsightPost[]> {
-  const snap = await getDocs(entriesCollection());
+  const snap = await getDocsSafe(entriesCollection());
   return snap.docs.map((item) =>
     normalizeInsightPost({
       id: item.id,
@@ -101,7 +100,7 @@ async function loadPostsFromEntries(): Promise<InsightPost[]> {
 }
 
 async function loadPostsFromLegacyTopLevel(): Promise<InsightPost[]> {
-  const snap = await getDocs(collection(getFirebaseDb(), LEGACY_TOP_LEVEL));
+  const snap = await getDocsSafe(collection(getFirebaseDb(), LEGACY_TOP_LEVEL));
   return snap.docs.map((item) =>
     normalizeInsightPost({
       id: item.id,
@@ -112,64 +111,77 @@ async function loadPostsFromLegacyTopLevel(): Promise<InsightPost[]> {
 
 /** Full insights payload used by admin + public listing pages. */
 export async function loadInsightsContent(): Promise<InsightsContent> {
-  const pageSnap = await getDoc(doc(getFirebaseDb(), ...INSIGHTS_PAGE_REF));
-  const meta = (pageSnap.exists() ? pageSnap.data()?.content : undefined) as
-    | InsightsPageMeta
-    | undefined;
+  try {
+    const pageSnap = await getDocSafe(doc(getFirebaseDb(), ...INSIGHTS_PAGE_REF));
+    const meta = (pageSnap.exists() ? pageSnap.data()?.content : undefined) as
+      | InsightsPageMeta
+      | undefined;
 
-  const entryPosts = await loadPostsFromEntries();
+    const entryPosts = await loadPostsFromEntries();
 
-  // Managed catalog: trust entries even when empty (deletes must stick).
-  if (meta?.entriesReady) {
+    // Managed catalog: trust entries even when empty (deletes must stick).
+    if (meta?.entriesReady) {
+      return mergeInsightsContent({
+        heroTitle: asLocalized(meta.heroTitle),
+        heading: asLocalized(meta.heading),
+        posts: sortInsightsByLatest(entryPosts),
+      });
+    }
+
+    let posts = entryPosts;
+
+    if (posts.length === 0) {
+      posts = await loadPostsFromLegacyTopLevel();
+    }
+
+    if (posts.length === 0) {
+      posts = fromLegacyPosts(meta);
+    }
+
+    if (posts.length === 0) {
+      return structuredClone(defaultInsightsContent);
+    }
+
     return mergeInsightsContent({
-      heroTitle: asLocalized(meta.heroTitle),
-      heading: asLocalized(meta.heading),
-      posts: sortInsightsByLatest(entryPosts),
+      heroTitle: asLocalized(meta?.heroTitle),
+      heading: asLocalized(meta?.heading),
+      posts: sortInsightsByLatest(posts),
     });
-  }
-
-  let posts = entryPosts;
-
-  if (posts.length === 0) {
-    posts = await loadPostsFromLegacyTopLevel();
-  }
-
-  if (posts.length === 0) {
-    posts = fromLegacyPosts(meta);
-  }
-
-  if (posts.length === 0) {
+  } catch (error) {
+    console.error("loadInsightsContent failed; using defaults.", error);
     return structuredClone(defaultInsightsContent);
   }
-
-  return mergeInsightsContent({
-    heroTitle: asLocalized(meta?.heroTitle),
-    heading: asLocalized(meta?.heading),
-    posts: sortInsightsByLatest(posts),
-  });
 }
 
 export async function loadInsightById(
   id: string
 ): Promise<InsightPost | null> {
-  const snap = await getDoc(entryDoc(id));
-  if (snap.exists()) {
-    return normalizeInsightPost({
-      id: snap.id,
-      ...(snap.data() as Partial<InsightPost>),
-    });
-  }
+  try {
+    const snap = await getDocSafe(entryDoc(id));
+    if (snap.exists()) {
+      return normalizeInsightPost({
+        id: snap.id,
+        ...(snap.data() as Partial<InsightPost>),
+      });
+    }
 
-  const legacy = await getDoc(doc(getFirebaseDb(), LEGACY_TOP_LEVEL, id));
-  if (legacy.exists()) {
-    return normalizeInsightPost({
-      id: legacy.id,
-      ...(legacy.data() as Partial<InsightPost>),
-    });
-  }
+    const legacy = await getDocSafe(doc(getFirebaseDb(), LEGACY_TOP_LEVEL, id));
+    if (legacy.exists()) {
+      return normalizeInsightPost({
+        id: legacy.id,
+        ...(legacy.data() as Partial<InsightPost>),
+      });
+    }
 
-  const all = await loadInsightsContent();
-  return all.posts.find((post) => post.id === id) ?? null;
+    const all = await loadInsightsContent();
+    return all.posts.find((post) => post.id === id) ?? null;
+  } catch (error) {
+    console.error("loadInsightById failed.", error);
+    const fallback = defaultInsightsContent.posts.find((post) => post.id === id);
+    return fallback
+      ? normalizeInsightPost(fallback)
+      : null;
+  }
 }
 
 export async function loadLatestInsightPosts(
@@ -206,7 +218,7 @@ export async function saveInsightsContent(content: InsightsContent) {
     // Field may not exist yet.
   }
 
-  const existing = await getDocs(entriesCollection());
+  const existing = await getDocsSafe(entriesCollection());
   const keepIds = new Set(content.posts.map((post) => post.id));
   const batch = writeBatch(db);
 
@@ -223,7 +235,7 @@ export async function saveInsightsContent(content: InsightsContent) {
   await batch.commit();
 
   try {
-    const legacySnap = await getDocs(collection(db, LEGACY_TOP_LEVEL));
+    const legacySnap = await getDocsSafe(collection(db, LEGACY_TOP_LEVEL));
     if (!legacySnap.empty) {
       const legacyBatch = writeBatch(db);
       for (const item of legacySnap.docs) {

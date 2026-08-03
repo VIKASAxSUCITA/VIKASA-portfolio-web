@@ -12,7 +12,6 @@ import HomeInsights from "@/app/components/home/HomeInsights";
 import HomeEvents from "@/app/components/home/HomeEvents";
 import HomeContact from "@/app/components/home/HomeContact";
 import { usePageEditor } from "@/app/components/admin/usePageEditor";
-import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
 import { getLatestEvents } from "@/lib/content/events";
 import { getLatestInsights } from "@/lib/content/insights";
 import type {
@@ -30,9 +29,7 @@ export default function AdminHomeEditor() {
     message,
     update,
     save,
-    footerContent,
-    footerUpdate,
-  } = usePageWithFooterEditor("home");
+  } = usePageEditor("home");
 
   const insightsEditor = usePageEditor("insights");
   const eventsEditor = usePageEditor("events");
@@ -85,7 +82,7 @@ export default function AdminHomeEditor() {
   return (
     <AdminGuard>
       <AdminShell {...shellProps}>
-        <AdminSitePreview footer={footerContent} footerUpdate={footerUpdate}>
+        <AdminSitePreview>
           <main>
             <HomeHero content={content.hero} edit={sectionEdit("hero")} />
             <HomeAbout content={content.about} edit={sectionEdit("about")} />

@@ -1,6 +1,8 @@
 import { compressImageFile } from "./compressImage";
 
 const pending = new Map<string, File>();
+/** Successfully uploaded blob: URLs → permanent URLs (kept until Save fully succeeds). */
+const uploadedCache = new Map<string, string>();
 /** Vercel Blob URLs replaced in the editor; deleted after a successful Save. */
 const pendingDeletes = new Set<string>();
 
@@ -18,6 +20,7 @@ export function discardPendingImage(url: string) {
     URL.revokeObjectURL(url);
     pending.delete(url);
   }
+  uploadedCache.delete(url);
 }
 
 export function isVercelBlobUrl(url: string) {
@@ -74,18 +77,57 @@ async function uploadFile(file: File): Promise<string> {
   return data.url;
 }
 
-async function walk(value: unknown): Promise<unknown> {
+async function resolveBlobUrl(blobUrl: string): Promise<string> {
+  const cached = uploadedCache.get(blobUrl);
+  if (cached) return cached;
+
+  const file = pending.get(blobUrl);
+  if (!file) {
+    throw new Error(
+      "A new image preview is missing. Choose the image again."
+    );
+  }
+
+  const url = await uploadFile(file);
+  uploadedCache.set(blobUrl, url);
+  return url;
+}
+
+function replaceCachedBlobs(value: unknown): unknown {
   if (typeof value === "string") {
     if (value.startsWith("blob:")) {
-      const file = pending.get(value);
-      if (!file) {
-        throw new Error(
-          "A new image preview is missing. Choose the image again."
-        );
+      return uploadedCache.get(value) ?? value;
+    }
+    if (value.includes("blob:") && uploadedCache.size > 0) {
+      let next = value;
+      for (const [blobUrl, permanent] of uploadedCache) {
+        if (next.includes(blobUrl)) {
+          next = next.split(blobUrl).join(permanent);
+        }
       }
-      const url = await uploadFile(file);
-      discardPendingImage(value);
-      return url;
+      return next;
+    }
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map(replaceCachedBlobs);
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, child]) => [
+        key,
+        replaceCachedBlobs(child),
+      ])
+    );
+  }
+  return value;
+}
+
+async function walk(value: unknown, used: Set<string>): Promise<unknown> {
+  if (typeof value === "string") {
+    if (value.startsWith("blob:")) {
+      used.add(value);
+      return resolveBlobUrl(value);
     }
 
     // TipTap bodyHtml (and similar) can embed blob: image URLs inside HTML.
@@ -96,7 +138,8 @@ async function walk(value: unknown): Promise<unknown> {
       const unique = [...new Set(blobUrls)];
       let next = value;
       for (const blobUrl of unique) {
-        const uploaded = (await walk(blobUrl)) as string;
+        used.add(blobUrl);
+        const uploaded = await resolveBlobUrl(blobUrl);
         next = next.split(blobUrl).join(uploaded);
       }
       return next;
@@ -106,24 +149,55 @@ async function walk(value: unknown): Promise<unknown> {
   }
 
   if (Array.isArray(value)) {
-    return Promise.all(value.map(walk));
+    // Upload sequentially so concurrent puts never collide on the same key.
+    const next: unknown[] = [];
+    for (const item of value) {
+      next.push(await walk(item, used));
+    }
+    return next;
   }
 
   if (value && typeof value === "object") {
-    const entries = await Promise.all(
-      Object.entries(value as Record<string, unknown>).map(
-        async ([key, child]) => [key, await walk(child)] as const
-      )
-    );
-    return Object.fromEntries(entries);
+    const next: Record<string, unknown> = {};
+    for (const [key, child] of Object.entries(
+      value as Record<string, unknown>
+    )) {
+      next[key] = await walk(child, used);
+    }
+    return next;
   }
 
   return value;
 }
 
-/** Upload any local blob: previews, return content with permanent URLs. */
+function finalizeUsedBlobs(used: Set<string>) {
+  for (const blobUrl of used) {
+    discardPendingImage(blobUrl);
+  }
+}
+
+/**
+ * Upload any local blob: previews, return content with permanent URLs.
+ * Keeps local previews until the whole tree finishes, so a failed Save can retry.
+ */
 export async function resolvePendingImages<T>(content: T): Promise<T> {
-  return (await walk(content)) as T;
+  const used = new Set<string>();
+  try {
+    const resolved = (await walk(content, used)) as T;
+    finalizeUsedBlobs(used);
+    return resolved;
+  } catch (error) {
+    // Leave pending files + upload cache so the next Save can continue.
+    throw error;
+  }
+}
+
+/**
+ * Replace any already-uploaded blob: URLs in content with permanent URLs.
+ * Useful after a failed Save so the draft no longer points at lost previews.
+ */
+export function applyUploadedBlobCache<T>(content: T): T {
+  return replaceCachedBlobs(content) as T;
 }
 
 function urlsToDelete(previous: unknown, next: unknown): string[] {

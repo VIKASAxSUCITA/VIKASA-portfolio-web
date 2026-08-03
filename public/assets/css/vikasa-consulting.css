@@ -1262,6 +1262,30 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   border-top: 1px solid var(--vk-line);
 }
 
+.service-detail-gallery {
+  margin: 1.25rem 0 1.5rem;
+  max-width: 100%;
+}
+
+.service-detail-gallery .insight-gallery {
+  margin: 0;
+}
+
+.service-detail-gallery .insight-gallery-frame {
+  border-radius: 12px;
+}
+
+.service-detail-gallery .insight-gallery-slide img {
+  max-height: none;
+  min-height: 360px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.service-detail-copy > .button {
+  margin-top: 0.25rem;
+}
+
 .service-detail-related > .heading {
   margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
   color: var(--vk-espresso);
