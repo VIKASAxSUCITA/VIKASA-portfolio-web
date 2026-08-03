@@ -128,7 +128,7 @@ export default function AdminLogosPage() {
           </p>
           <LogoGrid
             title="Partners"
-            hint="Shown in the About page partners marquee."
+            hint="Shown on the Home and About pages."
             items={content.partners}
             disabled={saving}
             onAdd={(file) => handleAdd("partners", file)}
@@ -136,7 +136,7 @@ export default function AdminLogosPage() {
           />
           <LogoGrid
             title="Clients"
-            hint="Shown in the About page clients marquee."
+            hint="Shown on the Home and About pages."
             items={content.clients}
             disabled={saving}
             onAdd={(file) => handleAdd("clients", file)}
