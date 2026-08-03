@@ -154,14 +154,39 @@ export function mergeEventsContent(
   };
 }
 
-/** Soonest upcoming first; past events after, newest past first. */
+/** Local midnight for calendar-day comparisons. */
+function startOfLocalDay(date = new Date()): number {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  ).getTime();
+}
+
+function eventStartTime(post: EventPost): number {
+  const time = new Date(post.startsAt).getTime();
+  return Number.isNaN(time) ? 0 : time;
+}
+
+/**
+ * Upcoming = starts on/after today (calendar day), or still ongoing (ends after
+ * today started). Past = fully before today.
+ *
+ * Order example (today = day 3):
+ *   starts 1, 2, 4, 10, 25  →  4, 10, 25, 2, 1
+ * Upcoming soonest-first, then past newest-first.
+ */
 export function sortEventsBySchedule(posts: EventPost[]): EventPost[] {
-  const now = Date.now();
+  const today = startOfLocalDay();
   return [...posts].sort((a, b) => {
-    const aTime = new Date(a.startsAt).getTime();
-    const bTime = new Date(b.startsAt).getTime();
-    const aUpcoming = aTime >= now;
-    const bUpcoming = bTime >= now;
+    const aTime = eventStartTime(a);
+    const bTime = eventStartTime(b);
+    const aEnd = a.endsAt ? new Date(a.endsAt).getTime() : NaN;
+    const bEnd = b.endsAt ? new Date(b.endsAt).getTime() : NaN;
+    const aUpcoming =
+      aTime >= today || (!Number.isNaN(aEnd) && aEnd >= today);
+    const bUpcoming =
+      bTime >= today || (!Number.isNaN(bEnd) && bEnd >= today);
 
     if (aUpcoming !== bUpcoming) {
       return aUpcoming ? -1 : 1;
