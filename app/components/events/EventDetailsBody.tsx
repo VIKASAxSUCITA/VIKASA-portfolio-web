@@ -8,6 +8,7 @@ import {
 import LocaleEditTabs from "@/app/components/i18n/LocaleEditTabs";
 import AutoTranslateButton from "@/app/components/i18n/AutoTranslateButton";
 import { useLocale } from "@/app/components/i18n/LocaleProvider";
+import InsightRichTextEditor from "@/app/components/insights/InsightRichTextEditor";
 import {
   eventKindLabel,
   eventText,
@@ -29,6 +30,10 @@ type EventDetailsBodyProps = {
   post: EventPost;
   contact?: EventContactInfo;
   edit?: { onChange: (updater: (prev: EventPost) => EventPost) => void };
+  /** When set, locale tabs are controlled by the parent admin toolbar. */
+  editLocale?: Locale;
+  onEditLocaleChange?: (locale: Locale) => void;
+  hideLocaleBar?: boolean;
 };
 
 function BreadcrumbChevron() {
@@ -66,9 +71,14 @@ export default function EventDetailsBody({
   post,
   contact,
   edit,
+  editLocale: editLocaleProp,
+  onEditLocaleChange,
+  hideLocaleBar = false,
 }: EventDetailsBodyProps) {
   const { locale: siteLocale } = useLocale();
-  const [editLocale, setEditLocale] = useState<Locale>("en");
+  const [editLocaleState, setEditLocaleState] = useState<Locale>("en");
+  const editLocale = editLocaleProp ?? editLocaleState;
+  const setEditLocale = onEditLocaleChange ?? setEditLocaleState;
   const locale = edit ? editLocale : siteLocale;
 
   const displayTitle = eventText(post, "title", locale);
@@ -77,10 +87,6 @@ export default function EventDetailsBody({
 
   const dateLabel = formatEventBadgeDate(post.startsAt, locale);
   const timeRange = formatEventTimeRange(post.startsAt, post.endsAt, locale);
-  const paragraphs = displayBody
-    .split(/\n\s*\n/)
-    .map((part) => part.trim())
-    .filter(Boolean);
 
   const patch = <K extends keyof EventPost>(key: K, value: EventPost[K]) =>
     edit?.onChange((prev) => ({ ...prev, [key]: value }));
@@ -141,7 +147,7 @@ export default function EventDetailsBody({
         </picture>
         <div className="page-banner-content">
           <div className="container text-center">
-            {edit ? (
+            {edit && !hideLocaleBar ? (
               <div className="locale-edit-bar">
                 <LocaleEditTabs
                   locale={editLocale}
@@ -286,23 +292,18 @@ export default function EventDetailsBody({
               ) : null}
 
               {edit ? (
-                <EditableField
-                  as="p"
-                  className="text text-16 event-detail-copy"
-                  value={String(post[bodyKey] || post.body)}
-                  multiline
-                  label="Full details"
-                  edit={{
-                    onChange: (value) =>
-                      patch(bodyKey, value as EventPost[typeof bodyKey]),
-                  }}
+                <InsightRichTextEditor
+                  content={String(post[bodyKey] || post.body)}
+                  placeholder="Write event details…"
+                  onChange={(value) =>
+                    patch(bodyKey, value as EventPost[typeof bodyKey])
+                  }
                 />
               ) : (
-                paragraphs.map((paragraph, index) => (
-                  <p key={index} className="text text-16 event-detail-copy">
-                    {paragraph}
-                  </p>
-                ))
+                <div
+                  className="text text-16 event-detail-copy insight-rich-body"
+                  dangerouslySetInnerHTML={{ __html: displayBody }}
+                />
               )}
             </div>
 

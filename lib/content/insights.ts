@@ -9,12 +9,14 @@ import {
 import {
   buildInsightBodyHtmlFromLegacy,
   insightBodyPlainText,
+  stripCoverImageFromBodyHtml,
 } from "./insightHtml";
 import type { InsightPost, InsightsContent } from "./types";
 
 export {
   buildInsightBodyHtmlFromLegacy,
   insightBodyPlainText,
+  stripCoverImageFromBodyHtml,
 } from "./insightHtml";
 
 export function slugifyInsightName(title: string): string {
@@ -33,10 +35,10 @@ export function createEmptyInsight(): InsightPost {
   const stamp = Date.now().toString(36);
   return {
     id: `new_insight_${stamp}`,
-    title: "New Insight",
+    title: "",
     titleKm: "",
     titleZh: "",
-    image: "/assets/img/blog/1.jpg",
+    image: "",
     category: "Insight",
     author: "VIKASA",
     quote: "",
@@ -69,7 +71,7 @@ export function normalizeInsightPost(
   const sectionTitle = post.sectionTitle ?? "";
   const image = post.image ?? "/assets/img/blog/1.jpg";
 
-  const bodyHtml =
+  const bodyHtmlRaw =
     typeof post.bodyHtml === "string" && post.bodyHtml.trim()
       ? post.bodyHtml
       : buildInsightBodyHtmlFromLegacy({
@@ -77,8 +79,16 @@ export function normalizeInsightPost(
           pairedImages,
           sectionTitle,
           quote,
-          featureImage: image,
         });
+  const bodyHtml = stripCoverImageFromBodyHtml(bodyHtmlRaw, image);
+  const bodyHtmlKm = stripCoverImageFromBodyHtml(
+    post.bodyHtmlKm?.trim() || "",
+    image
+  );
+  const bodyHtmlZh = stripCoverImageFromBodyHtml(
+    post.bodyHtmlZh?.trim() || "",
+    image
+  );
 
   return {
     id: post.id,
@@ -93,8 +103,8 @@ export function normalizeInsightPost(
     paragraphs,
     pairedImages,
     bodyHtml,
-    bodyHtmlKm: post.bodyHtmlKm?.trim() || "",
-    bodyHtmlZh: post.bodyHtmlZh?.trim() || "",
+    bodyHtmlKm,
+    bodyHtmlZh,
     createdAt: post.createdAt ?? "1970-01-01T00:00:00.000Z",
   };
 }
@@ -110,9 +120,10 @@ export function insightText(
     if (locale === "zh" && post.titleZh.trim()) return post.titleZh;
     return post.title;
   }
-  if (locale === "km" && post.bodyHtmlKm.trim()) return post.bodyHtmlKm;
-  if (locale === "zh" && post.bodyHtmlZh.trim()) return post.bodyHtmlZh;
-  return post.bodyHtml;
+  let html = post.bodyHtml;
+  if (locale === "km" && post.bodyHtmlKm.trim()) html = post.bodyHtmlKm;
+  else if (locale === "zh" && post.bodyHtmlZh.trim()) html = post.bodyHtmlZh;
+  return stripCoverImageFromBodyHtml(html, post.image);
 }
 
 export function mergeInsightsContent(

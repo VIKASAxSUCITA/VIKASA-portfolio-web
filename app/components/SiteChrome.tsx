@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 import GlobalHeader from "@/app/components/GlobalHeader";
+import HomePageStyles from "@/app/components/home/HomePageStyles";
 import { LocaleProvider } from "@/app/components/i18n/LocaleProvider";
 
 declare global {
@@ -36,6 +37,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
         <>{children}</>
       ) : (
         <>
+          <HomePageStyles />
           <GlobalHeader />
           <div className="page-content consulting-site">{children}</div>
         </>

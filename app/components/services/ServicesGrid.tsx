@@ -14,12 +14,6 @@ const VIEW_DETAILS: Record<Locale, string> = {
   zh: "了解服务",
 };
 
-const ADVISORY: Record<Locale, string> = {
-  en: "Advisory",
-  km: "ការពិគ្រោះយោបល់",
-  zh: "咨询服务",
-};
-
 function CheckIcon() {
   return (
     <svg
@@ -123,9 +117,8 @@ function ServiceCard({
           <span className="vikasa-service-card-glyph" aria-hidden>
             <ServiceGlyph index={index} />
           </span>
-          <span className="vikasa-service-card-label">{ADVISORY[locale]}</span>
+          <h3 className="heading text-28 vikasa-service-card-title">{title}</h3>
         </div>
-        <h3 className="heading text-28">{title}</h3>
         <p className="text text-16">{description}</p>
         <ul className="vikasa-service-card-points list-unstyled">
           {service.items.map((item, itemIndex) => (
@@ -146,7 +139,11 @@ function ServiceCard({
   );
 }
 
-export default function ServicesGrid() {
+export default function ServicesGrid({
+  services = SERVICE_DETAILS,
+}: {
+  services?: ServiceDetail[];
+}) {
   const { locale } = useLocale();
   const heading =
     locale === "km"
@@ -177,7 +174,7 @@ export default function ServicesGrid() {
           </p>
         </div>
         <div className="vikasa-services-grid">
-          {SERVICE_DETAILS.map((service, index) => (
+          {services.map((service, index) => (
             <ServiceCard key={service.slug} service={service} index={index} />
           ))}
         </div>

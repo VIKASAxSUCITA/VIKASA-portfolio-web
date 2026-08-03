@@ -1,10 +1,10 @@
 import {
   doc,
-  getDoc,
   setDoc,
   serverTimestamp,
   getFirebaseDb,
 } from "@/lib/firebase/firestore";
+import { getDocSafe } from "@/lib/firebase/safeRead";
 import {
   defaultAboutContent,
   defaultEventsContent,
@@ -24,6 +24,10 @@ import {
   normalizeAboutContent,
   normalizeHomeContent,
 } from "./localizeContent";
+import {
+  defaultServicesContent,
+  normalizeServicesContent,
+} from "./services";
 import type {
   AboutContent,
   FooterContent,
@@ -55,6 +59,7 @@ const defaults: PageContentMap = {
   about: defaultAboutContent,
   insights: defaultInsightsContent,
   events: defaultEventsContent,
+  services: defaultServicesContent,
   footer: defaultFooterContent,
 };
 
@@ -72,22 +77,32 @@ export async function loadPageContent<T extends PageId>(
     return (await loadEventsContent()) as PageContentMap[T];
   }
 
-  const snap = await getDoc(doc(getFirebaseDb(), "pages", pageId));
-  if (!snap.exists()) {
+  try {
+    const snap = await getDocSafe(doc(getFirebaseDb(), "pages", pageId));
+    if (!snap.exists()) {
+      return getDefaultContent(pageId);
+    }
+    const data = snap.data()?.content as PageContentMap[T] | undefined;
+    if (!data) return getDefaultContent(pageId);
+    if (pageId === "home") {
+      return mergeHomeContent(data as Partial<HomeContent>) as PageContentMap[T];
+    }
+    if (pageId === "about") {
+      return mergeAboutContent(data as Partial<AboutContent>) as PageContentMap[T];
+    }
+    if (pageId === "footer") {
+      return mergeFooterContent(data as Partial<FooterContent>) as PageContentMap[T];
+    }
+    if (pageId === "services") {
+      return normalizeServicesContent(
+        data as Partial<PageContentMap["services"]>
+      ) as PageContentMap[T];
+    }
+    return data;
+  } catch (error) {
+    console.error(`loadPageContent(${pageId}) failed; using defaults.`, error);
     return getDefaultContent(pageId);
   }
-  const data = snap.data()?.content as PageContentMap[T] | undefined;
-  if (!data) return getDefaultContent(pageId);
-  if (pageId === "home") {
-    return mergeHomeContent(data as Partial<HomeContent>) as PageContentMap[T];
-  }
-  if (pageId === "about") {
-    return mergeAboutContent(data as Partial<AboutContent>) as PageContentMap[T];
-  }
-  if (pageId === "footer") {
-    return mergeFooterContent(data as Partial<FooterContent>) as PageContentMap[T];
-  }
-  return data;
 }
 
 export async function savePageContent<T extends PageId>(
@@ -103,12 +118,42 @@ export async function savePageContent<T extends PageId>(
     return;
   }
 
+  const toSave =
+    pageId === "services"
+      ? normalizeServicesContent(content as PageContentMap["services"])
+      : content;
+
   await setDoc(
     doc(getFirebaseDb(), "pages", pageId),
     {
-      content,
+      content: toSave,
       updatedAt: serverTimestamp(),
     },
     { merge: true }
   );
+
+  // Keep home service cards in sync with the services CMS.
+  if (pageId === "services") {
+    const services = (toSave as PageContentMap["services"]).services;
+    const home = await loadPageContent("home");
+    const nextHome: HomeContent = {
+      ...home,
+      services: {
+        ...home.services,
+        cards: services.map((service) => ({
+          title: service.title,
+          description: service.description,
+          items: service.items,
+        })),
+      },
+    };
+    await setDoc(
+      doc(getFirebaseDb(), "pages", "home"),
+      {
+        content: nextHome,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  }
 }

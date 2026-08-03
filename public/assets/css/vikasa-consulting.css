@@ -62,6 +62,76 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ——— Khmer: proper font + room for subscripts/diacritics ——— */
+html[lang="km"] {
+  --font-heading: "Kantumruy Pro", "Noto Sans Khmer", "Khmer OS", sans-serif;
+  --font-body: "Kantumruy Pro", "Noto Sans Khmer", "Khmer OS", sans-serif;
+}
+
+html[lang="km"] body {
+  font-family: var(--font-body);
+  letter-spacing: 0;
+  line-height: 1.85;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+html[lang="km"] .page-content .heading,
+html[lang="km"] .page-content h1,
+html[lang="km"] .page-content h2,
+html[lang="km"] .page-content h3,
+html[lang="km"] .page-content h4,
+html[lang="km"] .page-content .widget-heading,
+html[lang="km"] .heading {
+  font-family: var(--font-heading);
+  letter-spacing: 0 !important;
+  line-height: 1.45 !important;
+}
+
+html[lang="km"] .page-content .text,
+html[lang="km"] .page-content p,
+html[lang="km"] .page-content .subheading,
+html[lang="km"] .page-content .menu-link,
+html[lang="km"] .page-content .button,
+html[lang="km"] .page-content .consulting-eyebrow {
+  letter-spacing: 0 !important;
+  line-height: 1.7 !important;
+}
+
+html[lang="km"] .page-content .subheading-bg,
+html[lang="km"] .page-content .consulting-eyebrow,
+html[lang="km"] .page-content .vikasa-cta-banner .subheading-bg,
+html[lang="km"] .footer-main .widget-heading {
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  line-height: 1.55 !important;
+}
+
+html[lang="km"] .page-content .vikasa-hero-title,
+html[lang="km"] .page-content .vikasa-cta-banner .heading.text-80,
+html[lang="km"] .page-content .text-80 {
+  white-space: normal !important;
+  line-height: 1.45 !important;
+  letter-spacing: 0 !important;
+}
+
+html[lang="km"] .page-content .vikasa-cta-banner .text.text-24,
+html[lang="km"] .page-content .vikasa-hero-text {
+  white-space: normal !important;
+  line-height: 1.7 !important;
+  letter-spacing: 0 !important;
+  max-width: 42rem;
+}
+
+html[lang="km"] .page-content .insight-rich-body::first-letter,
+html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .page-content {
   background: #ffffff !important;
   background-color: #ffffff !important;
@@ -454,6 +524,9 @@ body {
   --color-secondary-button-border: rgba(255, 255, 255, 0.85);
   --color-secondary-button-icon: var(--vk-espresso);
   --color-secondary-button-icon-background: #fff;
+  color: #fff;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.85);
 }
 
 .page-content .vikasa-btn-ghost.button--secondary:hover,
@@ -463,6 +536,9 @@ body {
   --color-secondary-button-hover-border: #fff;
   --color-secondary-button-hover-icon: #fff;
   --color-secondary-button-hover-icon-background: var(--vk-espresso);
+  color: var(--vk-espresso);
+  background-color: #fff;
+  border-color: #fff;
 }
 
 /* CTA ghost button — same shape as banner, espresso color */
@@ -472,6 +548,9 @@ body {
   --color-secondary-button-border: var(--vk-espresso);
   --color-secondary-button-icon: #fff;
   --color-secondary-button-icon-background: var(--vk-espresso);
+  color: var(--vk-espresso);
+  background-color: transparent;
+  border: 1px solid var(--vk-espresso);
 }
 
 .page-content .vikasa-btn-ghost--espresso.button--secondary:hover,
@@ -481,6 +560,9 @@ body {
   --color-secondary-button-hover-border: var(--vk-espresso);
   --color-secondary-button-hover-icon: var(--vk-espresso);
   --color-secondary-button-hover-icon-background: #fff;
+  color: #fff;
+  background-color: var(--vk-espresso);
+  border-color: var(--vk-espresso);
 }
 
 /* ——— Buttons ——— */
@@ -977,12 +1059,11 @@ a.vikasa-service-card-inner:focus {
   flex-shrink: 0;
 }
 
-.vikasa-service-card-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--vk-gold);
+.vikasa-service-card-title {
+  margin: 0 !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--vk-espresso) !important;
 }
 
 .vikasa-service-card-inner .heading {
@@ -1083,6 +1164,18 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   color: var(--vk-espresso);
 }
 
+.service-detail-aside-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.service-detail-aside-head .heading {
+  margin-bottom: 0;
+}
+
 .service-detail-points {
   display: flex;
   flex-direction: column;
@@ -1108,10 +1201,89 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   color: var(--vk-gold);
 }
 
+.service-detail-point-edit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem;
+  align-items: start;
+  flex: 1;
+  min-width: 0;
+}
+
+.service-detail-point-text,
+.service-detail-point-edit .admin-editable-text {
+  width: 100%;
+}
+
+.service-detail-point-remove {
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(94, 48, 35, 0.45);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.service-detail-point-remove:hover {
+  background: rgba(94, 48, 35, 0.08);
+  color: var(--vk-espresso);
+}
+
+/* TipTap on service overview — toolbar above content, never overlapping */
+.service-detail-rte {
+  margin: 0 0 1.5rem;
+}
+
+.service-detail-rte .insight-rte {
+  margin: 0;
+}
+
+.service-detail-rte .insight-rte-toolbar {
+  position: static;
+  top: auto;
+  margin: 0 0 12px;
+  background: #fff;
+}
+
+.service-detail-rte .insight-rte .ProseMirror {
+  min-height: 180px;
+  padding: 0.15rem 0.1rem;
+  color: var(--vk-espresso);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
 .service-detail-related {
   margin-top: clamp(3.5rem, 7vw, 5.5rem);
   padding-top: clamp(2.5rem, 5vw, 3.5rem);
   border-top: 1px solid var(--vk-line);
+}
+
+.service-detail-gallery {
+  margin: 1.25rem 0 1.5rem;
+  max-width: 100%;
+}
+
+.service-detail-gallery .insight-gallery {
+  margin: 0;
+}
+
+.service-detail-gallery .insight-gallery-frame {
+  border-radius: 12px;
+}
+
+.service-detail-gallery .insight-gallery-slide img {
+  max-height: none;
+  min-height: 360px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.service-detail-copy > .button {
+  margin-top: 0.25rem;
 }
 
 .service-detail-related > .heading {
@@ -1866,6 +2038,145 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   padding-block: clamp(4.5rem, 8vw, 7rem);
 }
 
+/* Dedicated /contact page — no hero; equal space above/below card */
+.page-content .contact-page {
+  --contact-page-gap: clamp(1.75rem, 3.5vw, 2.75rem);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content .contact-page .section-contact-form.section-padding {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: var(--contact-page-gap) !important;
+  padding-top: calc(var(--vk-header-height) + var(--contact-page-gap)) !important;
+  padding-bottom: var(--contact-page-gap) !important;
+}
+
+.page-content .contact-page .section-contact-form > .container {
+  max-width: 860px;
+  width: 100%;
+}
+
+.page-content .contact-page .footer-main {
+  margin-top: 0 !important;
+  flex-shrink: 0;
+}
+
+.page-content .contact-page .section-contact-form .contact-box {
+  --padding: clamp(1.1rem, 2vw, 1.5rem);
+  padding: var(--padding);
+  max-width: 100%;
+  margin-inline: auto;
+  border-radius: var(--vk-radius);
+  box-shadow: var(--vk-shadow);
+}
+
+.page-content .contact-page .section-contact-form .heading.text-50 {
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem) !important;
+  line-height: 1.25 !important;
+  margin-bottom: 0.45rem;
+}
+
+.page-content .contact-page .section-contact-form .text.text-18 {
+  font-size: 0.92rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: 0;
+}
+
+.page-content .contact-page .section-contact-form .subheading-bg {
+  font-size: 0.72rem !important;
+  margin-bottom: 0.45rem;
+  padding: 0.28rem 0.65rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-channel {
+  margin-block-start: 0.75rem;
+  gap: 0.7rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-channel .svg-wrapper,
+.page-content .contact-page .section-contact-form .contact-channel .svg-wrapper svg {
+  width: 42px;
+  height: 42px;
+}
+
+.page-content .contact-page .section-contact-form .contact-channel .heading.text-24 {
+  font-size: 0.95rem !important;
+  margin-bottom: 0.1rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-channel .text.text-16 {
+  font-size: 0.85rem !important;
+}
+
+.page-content .contact-page .section-contact-form .section-headings {
+  max-width: none;
+}
+
+.page-content .contact-page .section-contact-form .card-icon-text-horizontal {
+  max-width: none;
+}
+
+.page-content .contact-page .section-contact-form .contact-form-wrap {
+  padding: clamp(0.95rem, 1.6vw, 1.25rem) !important;
+}
+
+.page-content .contact-page .section-contact-form .contact-form-headings .heading.text-32 {
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem) !important;
+  margin-bottom: 0.3rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-form-headings .text.text-16 {
+  font-size: 0.85rem !important;
+  margin-bottom: 0.65rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-form .field {
+  margin-bottom: 0.55rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-form {
+  gap: 0.55rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-form textarea {
+  min-height: 4.75rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-form .contact-form-control {
+  min-height: 40px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-form .form-button {
+  margin-block-start: 0.65rem;
+}
+
+.page-content .contact-page .section-contact-form .contact-form-actions .button {
+  min-height: 42px;
+  font-size: 13px;
+  padding-inline: 1.1rem;
+}
+
+@media (min-width: 992px) {
+  .page-content .contact-page .section-contact-form .product-grid {
+    --bs-gutter-x: 1.25rem;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 1400px) {
+  .page-content .contact-page .section-contact-form .col-contact-form,
+  .page-content .contact-page .section-contact-form .col-contact-content {
+    width: 50%;
+  }
+}
+
 .page-content .section-contact-form .contact-form-wrap {
   --color-background: var(--vk-beige);
   --color-foreground: var(--vk-espresso);
@@ -2040,7 +2351,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 
 .footer-main .widget-heading {
   font-family: var(--font-body);
-  font-size: 16px !important;
+  font-size: 18px !important;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2105,12 +2416,17 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   color: var(--vk-gold);
 }
 
-.page-content .insight-detail-hero-overlay {
-  background: linear-gradient(
-    180deg,
-    rgba(94, 48, 35, 0.2),
-    rgba(94, 48, 35, 0.7)
-  );
+.page-content .insight-article-title {
+  color: var(--vk-espresso) !important;
+}
+
+.page-content .insight-article-body.insight-rich-body p,
+.page-content .insight-article-body.insight-rich-body li {
+  color: rgba(40, 40, 40, 0.86);
+}
+
+.page-content .insight-gallery-frame {
+  box-shadow: var(--vk-shadow);
 }
 
 .page-content .event-info-card {

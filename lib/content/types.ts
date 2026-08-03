@@ -1,4 +1,5 @@
 import type { LocalizedString } from "@/lib/i18n/locale";
+import type { ServicesContent } from "./services";
 
 export type FooterContent = {
   social: {
@@ -81,6 +82,10 @@ export type AboutContent = {
     title: LocalizedString;
     text: LocalizedString;
   };
+  /** Partner logo images (image-only CMS). */
+  partners: Array<{ id: string; name: string; logo: string }>;
+  /** Client logo images (image-only CMS). */
+  clients: Array<{ id: string; name: string; logo: string }>;
 };
 
 export type InsightPost = {
@@ -133,12 +138,19 @@ export type EventsContent = {
   posts: EventPost[];
 };
 
-export type PageId = "home" | "about" | "insights" | "events" | "footer";
+export type PageId =
+  | "home"
+  | "about"
+  | "insights"
+  | "events"
+  | "services"
+  | "footer";
 
 export type PageContentMap = {
   home: HomeContent;
   about: AboutContent;
   insights: InsightsContent;
   events: EventsContent;
+  services: ServicesContent;
   footer: FooterContent;
 };

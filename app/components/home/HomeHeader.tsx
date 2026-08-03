@@ -131,8 +131,17 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
   const isAbout = pathname === "/about";
   const isServices =
     pathname === "/services" || pathname.startsWith("/services/");
+  const isInsightsListing = pathname === "/insights";
+  const isEvents =
+    pathname === "/events" || pathname.startsWith("/events/");
   const overHero =
-    (isHome || isAbout || isServices) && !scrolled && !previewMode;
+    (isHome ||
+      isAbout ||
+      isServices ||
+      isInsightsListing ||
+      isEvents) &&
+    !scrolled &&
+    !previewMode;
   const logoSrc = overHero
     ? "/assets/img/vikasa/white_log_vikasa.jpg"
     : "/assets/img/vikasa/vikasa_logo.png";

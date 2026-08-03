@@ -39,6 +39,11 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang =
+      locale === "km" ? "km" : locale === "zh" ? "zh-CN" : "en";
+  }, [locale]);
+
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
     try {

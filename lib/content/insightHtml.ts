@@ -14,7 +14,6 @@ export function buildInsightBodyHtmlFromLegacy(input: {
   pairedImages: string[];
   sectionTitle?: string;
   quote?: string;
-  featureImage?: string;
 }): string {
   const [lead = "", second = "", third = "", fourth = ""] = input.paragraphs;
   const chunks: string[] = [];
@@ -45,11 +44,97 @@ export function buildInsightBodyHtmlFromLegacy(input: {
   if (fourth.trim()) {
     chunks.push(`<p>${escapeHtml(fourth.trim())}</p>`);
   }
-  if (input.featureImage?.trim()) {
-    chunks.push(`<img src="${escapeHtml(input.featureImage.trim())}" alt="">`);
-  }
 
   return chunks.join("") || "<p></p>";
+}
+
+/**
+ * Remove cover/hero image duplicates from body HTML.
+ * Older migrations appended the feature image at the end of the article.
+ */
+export function stripCoverImageFromBodyHtml(
+  html: string,
+  coverImage: string
+): string {
+  const cover = coverImage.trim();
+  if (!html.trim()) return html;
+  if (!cover) return html;
+
+  const escaped = cover.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(
+    `<img\\b[^>]*\\bsrc=["']${escaped}["'][^>]*/?>`,
+    "gi"
+  );
+  const cleaned = html.replace(pattern, "").replace(/(<p>\s*<\/p>)+/gi, "");
+  const trimmed = cleaned.trim();
+  if (!trimmed) return html.trim() ? "<p></p>" : "";
+  return trimmed;
+}
+
+/** Collect unique image URLs from insight body HTML. */
+export function extractBodyImageSrcs(html: string): string[] {
+  const srcs: string[] = [];
+  const seen = new Set<string>();
+  const pattern = /<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(html)) !== null) {
+    const src = match[1]?.trim();
+    if (!src || seen.has(src)) continue;
+    seen.add(src);
+    srcs.push(src);
+  }
+  return srcs;
+}
+
+/** Remove all images from body HTML, keeping text/structure. */
+export function stripImagesFromBodyHtml(html: string): string {
+  if (!html.trim()) return html;
+  const cleaned = html
+    .replace(/<img\b[^>]*>/gi, "")
+    .replace(/<figure\b[^>]*>\s*<\/figure>/gi, "")
+    .replace(/(<p>\s*<\/p>)+/gi, "");
+  const trimmed = cleaned.trim();
+  return trimmed || "<p></p>";
+}
+
+function escapeAttr(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * Keep locale text, but force the shared image list (EN/KM/ZH share media).
+ * Images are appended after prose so every language shows the same gallery.
+ */
+export function withSyncedBodyImages(
+  html: string,
+  imageSrcs: string[]
+): string {
+  const prose = stripImagesFromBodyHtml(html || "");
+  if (imageSrcs.length === 0) return prose;
+  const imgs = imageSrcs
+    .map(
+      (src) =>
+        `<img src="${escapeAttr(src)}" alt="" class="insight-rte-image">`
+    )
+    .join("");
+  return `${prose}${imgs}`;
+}
+
+/** Copy image list from a source body onto one or more target bodies. */
+export function syncBodiesToSharedImages(
+  sourceHtml: string,
+  targets: Record<string, string>
+): Record<string, string> {
+  const images = extractBodyImageSrcs(sourceHtml);
+  const next: Record<string, string> = {};
+  for (const [key, html] of Object.entries(targets)) {
+    next[key] = withSyncedBodyImages(html, images);
+  }
+  return next;
 }
 
 /** Plain-text excerpt for cards / SEO snippets. */

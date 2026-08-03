@@ -1,13 +1,12 @@
 import {
   collection,
   doc,
-  getDoc,
-  getDocs,
   serverTimestamp,
   setDoc,
   writeBatch,
   getFirebaseDb,
 } from "@/lib/firebase/firestore";
+import { getDocSafe, getDocsSafe } from "@/lib/firebase/safeRead";
 import { defaultEventsContent } from "./defaults";
 import {
   mergeEventsContent,
@@ -60,7 +59,7 @@ function eventDocPayload(post: EventPost) {
 }
 
 async function loadPostsFromEntries(): Promise<EventPost[]> {
-  const snap = await getDocs(entriesCollection());
+  const snap = await getDocsSafe(entriesCollection());
   return snap.docs.map((item) =>
     normalizeEventPost({
       id: item.id,
@@ -70,43 +69,54 @@ async function loadPostsFromEntries(): Promise<EventPost[]> {
 }
 
 export async function loadEventsContent(): Promise<EventsContent> {
-  const pageSnap = await getDoc(doc(getFirebaseDb(), ...EVENTS_PAGE_REF));
-  const meta = (pageSnap.exists() ? pageSnap.data()?.content : undefined) as
-    | EventsPageMeta
-    | undefined;
+  try {
+    const pageSnap = await getDocSafe(doc(getFirebaseDb(), ...EVENTS_PAGE_REF));
+    const meta = (pageSnap.exists() ? pageSnap.data()?.content : undefined) as
+      | EventsPageMeta
+      | undefined;
 
-  const entryPosts = await loadPostsFromEntries();
+    const entryPosts = await loadPostsFromEntries();
 
-  if (meta?.entriesReady) {
+    if (meta?.entriesReady) {
+      return mergeEventsContent({
+        heroTitle: asLocalized(meta.heroTitle),
+        heading: asLocalized(meta.heading),
+        posts: sortEventsBySchedule(entryPosts),
+      });
+    }
+
+    if (entryPosts.length === 0) {
+      return structuredClone(defaultEventsContent);
+    }
+
     return mergeEventsContent({
-      heroTitle: asLocalized(meta.heroTitle),
-      heading: asLocalized(meta.heading),
+      heroTitle: asLocalized(meta?.heroTitle),
+      heading: asLocalized(meta?.heading),
       posts: sortEventsBySchedule(entryPosts),
     });
-  }
-
-  if (entryPosts.length === 0) {
+  } catch (error) {
+    console.error("loadEventsContent failed; using defaults.", error);
     return structuredClone(defaultEventsContent);
   }
-
-  return mergeEventsContent({
-    heroTitle: asLocalized(meta?.heroTitle),
-    heading: asLocalized(meta?.heading),
-    posts: sortEventsBySchedule(entryPosts),
-  });
 }
 
 export async function loadEventById(id: string): Promise<EventPost | null> {
-  const snap = await getDoc(entryDoc(id));
-  if (snap.exists()) {
-    return normalizeEventPost({
-      id: snap.id,
-      ...(snap.data() as Partial<EventPost>),
-    });
-  }
+  try {
+    const snap = await getDocSafe(entryDoc(id));
+    if (snap.exists()) {
+      return normalizeEventPost({
+        id: snap.id,
+        ...(snap.data() as Partial<EventPost>),
+      });
+    }
 
-  const all = await loadEventsContent();
-  return all.posts.find((post) => post.id === id) ?? null;
+    const all = await loadEventsContent();
+    return all.posts.find((post) => post.id === id) ?? null;
+  } catch (error) {
+    console.error("loadEventById failed.", error);
+    const fallback = defaultEventsContent.posts.find((post) => post.id === id);
+    return fallback ? normalizeEventPost(fallback) : null;
+  }
 }
 
 export async function saveEventsContent(content: EventsContent) {
@@ -126,7 +136,7 @@ export async function saveEventsContent(content: EventsContent) {
     { merge: true }
   );
 
-  const existing = await getDocs(entriesCollection());
+  const existing = await getDocsSafe(entriesCollection());
   const keepIds = new Set(content.posts.map((post) => post.id));
   const batch = writeBatch(db);
 

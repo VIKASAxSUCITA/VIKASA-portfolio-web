@@ -6,6 +6,28 @@ import type {
   InsightsContent,
 } from "./types";
 import { defaultAboutContent, defaultHomeContent } from "./defaults";
+import { CLIENT_LOGOS, PARTNER_LOGOS } from "./logos";
+
+function normalizeLogoList(
+  value: unknown,
+  fallback: AboutContent["partners"]
+): AboutContent["partners"] {
+  if (!Array.isArray(value) || value.length === 0) {
+    return fallback.map((item) => ({ ...item }));
+  }
+  return value
+    .map((item, index) => {
+      const row = (item ?? {}) as Record<string, unknown>;
+      const logo = String(row.logo ?? "").trim();
+      if (!logo) return null;
+      return {
+        id: String(row.id ?? `logo_${index + 1}`),
+        name: String(row.name ?? `Logo ${index + 1}`),
+        logo,
+      };
+    })
+    .filter(Boolean) as AboutContent["partners"];
+}
 
 function migrateServiceCard(
   card: Record<string, unknown> | undefined,
@@ -198,6 +220,22 @@ export function normalizeAboutContent(
       title: mergeLocalized(mission.title, d.mission.title),
       text: mergeLocalized(mission.text, d.mission.text),
     },
+    partners: normalizeLogoList(
+      (raw as { partners?: unknown }).partners,
+      d.partners.length ? d.partners : PARTNER_LOGOS.map((item) => ({
+        id: item.id,
+        name: item.name,
+        logo: item.logo || "",
+      }))
+    ),
+    clients: normalizeLogoList(
+      (raw as { clients?: unknown }).clients,
+      d.clients.length ? d.clients : CLIENT_LOGOS.map((item) => ({
+        id: item.id,
+        name: item.name,
+        logo: item.logo || "",
+      }))
+    ),
   };
 }
 

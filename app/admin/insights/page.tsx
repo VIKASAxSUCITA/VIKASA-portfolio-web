@@ -1,47 +1,56 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import AdminGuard from "@/app/components/admin/AdminGuard";
-import AdminInsightDetailEditor from "@/app/components/admin/AdminInsightDetailEditor";
 import AdminShell from "@/app/components/admin/AdminShell";
-import AdminSitePreview from "@/app/components/admin/AdminSitePreview";
-import LocalizedEditableField from "@/app/components/i18n/LocalizedEditableField";
-import LocalizedSection from "@/app/components/i18n/LocalizedSection";
-import { usePageWithFooterEditor } from "@/app/components/admin/usePageWithFooterEditor";
-import { createEmptyInsight, sortInsightsByLatest } from "@/lib/content/insights";
-import type { InsightPost } from "@/lib/content/types";
-import { asLocalized, setLocalized } from "@/lib/i18n/localized";
+import { usePageEditor } from "@/app/components/admin/usePageEditor";
+import {
+  excerptText,
+  formatAdminDateTime,
+} from "@/lib/content/adminFormat";
+import { sortInsightsByLatest } from "@/lib/content/insights";
 
-export default function AdminInsightsEditorPage() {
-  const {
-    content,
-    loading,
-    saving,
-    dirty,
-    message,
-    update,
-    save,
-    footerContent,
-    footerUpdate,
-  } = usePageWithFooterEditor("insights");
+function EditIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3Z"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+      <path
+        d="m13.5 6.5 3 3"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
-  const [activeId, setActiveId] = useState<string | null>(null);
+function TrashIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M5 7h14M10 11v6M14 11v6M8 7l1-2h6l1 2M7 7l1 12h8l1-12"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
-  useEffect(() => {
-    if (loading) return;
-    const editId = new URLSearchParams(window.location.search).get("edit");
-    if (!editId) return;
-    const exists = content.posts.some((post) => post.id === editId);
-    if (!exists) return;
-    setActiveId(editId);
-    window.history.replaceState(null, "", "/admin/insights");
-  }, [loading, content.posts]);
+export default function AdminInsightsListPage() {
+  const router = useRouter();
+  const { content, loading, saving, message, saveSnapshot } =
+    usePageEditor("insights");
 
   const shellProps = {
     pageTitle: "Insights",
-    onSave: save,
     saving,
-    dirty,
     message,
   };
 
@@ -49,201 +58,147 @@ export default function AdminInsightsEditorPage() {
     return (
       <AdminGuard>
         <AdminShell {...shellProps}>
-          <p className="admin-main text text-16">Loading insights content...</p>
+          <p className="admin-cms admin-cms-empty">Loading insights…</p>
         </AdminShell>
       </AdminGuard>
     );
   }
 
   const posts = sortInsightsByLatest(content.posts);
-  const activePost = posts.find((post) => post.id === activeId) ?? null;
 
-  function updatePost(
-    id: string,
-    updater: (post: InsightPost) => InsightPost
-  ) {
-    update((prev) => ({
-      ...prev,
-      posts: prev.posts.map((post) =>
-        post.id === id ? updater(post) : post
-      ),
-    }));
-  }
-
-  function handleAdd() {
-    const next = createEmptyInsight();
-    update((prev) => ({
-      ...prev,
-      posts: [next, ...prev.posts],
-    }));
-    setActiveId(next.id);
-  }
-
-  function handleDelete(id: string) {
-    const confirmed = window.confirm(
-      "Remove this insight? Click Save in the top bar to publish the deletion."
-    );
+  async function handleDelete(id: string) {
+    const confirmed = window.confirm("Remove this insight?");
     if (!confirmed) return;
-
-    update((prev) => ({
-      ...prev,
-      posts: prev.posts.filter((post) => post.id !== id),
-    }));
-    setActiveId(null);
+    try {
+      await saveSnapshot({
+        ...content,
+        posts: content.posts.filter((post) => post.id !== id),
+      });
+    } catch {
+      // message set by editor hook
+    }
   }
 
   return (
     <AdminGuard>
       <AdminShell {...shellProps}>
-        <AdminSitePreview footer={footerContent} footerUpdate={footerUpdate}>
-          {activePost ? (
-            <AdminInsightDetailEditor
-              post={activePost}
-              onChange={(updater) => updatePost(activePost.id, updater)}
-              onBack={() => setActiveId(null)}
-              onDelete={() => handleDelete(activePost.id)}
-              saving={saving}
-            />
-          ) : (
-            <main>
-              <section className="page-banner overlay" aria-label="Insights">
-                <picture className="media media-bg">
-                  <img
-                    src="/assets/img/banner/page-banner.jpg"
-                    width={1920}
-                    height={520}
-                    alt=""
-                  />
-                </picture>
-                <div className="page-banner-content">
-                  <div className="container text-center">
-                    <LocalizedSection
-                      edit
-                      translateSources={[
-                        content.heroTitle.en,
-                        content.heading.en,
-                      ]}
-                      onAutoTranslated={(locale, values) => {
-                        update((prev) => ({
-                          ...prev,
-                          heroTitle: setLocalized(
-                            asLocalized(prev.heroTitle),
-                            locale,
-                            values[0] ?? ""
-                          ),
-                          heading: setLocalized(
-                            asLocalized(prev.heading),
-                            locale,
-                            values[1] ?? ""
-                          ),
-                        }));
-                      }}
-                    >
-                      {(locale) => (
-                        <LocalizedEditableField
-                          as="span"
-                          className="heading text-80 fw-700"
-                          value={content.heroTitle}
-                          locale={locale}
-                          label="Insights hero title"
-                          edit={{
-                            onChange: (heroTitle) =>
-                              update((prev) => ({ ...prev, heroTitle })),
-                          }}
-                        />
-                      )}
-                    </LocalizedSection>
-                  </div>
-                </div>
-              </section>
-
-              <div className="featured-blog blog-style-3 section-padding">
-                <div className="container">
-                  <div className="section-headings text-center">
-                    <LocalizedSection
-                      edit
-                      translateSources={[content.heading.en]}
-                      onAutoTranslated={(locale, values) => {
-                        update((prev) => ({
-                          ...prev,
-                          heading: setLocalized(
-                            asLocalized(prev.heading),
-                            locale,
-                            values[0] ?? ""
-                          ),
-                        }));
-                      }}
-                    >
-                      {(locale) => (
-                        <LocalizedEditableField
-                          as="span"
-                          className="heading text-50"
-                          value={content.heading}
-                          locale={locale}
-                          label="Insights list heading"
-                          edit={{
-                            onChange: (heading) =>
-                              update((prev) => ({ ...prev, heading })),
-                          }}
-                        />
-                      )}
-                    </LocalizedSection>
-                    <p className="text text-14 admin-insights-preview-note">
-                      Click a card to edit the full detail page, or use Add for
-                      a new insight. After editing or deleting, click Save in
-                      the top bar to publish.
-                    </p>
-                  </div>
-                  <div className="section-content">
-                    <div className="row product-grid justify-content-center">
-                      <div className="col-12 col-md-6 col-lg-4">
-                        <button
-                          type="button"
-                          className="admin-insight-add-card"
-                          onClick={handleAdd}
-                          disabled={saving}
-                        >
-                          <span className="admin-insight-add-icon" aria-hidden>
-                            +
-                          </span>
-                          <span className="heading text-22">Add Insight</span>
-                          <span className="text text-14">
-                            Create a new article with full details
-                          </span>
-                        </button>
-                      </div>
-
-                      {posts.map((post) => (
-                        <div key={post.id} className="col-12 col-md-6 col-lg-4">
-                          <button
-                            type="button"
-                            className="card-blog-list admin-insight-card"
-                            onClick={() => setActiveId(post.id)}
-                            disabled={saving}
-                          >
-                            <div className="card-blog-list-media radius18">
-                              <div className="media">
-                                <img
-                                  src={post.image}
-                                  alt=""
-                                  width={1000}
-                                  height={707}
-                                />
+        <div className="admin-cms">
+          <div className="admin-cms-panel">
+            {posts.length === 0 ? (
+              <p className="admin-cms-empty">
+                No insights yet. Use + to create one.
+              </p>
+            ) : (
+              <div className="admin-cms-table-wrap">
+                <table className="admin-cms-table">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Cover</th>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th>Author</th>
+                      <th>Upload date</th>
+                      <th>View</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {posts.map((post, index) => {
+                      const { date, time } = formatAdminDateTime(
+                        post.createdAt
+                      );
+                      return (
+                        <tr key={post.id}>
+                          <td className="admin-cms-no">
+                            {posts.length - index}
+                          </td>
+                          <td className="admin-cms-cover">
+                            <div className="admin-cms-cover-media">
+                              {post.image ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={post.image} alt="" />
+                              ) : (
+                                <span className="admin-cms-cover-empty" />
+                              )}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="admin-cms-title">
+                              <strong>{post.title || "Untitled"}</strong>
+                              <div className="admin-cms-desc">
+                                <span className="admin-cms-excerpt">
+                                  {excerptText(post.bodyHtml) ||
+                                    "No content yet"}
+                                </span>
+                                <div className="admin-cms-row-actions">
+                                  <button
+                                    type="button"
+                                    className="admin-cms-icon-btn"
+                                    aria-label="Edit insight"
+                                    onClick={() =>
+                                      router.push(`/admin/insights/${post.id}`)
+                                    }
+                                  >
+                                    <EditIcon />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="admin-cms-icon-btn"
+                                    aria-label="Delete insight"
+                                    onClick={() => void handleDelete(post.id)}
+                                  >
+                                    <TrashIcon />
+                                  </button>
+                                </div>
                               </div>
                             </div>
-                            <h2 className="card-blog-heading heading text-22">
-                              {post.title}
-                            </h2>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                          </td>
+                          <td>
+                            {post.category ? (
+                              <span className="admin-cms-pill">
+                                {post.category}
+                              </span>
+                            ) : (
+                              "—"
+                            )}
+                          </td>
+                          <td>{post.author || "—"}</td>
+                          <td>
+                            <div className="admin-cms-datetime">
+                              <span>{date}</span>
+                              <span>{time}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <a
+                              className="admin-cms-view"
+                              href={`/insights/${post.id}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              ##
+                            </a>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
-            </main>
-          )}
-        </AdminSitePreview>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="admin-cms-fab"
+            onClick={() => router.push("/admin/insights/new")}
+            disabled={saving}
+            aria-label="Add insight"
+            title="Add insight"
+          >
+            +
+          </button>
+        </div>
       </AdminShell>
     </AdminGuard>
   );
