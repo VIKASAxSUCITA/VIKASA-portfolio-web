@@ -65,10 +65,11 @@ export default function AdminEventDetailEditor({
     post[summaryKey] || (editLocale === "en" ? post.summary : "")
   );
   const bodyValue = useMemo(() => {
-    const raw = String(
+    // Pass raw HTML to the editor. Do NOT run withSyncedBodyImages here —
+    // that rewrites markup on every keystroke and can wipe TipTap images.
+    return String(
       post[bodyKey] || (editLocale === "en" ? post.body : "") || "<p></p>"
     );
-    return withSyncedBodyImages(raw, sharedImages(post));
   }, [bodyKey, editLocale, post]);
   const cover = post.coverImage || post.image || "";
 
@@ -77,22 +78,30 @@ export default function AdminEventDetailEditor({
   }
 
   function patchBody(html: string) {
-    const images = extractBodyImageSrcs(html);
-    onChange((prev) => ({
-      ...prev,
-      body:
-        editLocale === "en"
+    onChange((prev) => {
+      const extracted = extractBodyImageSrcs(html);
+      const images = extracted.length ? extracted : sharedImages(prev);
+      const bodyToStore =
+        extracted.length > 0 || images.length === 0
           ? html
-          : withSyncedBodyImages(prev.body || "<p></p>", images),
-      bodyKm:
-        editLocale === "km"
-          ? html
-          : withSyncedBodyImages(prev.bodyKm || "<p></p>", images),
-      bodyZh:
-        editLocale === "zh"
-          ? html
-          : withSyncedBodyImages(prev.bodyZh || "<p></p>", images),
-    }));
+          : withSyncedBodyImages(html, images);
+
+      return {
+        ...prev,
+        body:
+          editLocale === "en"
+            ? bodyToStore
+            : withSyncedBodyImages(prev.body || "<p></p>", images),
+        bodyKm:
+          editLocale === "km"
+            ? bodyToStore
+            : withSyncedBodyImages(prev.bodyKm || "<p></p>", images),
+        bodyZh:
+          editLocale === "zh"
+            ? bodyToStore
+            : withSyncedBodyImages(prev.bodyZh || "<p></p>", images),
+      };
+    });
   }
 
   return (

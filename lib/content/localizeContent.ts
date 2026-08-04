@@ -157,6 +157,7 @@ export function normalizeHomeContent(saved: Partial<HomeContent> | Record<string
       title: mergeLocalized(contact.title, d.contact.title),
       text: mergeLocalized(contact.text, d.contact.text),
       email: String(contact.email ?? d.contact.email),
+      telegram: String(contact.telegram ?? d.contact.telegram),
       whatsappNumber: String(contact.whatsappNumber ?? d.contact.whatsappNumber),
       whatsappLabel: mergeLocalized(
         contact.whatsappLabel,

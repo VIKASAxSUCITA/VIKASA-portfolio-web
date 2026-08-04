@@ -26,7 +26,8 @@ export const ui = {
     services: L("Services", "សេវាកម្ម", "服务"),
     contactInfo: L("Contact Info", "ព័ត៌មានទំនាក់ទំនង", "联系信息"),
     address: L("Address", "អាសយដ្ឋាន", "地址"),
-    phone: L("Phone Number", "លេខទូរស័ព្ទ", "电话"),
+    telegram: L("Telegram", "តេលេក្រាម", "Telegram"),
+    phone: L("Phone", "ទូរស័ព្ទ", "电话"),
     email: L("Email", "អ៊ីមែល", "邮箱"),
     copyright: L("Copyright ©", "រក្សាសិទ្ធិ ©", "版权所有 ©"),
   },
@@ -53,6 +54,7 @@ export const ui = {
   },
   contact: {
     email: L("Email", "អ៊ីមែល", "邮箱"),
+    telegram: L("Telegram", "តេលេក្រាម", "Telegram"),
     whatsapp: L("WhatsApp", "WhatsApp", "WhatsApp"),
     namePlaceholder: L("Your Name *", "ឈ្មោះរបស់អ្នក *", "您的姓名 *"),
     emailPlaceholder: L("Email *", "អ៊ីមែល *", "邮箱 *"),
@@ -81,6 +83,11 @@ export const ui = {
       "正在打开邮件应用以发送方案申请…"
     ),
     chatAria: L("Chat on WhatsApp", "ជជែកតាម WhatsApp", "通过 WhatsApp 聊天"),
+    telegramAria: L(
+      "Message on Telegram",
+      "ផ្ញើសារតាមតេលេក្រាម",
+      "通过 Telegram 发消息"
+    ),
   },
   search: {
     toggleAria: L(

@@ -181,12 +181,13 @@ export const defaultHomeContent: HomeContent = {
       "联系 / 获取方案"
     ),
     text: L(
-      "Tell us about your business goals. Request a proposal — reach us by form, WhatsApp, or email.",
-      "ប្រាប់យើងអំពីគោលដៅអាជីវកម្មរបស់អ្នក។ ស្នើសុំសំណើសេវា — ទាក់ទងតាមសំណុំបែបបទ WhatsApp ឬអ៊ីមែល។",
-      "告诉我们您的业务目标。通过表单、WhatsApp 或邮件申请方案。"
+      "Tell us about your business goals. Request a proposal — reach us by form, Telegram, WhatsApp, or email.",
+      "ប្រាប់យើងអំពីគោលដៅអាជីវកម្មរបស់អ្នក។ ស្នើសុំសំណើសេវា — ទាក់ទងតាមសំណុំបែបបទ Telegram, WhatsApp ឬអ៊ីមែល។",
+      "告诉我们您的业务目标。通过表单、Telegram、WhatsApp 或邮件申请方案。"
     ),
-    email: "hello@vikasa.com",
-    whatsappNumber: "855000000000",
+    email: "vikasacontact@gmail.com",
+    telegram: "@vikasacontact",
+    whatsappNumber: "85515969496",
     whatsappLabel: L(
       "Chat on WhatsApp",
       "ជជែកតាម WhatsApp",
@@ -412,16 +413,15 @@ export const defaultEventsContent: EventsContent = {
 
 export const defaultFooterContent: FooterContent = {
   social: {
-    facebook: "https://web.facebook.com",
-    linkedin: "https://www.linkedin.com/",
-    twitter: "https://x.com/",
-    instagram: "https://www.instagram.com/",
+    facebook: "",
+    linkedin: "",
+    twitter: "",
+    instagram: "",
   },
   contact: {
-    address:
-      "Connexion, Koh Pich, Corner of Koh Pich Street, and Park Ave, Phnom Penh",
-    phone: "+855 00 000 0000",
-    email: "hello@vikasa.com",
+    telegram: "@vikasacontact",
+    phone: "015 96 94 96",
+    email: "vikasacontact@gmail.com",
   },
   copyright: "VIKASA. All rights reserved.",
 };

@@ -50,10 +50,12 @@ export default function AdminInsightDetailEditor({
     post[titleKey] || (editLocale === "en" ? post.title : "")
   );
   const bodyValue = useMemo(() => {
-    const raw = String(
+    // Pass raw HTML to the editor. Do NOT run withSyncedBodyImages here —
+    // that rewrites markup on every keystroke, triggers setContent, and can
+    // wipe TipTap image node views while typing.
+    return String(
       post[bodyKey] || (editLocale === "en" ? post.bodyHtml : "") || "<p></p>"
     );
-    return withSyncedBodyImages(raw, sharedImages(post));
   }, [bodyKey, editLocale, post]);
 
   function patch<K extends keyof InsightPost>(key: K, value: InsightPost[K]) {
@@ -61,22 +63,31 @@ export default function AdminInsightDetailEditor({
   }
 
   function patchBody(html: string) {
-    const images = extractBodyImageSrcs(html);
-    onChange((prev) => ({
-      ...prev,
-      bodyHtml:
-        editLocale === "en"
+    onChange((prev) => {
+      const extracted = extractBodyImageSrcs(html);
+      // If TipTap briefly omits node-view images from getHTML(), keep prior ones.
+      const images = extracted.length ? extracted : sharedImages(prev);
+      const bodyToStore =
+        extracted.length > 0 || images.length === 0
           ? html
-          : withSyncedBodyImages(prev.bodyHtml || "<p></p>", images),
-      bodyHtmlKm:
-        editLocale === "km"
-          ? html
-          : withSyncedBodyImages(prev.bodyHtmlKm || "<p></p>", images),
-      bodyHtmlZh:
-        editLocale === "zh"
-          ? html
-          : withSyncedBodyImages(prev.bodyHtmlZh || "<p></p>", images),
-    }));
+          : withSyncedBodyImages(html, images);
+
+      return {
+        ...prev,
+        bodyHtml:
+          editLocale === "en"
+            ? bodyToStore
+            : withSyncedBodyImages(prev.bodyHtml || "<p></p>", images),
+        bodyHtmlKm:
+          editLocale === "km"
+            ? bodyToStore
+            : withSyncedBodyImages(prev.bodyHtmlKm || "<p></p>", images),
+        bodyHtmlZh:
+          editLocale === "zh"
+            ? bodyToStore
+            : withSyncedBodyImages(prev.bodyHtmlZh || "<p></p>", images),
+      };
+    });
   }
 
   return (

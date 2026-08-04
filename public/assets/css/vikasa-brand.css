@@ -5076,9 +5076,10 @@ h4,
 
 .page-banner {
   --color-overlay: linear-gradient(
-    184deg,
-    rgba(107, 63, 47, 0.12) -40%,
-    rgba(107, 63, 47, 0.48) 100%
+    105deg,
+    rgba(47, 36, 31, 0.78) 0%,
+    rgba(94, 48, 35, 0.68) 50%,
+    rgba(94, 48, 35, 0.55) 100%
   );
 }
 
@@ -5557,10 +5558,12 @@ a.multicolumn-card:focus {
 
 .page-banner {
   --color-overlay: linear-gradient(
-    184deg,
-    rgba(255, 253, 249, 0.15) -20%,
-    rgba(107, 63, 47, 0.32) 100%
+    105deg,
+    rgba(47, 36, 31, 0.82) 0%,
+    rgba(94, 48, 35, 0.72) 45%,
+    rgba(94, 48, 35, 0.58) 100%
   );
+  background-color: #5e3023;
 }
 
 /* Mid-page CTA — light panel like Sucita (no dark brown slab) */

@@ -33,6 +33,29 @@ export function WhatsAppIcon() {
   );
 }
 
+export function TelegramIcon() {
+  return (
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <rect width={80} height={80} rx={10} fill="var(--vikasa-brown, #5e3123)" />
+      <path
+        d="M54.8 25.6 22.9 37.7c-2.2.8-2.1 2.1-.4 2.7l8.2 2.6 3.1 9.5c.4 1.1 0 1.6.9 1.6.7 0 1.2-.3 1.8-.9l4.4-4.2 9.1 6.7c1.7 1 2.9.5 3.3-1.6l6-28.3c.6-2.4-.9-3.5-2.5-2.8Zm-8.9 8.2-13.5 12.2-.5 6.1-2.6-8.7 16.6-9.6Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
+function telegramHref(handle: string): string {
+  const cleaned = handle.replace(/^@/, "").trim();
+  return cleaned ? `https://t.me/${cleaned}` : "https://t.me/";
+}
+
+function formatTelegramHandle(handle: string): string {
+  const trimmed = handle.trim();
+  if (!trimmed) return "@vikasacontact";
+  return trimmed.startsWith("@") ? trimmed : `@${trimmed}`;
+}
+
 type Contact = HomeContent["contact"];
 
 type ContactFormProps = {
@@ -91,6 +114,10 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
         const mailtoHref = `mailto:${content.email}?subject=${encodeURIComponent(
           uiT(ui.contact.mailSubject, locale)
         )}`;
+        const telegramHandle = formatTelegramHandle(
+          content.telegram || "@vikasacontact"
+        );
+        const telegramLink = telegramHref(telegramHandle);
 
         function handleSubmit(event: FormEvent<HTMLFormElement>) {
           event.preventDefault();
@@ -209,6 +236,46 @@ export default function ContactForm({ content, edit }: ContactFormProps) {
                             {uiT(ui.contact.email, locale)}
                           </h2>
                           <p className="text text-16">{content.email}</p>
+                        </div>
+                      </a>
+                    )}
+
+                    {edit ? (
+                      <div className="card-icon-text card-icon-text-horizontal contact-channel">
+                        <div className="svg-wrapper">
+                          <TelegramIcon />
+                        </div>
+                        <div className="content">
+                          <h2 className="heading text-24 fw-700">
+                            {uiT(ui.contact.telegram, locale)}
+                          </h2>
+                          <EditableText
+                            className="text text-16"
+                            value={content.telegram || "@vikasacontact"}
+                            label="Telegram handle"
+                            onChange={(telegram) =>
+                              edit.onChange((prev) => ({ ...prev, telegram }))
+                            }
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <a
+                        href={telegramLink}
+                        className="card-icon-text card-icon-text-horizontal contact-channel"
+                        data-aos="fade-up"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${uiT(ui.contact.telegramAria, locale)} ${telegramHandle}`}
+                      >
+                        <div className="svg-wrapper">
+                          <TelegramIcon />
+                        </div>
+                        <div className="content">
+                          <h2 className="heading text-24 fw-700">
+                            {uiT(ui.contact.telegram, locale)}
+                          </h2>
+                          <p className="text text-16">{telegramHandle}</p>
                         </div>
                       </a>
                     )}

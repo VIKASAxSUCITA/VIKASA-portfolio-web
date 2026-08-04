@@ -5,8 +5,8 @@ export const LOCALES: readonly Locale[] = ["en", "km", "zh"] as const;
 
 export const LOCALE_LABELS: Record<Locale, string> = {
   en: "EN",
-  km: "ខ្មែរ",
-  zh: "中文",
+  km: "KH",
+  zh: "CH",
 };
 
 export type LocalizedString = {
