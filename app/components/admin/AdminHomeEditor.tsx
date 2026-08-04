@@ -8,6 +8,7 @@ import HomeHero from "@/app/components/home/HomeHero";
 import HomeAbout from "@/app/components/home/HomeAbout";
 import HomeCta from "@/app/components/home/HomeCta";
 import HomeServices from "@/app/components/home/HomeServices";
+import HomePartners from "@/app/components/home/HomePartners";
 import HomeInsights from "@/app/components/home/HomeInsights";
 import HomeEvents from "@/app/components/home/HomeEvents";
 import HomeContact from "@/app/components/home/HomeContact";
@@ -15,6 +16,7 @@ import { usePageEditor } from "@/app/components/admin/usePageEditor";
 import { getLatestEvents } from "@/lib/content/events";
 import { getLatestInsights } from "@/lib/content/insights";
 import type {
+  AboutContent,
   EventsContent,
   HomeContent,
   InsightsContent,
@@ -33,10 +35,12 @@ export default function AdminHomeEditor() {
 
   const insightsEditor = usePageEditor("insights");
   const eventsEditor = usePageEditor("events");
+  const aboutEditor = usePageEditor("about");
   const [insightsPreview, setInsightsPreview] = useState<InsightsContent | null>(
     null
   );
   const [eventsPreview, setEventsPreview] = useState<EventsContent | null>(null);
+  const [aboutPreview, setAboutPreview] = useState<AboutContent | null>(null);
 
   useEffect(() => {
     if (!insightsEditor.loading) {
@@ -50,6 +54,12 @@ export default function AdminHomeEditor() {
     }
   }, [eventsEditor.loading, eventsEditor.content]);
 
+  useEffect(() => {
+    if (!aboutEditor.loading) {
+      setAboutPreview(aboutEditor.content);
+    }
+  }, [aboutEditor.loading, aboutEditor.content]);
+
   const shellProps = {
     pageTitle: "Home",
     onSave: save,
@@ -58,7 +68,12 @@ export default function AdminHomeEditor() {
     message,
   };
 
-  if (loading || insightsEditor.loading || eventsEditor.loading) {
+  if (
+    loading ||
+    insightsEditor.loading ||
+    eventsEditor.loading ||
+    aboutEditor.loading
+  ) {
     return (
       <AdminGuard>
         <AdminShell {...shellProps}>
@@ -90,6 +105,10 @@ export default function AdminHomeEditor() {
             <HomeServices
               content={content.services}
               edit={sectionEdit("services")}
+            />
+            <HomePartners
+              partners={aboutPreview?.partners ?? []}
+              clients={aboutPreview?.clients ?? []}
             />
             <HomeInsights
               heading={insightsHeading}

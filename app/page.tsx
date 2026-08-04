@@ -14,10 +14,11 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Page() {
-  const [content, insights, events] = await Promise.all([
+  const [content, insights, events, about] = await Promise.all([
     loadPageContent("home"),
     loadPageContent("insights"),
     loadPageContent("events"),
+    loadPageContent("about"),
   ]);
 
   return (
@@ -27,6 +28,8 @@ export default async function Page() {
       latestInsights={getLatestInsights(insights.posts, 6)}
       eventsHeading={events.heading}
       latestEvents={getLatestEvents(events.posts, 3)}
+      partners={about.partners ?? []}
+      clients={about.clients ?? []}
     />
   );
 }

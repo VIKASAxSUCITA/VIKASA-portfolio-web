@@ -3285,11 +3285,12 @@ button.admin-article-image-chip {
   background: rgba(94, 48, 35, 0.05);
 }
 
-/* Admin TipTap: body images as compact 3-up thumbnails (grid — TipTap block
-   node views ignore inline-block in contenteditable). */
+/* Admin TipTap: body images as compact 3-up thumbnails.
+   TipTap block node views need CSS grid + min-width:0 so large images
+   don't blow out each track and force one-per-row stacking. */
 .admin-composer--embedded .admin-composer-editor .ProseMirror {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   column-gap: 0.7rem;
   row-gap: 0.7rem;
   align-items: start;
@@ -3304,35 +3305,55 @@ button.admin-article-image-chip {
 .admin-composer--embedded .admin-composer-editor .ProseMirror > hr,
 .admin-composer--embedded .admin-composer-editor .ProseMirror > pre {
   grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* Don't let empty cursor paragraphs between images break the 3-up row */
+.admin-composer--embedded .admin-composer-editor .ProseMirror
+  > .react-renderer.node-image
+  + p:has(+ .react-renderer.node-image):has(> br.ProseMirror-trailingBreak:only-child),
+.admin-composer--embedded .admin-composer-editor .ProseMirror
+  > .react-renderer.node-image
+  + p:has(+ .react-renderer.node-image):empty {
+  display: none !important;
 }
 
 .admin-composer--embedded .admin-composer-editor .ProseMirror > p:has(> img:only-child) {
   grid-column: auto;
+  min-width: 0 !important;
   margin: 0 !important;
 }
 
+.admin-composer--embedded .admin-composer-editor .ProseMirror > .react-renderer,
 .admin-composer--embedded .admin-composer-editor .ProseMirror > .react-renderer.node-image,
 .admin-composer--embedded .admin-composer-editor .ProseMirror > .insight-rte-image-wrap {
   display: block !important;
+  box-sizing: border-box !important;
   width: 100% !important;
   max-width: 100% !important;
+  min-width: 0 !important;
   margin: 0 !important;
+  overflow: hidden !important;
   white-space: normal !important;
 }
 
-.admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer.node-image .insight-rte-image-wrap {
+.admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer.node-image .insight-rte-image-wrap,
+.admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer .insight-rte-image-wrap {
   display: block !important;
   width: 100% !important;
   max-width: 100% !important;
+  min-width: 0 !important;
   margin: 0 !important;
 }
 
 .admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-frame {
   height: 168px;
+  max-width: 100%;
 }
 
 .admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-wrap img.insight-rte-image,
 .admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer.node-image img,
+.admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer img,
 .admin-composer--embedded .admin-composer-editor .ProseMirror img.insight-rte-image,
 .admin-composer--embedded .admin-composer-editor .ProseMirror > p:has(> img:only-child) img {
   display: block !important;
@@ -3365,18 +3386,19 @@ button.admin-article-image-chip {
 
 @media (max-width: 900px) {
   .admin-composer--embedded .admin-composer-editor .ProseMirror {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
 @media (max-width: 560px) {
   .admin-composer--embedded .admin-composer-editor .ProseMirror {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-frame,
   .admin-composer--embedded .admin-composer-editor .ProseMirror .insight-rte-image-wrap img.insight-rte-image,
   .admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer.node-image img,
+  .admin-composer--embedded .admin-composer-editor .ProseMirror .react-renderer img,
   .admin-composer--embedded .admin-composer-editor .ProseMirror img.insight-rte-image,
   .admin-composer--embedded .admin-composer-editor .ProseMirror > p:has(> img:only-child) img {
     height: 200px !important;
@@ -4693,9 +4715,9 @@ button.admin-article-image-chip {
 
 .event-list-card {
   display: grid;
-  grid-template-columns: minmax(240px, 360px) 1fr;
+  grid-template-columns: 280px 1fr;
   gap: 28px;
-  align-items: stretch;
+  align-items: start;
   padding: 20px;
   background: rgba(94, 49, 35, 0.06);
   border-radius: 22px;
@@ -4704,16 +4726,19 @@ button.admin-article-image-chip {
 
 .event-list-card-media {
   position: relative;
+  width: 280px;
+  height: 210px;
   overflow: hidden;
   border-radius: 16px;
-  min-height: 220px;
   background: #ebe4dc;
+  flex-shrink: 0;
 }
 
 .event-list-card-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -4931,6 +4956,22 @@ button.admin-article-image-chip {
   color: var(--vikasa-brown, #5e3123);
 }
 
+.admin-composer .admin-form-meta-field input.admin-event-datetime {
+  max-width: none;
+  min-height: 44px;
+  color-scheme: light;
+  cursor: pointer;
+}
+
+.admin-composer .admin-form-meta-field input.admin-event-datetime::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.admin-composer .admin-form-meta-field input.admin-event-datetime::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
 .admin-event-hint,
 .admin-event-card-meta {
   margin: 0;
@@ -4943,8 +4984,8 @@ button.admin-article-image-chip {
   }
 
   .event-list-card-media {
-    min-height: 220px;
-    aspect-ratio: 16 / 10;
+    width: 100%;
+    height: 220px;
   }
 
   .event-detail-layout {

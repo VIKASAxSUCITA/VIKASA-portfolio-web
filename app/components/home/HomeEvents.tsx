@@ -20,12 +20,6 @@ type HomeEventsProps = {
   adminLinks?: boolean;
 };
 
-const EYEBROW: Record<string, string> = {
-  en: "Schedule",
-  km: "កាលវិភាគ",
-  zh: "日程",
-};
-
 const VIEW_DETAILS: Record<string, string> = {
   en: "View details",
   km: "មើលព័ត៌មាន",
@@ -94,7 +88,6 @@ export default function HomeEvents({
       : `/events/${id}`;
 
   const cards = posts.slice(0, 3);
-  const eyebrow = EYEBROW[locale] ?? EYEBROW.en;
   const detailsLabel = adminLinks
     ? "Edit event"
     : (VIEW_DETAILS[locale] ?? VIEW_DETAILS.en);
@@ -106,14 +99,10 @@ export default function HomeEvents({
     <div id="home-events" className="home-events-section section-padding">
       <div className="container">
         <div className="home-events-head section-headings text-center">
-          <p className="home-events-eyebrow" data-aos="fade-up">
-            {eyebrow}
-          </p>
           <h2
             id="events"
             className="heading text-50"
             data-aos="fade-up"
-            data-aos-delay="50"
           >
             {headingText}
           </h2>

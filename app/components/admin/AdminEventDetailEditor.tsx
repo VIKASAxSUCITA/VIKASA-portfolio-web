@@ -5,6 +5,10 @@ import EditableImage from "@/app/components/admin/EditableImage";
 import EditableText from "@/app/components/admin/EditableText";
 import InsightRichTextEditor from "@/app/components/insights/InsightRichTextEditor";
 import {
+  fromDateTimeLocalValue,
+  toDateTimeLocalValue,
+} from "@/lib/content/events";
+import {
   extractBodyImageSrcs,
   withSyncedBodyImages,
 } from "@/lib/content/insightHtml";
@@ -177,20 +181,27 @@ export default function AdminEventDetailEditor({
               </label>
               <label className="admin-form-meta-field">
                 <span>Starts</span>
-                <EditableText
-                  value={post.startsAt}
-                  onChange={(startsAt) => patch("startsAt", startsAt)}
-                  label="Starts"
-                  className="admin-composer-input"
+                <input
+                  type="datetime-local"
+                  className="admin-composer-input admin-event-datetime"
+                  value={toDateTimeLocalValue(post.startsAt)}
+                  onChange={(event) => {
+                    const next = fromDateTimeLocalValue(event.target.value);
+                    if (next) patch("startsAt", next);
+                  }}
+                  aria-label="Start date and time"
                 />
               </label>
               <label className="admin-form-meta-field">
                 <span>Ends</span>
-                <EditableText
-                  value={post.endsAt}
-                  onChange={(endsAt) => patch("endsAt", endsAt)}
-                  label="Ends"
-                  className="admin-composer-input"
+                <input
+                  type="datetime-local"
+                  className="admin-composer-input admin-event-datetime"
+                  value={toDateTimeLocalValue(post.endsAt)}
+                  onChange={(event) =>
+                    patch("endsAt", fromDateTimeLocalValue(event.target.value))
+                  }
+                  aria-label="End date and time"
                 />
               </label>
             </div>
