@@ -46,7 +46,7 @@ function mergeAboutContent(saved: Partial<AboutContent>): AboutContent {
 
 function mergeFooterContent(saved: Partial<FooterContent>): FooterContent {
   const defaults = defaultFooterContent;
-  const savedContact = saved.contact ?? {};
+  const savedContact: Partial<FooterContent["contact"]> = saved.contact ?? {};
   const savedPhone = savedContact.phone?.trim() ?? "";
   const savedEmail = savedContact.email?.trim() ?? "";
   const savedTelegram = savedContact.telegram?.trim() ?? "";
