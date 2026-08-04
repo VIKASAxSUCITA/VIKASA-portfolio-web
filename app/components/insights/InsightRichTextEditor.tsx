@@ -209,7 +209,12 @@ export default function InsightRichTextEditor({
   useEffect(() => {
     if (!editor) return;
     if (content === lastEmitted.current) return;
-    if (editor.getHTML() === content) return;
+    // Avoid resetting the doc while typing when only serialization differs.
+    const current = editor.getHTML();
+    if (current === content) {
+      lastEmitted.current = content;
+      return;
+    }
     lastEmitted.current = content;
     editor.commands.setContent(content, { emitUpdate: false });
   }, [content, editor]);

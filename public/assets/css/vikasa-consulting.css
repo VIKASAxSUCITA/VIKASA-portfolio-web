@@ -1113,12 +1113,10 @@ a.vikasa-service-card-inner:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
-  margin-top: 0.05rem;
-  border-radius: 50%;
-  border: 1.5px solid var(--vk-gold);
+  margin-top: 0.1rem;
   color: var(--vk-espresso);
   background: transparent;
 }
@@ -2233,13 +2231,15 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   color: var(--vk-black) !important;
 }
 
-/* ——— Page banners (light overlays) ——— */
+/* ——— Page banners (brand color wash for white title text) ——— */
 .page-content .page-banner {
   --color-overlay: linear-gradient(
-    100deg,
-    rgba(250, 248, 246, 0.2) 0%,
-    rgba(94, 48, 35, 0.42) 100%
+    105deg,
+    rgba(47, 36, 31, 0.82) 0%,
+    rgba(94, 48, 35, 0.72) 45%,
+    rgba(94, 48, 35, 0.58) 100%
   );
+  background-color: #5e3023;
 }
 
 .page-content .page-banner--full {

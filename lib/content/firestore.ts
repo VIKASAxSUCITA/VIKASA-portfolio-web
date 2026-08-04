@@ -46,11 +46,31 @@ function mergeAboutContent(saved: Partial<AboutContent>): AboutContent {
 
 function mergeFooterContent(saved: Partial<FooterContent>): FooterContent {
   const defaults = defaultFooterContent;
+  const savedContact = saved.contact ?? {};
+  const savedPhone = savedContact.phone?.trim() ?? "";
+  const savedEmail = savedContact.email?.trim() ?? "";
+  const savedTelegram = savedContact.telegram?.trim() ?? "";
+  const isPlaceholderPhone =
+    !savedPhone ||
+    savedPhone === "+855 00 000 0000" ||
+    savedPhone === "+855000000000";
+  const isPlaceholderEmail =
+    !savedEmail || savedEmail === "hello@vikasa.com";
+
   return {
     ...defaults,
     ...saved,
-    social: { ...defaults.social, ...saved.social },
-    contact: { ...defaults.contact, ...saved.contact },
+    social: {
+      facebook: "",
+      linkedin: "",
+      twitter: "",
+      instagram: "",
+    },
+    contact: {
+      telegram: savedTelegram || defaults.contact.telegram,
+      phone: isPlaceholderPhone ? defaults.contact.phone : savedPhone,
+      email: isPlaceholderEmail ? defaults.contact.email : savedEmail,
+    },
   };
 }
 

@@ -9,7 +9,9 @@ export type FooterContent = {
     instagram: string;
   };
   contact: {
-    address: string;
+    /** @deprecated Prefer telegram; kept for older saved footer docs. */
+    address?: string;
+    telegram: string;
     phone: string;
     email: string;
   };
@@ -49,6 +51,7 @@ export type HomeContent = {
     title: LocalizedString;
     text: LocalizedString;
     email: string;
+    telegram: string;
     whatsappNumber: string;
     whatsappLabel: LocalizedString;
     formTitle: LocalizedString;
