@@ -58,7 +58,7 @@ export default function HomeFooter({
                   <div className="footer-widget footer-widget-brand">
                     <a className="footer-logo" href="/" aria-label="VIKASA">
                       <img
-                        src="/assets/img/vikasa/vikasa_logo.png"
+                        src="/assets/img/vikasa/white_log_vikasa.jpg"
                         alt="VIKASA"
                         width={220}
                         height={86}

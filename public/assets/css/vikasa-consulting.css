@@ -1,20 +1,20 @@
 /**
- * VIKASA — Luxury executive consulting theme (light-first)
- * Espresso #5E3023 · Latte #895637 · Gold #BD9655 · White · Beige #FAF8F6
+ * VIKASA — Advisory Academy theme (light-first)
+ * Navy #002068 · Accent Blue #0858F0 · White · Soft Blue Gray #F4F7FC
  * Typography: Montserrat
  */
 
 :root {
-  --vk-espresso: #5e3023;
-  --vk-latte: #895637;
-  --vk-gold: #bd9655;
-  --vk-gold-soft: rgba(189, 150, 85, 0.16);
+  --vk-espresso: #002068;
+  --vk-latte: #1a3a8a;
+  --vk-gold: #0858f0;
+  --vk-gold-soft: rgba(8, 88, 240, 0.14);
   --vk-white: #ffffff;
-  --vk-beige: #faf8f6;
+  --vk-beige: #f4f7fc;
   --vk-black: #000000;
-  --vk-muted: rgba(0, 0, 0, 0.62);
-  --vk-line: rgba(94, 48, 35, 0.12);
-  --vk-shadow: 0 10px 28px rgba(94, 48, 35, 0.06);
+  --vk-muted: rgba(0, 32, 104, 0.62);
+  --vk-line: rgba(0, 32, 104, 0.12);
+  --vk-shadow: 0 10px 28px rgba(0, 32, 104, 0.08);
   --vk-radius: 10px;
   --vk-radius-sm: 8px;
   --vk-radius-lg: 12px;
@@ -23,7 +23,7 @@
 
   /* Legacy aliases */
   --vk-navy: var(--vk-espresso);
-  --vk-navy-deep: #4a261c;
+  --vk-navy-deep: #000830;
   --vk-navy-soft: var(--vk-latte);
   --vk-snow: #ffffff;
   --vk-ink: var(--vk-black);
@@ -244,7 +244,7 @@ html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
   --color-foreground: var(--vk-espresso);
   background: var(--vk-white);
   border-bottom-color: var(--vk-line);
-  box-shadow: 0 6px 24px rgba(94, 48, 35, 0.05);
+  box-shadow: 0 6px 24px rgba(0, 32, 104, 0.05);
 }
 
 .header-1.is-over-hero:not(.is-scrolled),
@@ -337,10 +337,10 @@ html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
 .header-1 .header-cta:focus,
 .header-1 .header-cta-mobile:hover,
 .header-1 .header-cta-mobile:focus {
-  --color-primary-button-hover-background: #a88248 !important;
-  --color-primary-button-hover-border: #a88248 !important;
-  background: #a88248 !important;
-  border-color: #a88248 !important;
+  --color-primary-button-hover-background: #0646c7 !important;
+  --color-primary-button-hover-border: #0646c7 !important;
+  background: #0646c7 !important;
+  border-color: #0646c7 !important;
   color: #fff !important;
 }
 
@@ -384,7 +384,7 @@ html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
   border-color: var(--vk-gold) !important;
   color: var(--vk-gold) !important;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(94, 48, 35, 0.1);
+  box-shadow: 0 6px 16px rgba(0, 32, 104, 0.1);
 }
 
 .locale-dropdown-toggle:hover .locale-dropdown-icon,
@@ -526,8 +526,8 @@ html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
 
 .page-content .vikasa-btn-gold.button--primary:hover,
 .page-content .vikasa-btn-gold.button--primary:focus {
-  --color-primary-button-hover-background: #a88248;
-  --color-primary-button-hover-border: #a88248;
+  --color-primary-button-hover-background: #0646c7;
+  --color-primary-button-hover-border: #0646c7;
   --color-primary-button-hover-text: #fff;
   --color-primary-button-hover-icon: #fff;
   --color-primary-button-hover-icon-background: var(--vk-espresso);
@@ -720,7 +720,7 @@ html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
   height: 14px;
   border-radius: 50%;
   background: var(--vk-espresso);
-  box-shadow: 0 4px 12px rgba(94, 48, 35, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 32, 104, 0.25);
   animation: vikasa-blob-dot-pulse 4s ease-in-out infinite;
 }
 
@@ -744,7 +744,7 @@ html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
   left: 2%;
   inset: auto;
   background: #efe7dd;
-  box-shadow: 0 20px 44px rgba(94, 48, 35, 0.18);
+  box-shadow: 0 20px 44px rgba(0, 32, 104, 0.18);
   transition:
     transform 0.45s ease,
     box-shadow 0.45s ease;
@@ -784,7 +784,7 @@ html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
 
 .vikasa-media-blob:hover .vikasa-media-blob-photo {
   transform: rotate(var(--vikasa-blob-tilt)) scale(1.03);
-  box-shadow: 0 28px 56px rgba(94, 48, 35, 0.24);
+  box-shadow: 0 28px 56px rgba(0, 32, 104, 0.24);
 }
 
 .vikasa-media-blob:hover .vikasa-media-blob-photo img,
@@ -1024,7 +1024,7 @@ html[lang="km"] .page-content .ProseMirror > p:first-of-type::first-letter {
   border-radius: 4px 16px 16px 4px;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 8px 24px rgba(94, 48, 35, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 32, 104, 0.05);
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease,
@@ -1050,8 +1050,8 @@ a.vikasa-service-card-inner:hover,
 a.vikasa-service-card-inner:focus {
   transform: translateY(-5px);
   background: #ffffff !important;
-  border-color: rgba(189, 150, 85, 0.35);
-  box-shadow: 0 18px 40px rgba(94, 48, 35, 0.1);
+  border-color: rgba(8, 88, 240, 0.35);
+  box-shadow: 0 18px 40px rgba(0, 32, 104, 0.1);
   text-decoration: none;
   color: inherit;
 }
@@ -1234,14 +1234,14 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: rgba(94, 48, 35, 0.45);
+  color: rgba(0, 32, 104, 0.45);
   font-size: 1.15rem;
   line-height: 1;
   cursor: pointer;
 }
 
 .service-detail-point-remove:hover {
-  background: rgba(94, 48, 35, 0.08);
+  background: rgba(0, 32, 104, 0.08);
   color: var(--vk-espresso);
 }
 
@@ -1442,7 +1442,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 .page-content a.insight-scroll-card {
   background: #ffffff !important;
   background-color: #ffffff !important;
-  border: 1px solid rgba(94, 48, 35, 0.1) !important;
+  border: 1px solid rgba(0, 32, 104, 0.1) !important;
   /* Neutral shadow — warm brown shadows looked like a second cream background */
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04) !important;
 }
@@ -1562,7 +1562,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   height: 100%;
   background: #ffffff;
   background-color: #ffffff;
-  border: 1px solid rgba(94, 48, 35, 0.1);
+  border: 1px solid rgba(0, 32, 104, 0.1);
   border-radius: 14px;
   overflow: hidden;
   text-decoration: none;
@@ -1577,7 +1577,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 .insight-scroll-card:hover,
 .insight-scroll-card:focus-visible {
   transform: translateY(-4px);
-  border-color: rgba(189, 150, 85, 0.4);
+  border-color: rgba(8, 88, 240, 0.4);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
   outline: none;
   text-decoration: none;
@@ -1614,7 +1614,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   padding: 0.35rem 0.65rem;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(189, 150, 85, 0.45);
+  border: 1px solid rgba(8, 88, 240, 0.45);
   color: var(--vk-espresso);
   font-size: 10px;
   font-weight: 700;
@@ -1691,7 +1691,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   height: 44px;
   display: grid;
   place-items: center;
-  border: 1.5px solid rgba(94, 48, 35, 0.28);
+  border: 1.5px solid rgba(0, 32, 104, 0.28);
   border-radius: 50%;
   background: transparent;
   color: var(--vk-espresso);
@@ -1720,7 +1720,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 .page-content .insights-carousel-view-all.button--secondary {
   --color-secondary-button-text: var(--vk-espresso);
   --color-secondary-button-background: transparent;
-  --color-secondary-button-border: rgba(94, 48, 35, 0.35);
+  --color-secondary-button-border: rgba(0, 32, 104, 0.35);
   border-radius: 6px;
   padding-inline: 1.6rem;
 }
@@ -1819,7 +1819,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 8px 22px rgba(94, 48, 35, 0.05);
+  box-shadow: 0 8px 22px rgba(0, 32, 104, 0.05);
   transition:
     transform 0.28s ease,
     box-shadow 0.28s ease,
@@ -1829,8 +1829,8 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 .page-content .home-event-card:hover,
 .page-content .home-event-card:focus-visible {
   transform: translateY(-3px);
-  border-color: rgba(189, 150, 85, 0.4);
-  box-shadow: 0 14px 32px rgba(94, 48, 35, 0.09);
+  border-color: rgba(8, 88, 240, 0.4);
+  box-shadow: 0 14px 32px rgba(0, 32, 104, 0.09);
   outline: none;
   text-decoration: none;
   color: inherit;
@@ -1870,7 +1870,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.96);
   border: 1px solid var(--vk-line);
-  box-shadow: 0 6px 16px rgba(94, 48, 35, 0.08);
+  box-shadow: 0 6px 16px rgba(0, 32, 104, 0.08);
   line-height: 1.05;
 }
 
@@ -1977,7 +1977,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 .page-content .home-events-view-all.button--secondary {
   --color-secondary-button-text: var(--vk-espresso);
   --color-secondary-button-background: transparent;
-  --color-secondary-button-border: rgba(94, 48, 35, 0.35);
+  --color-secondary-button-border: rgba(0, 32, 104, 0.35);
   border-radius: 6px;
   padding-inline: 1.5rem;
 }
@@ -2235,11 +2235,11 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 .page-content .page-banner {
   --color-overlay: linear-gradient(
     105deg,
-    rgba(47, 36, 31, 0.82) 0%,
-    rgba(94, 48, 35, 0.72) 45%,
-    rgba(94, 48, 35, 0.58) 100%
+    rgba(0, 8, 48, 0.82) 0%,
+    rgba(0, 32, 104, 0.72) 45%,
+    rgba(0, 32, 104, 0.58) 100%
   );
-  background-color: #5e3023;
+  background-color: #002068;
 }
 
 .page-content .page-banner--full {
@@ -2395,7 +2395,7 @@ a.vikasa-service-card-inner:focus .vikasa-service-card-cta {
 .footer-main .social-link {
   background: transparent !important;
   color: var(--vk-gold) !important;
-  border: 1px solid rgba(189, 150, 85, 0.45);
+  border: 1px solid rgba(8, 88, 240, 0.45);
   border-radius: 50% !important;
 }
 

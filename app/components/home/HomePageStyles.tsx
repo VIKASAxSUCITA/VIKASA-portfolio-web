@@ -29,21 +29,21 @@ export default function HomePageStyles() {
               /* header nav */
               --font-nav-main: 16px;
 
-              /* Colors — VIKASA */
+              /* Colors — VIKASA Advisory Academy (navy + accent blue) */
               --color-background: #ffffff;
-              --color-foreground: #5e3123;
-              --color-foreground-heading: #5e3123;
-              --color-foreground-subheading: #5e3123;
-              --color-background-subheading: rgba(187, 151, 89, 0.12);
-              --color-border-subheading-bg: rgba(94, 49, 35, 0.15);
-              --color-primary: #5e3123;
-              --color-primary-background: #5e3123;
-              --color-primary-hover: #bb9759;
-              --color-primary-background-hover: #bb9759;
-              --color-border: rgba(94, 49, 35, 0.15);
-              --color-border-hover: rgba(187, 151, 89, 0.55);
-              --color-shadow: rgba(94, 49, 35, 0.2);
-              --color-overlay: rgba(94, 49, 35, 0.55);
+              --color-foreground: #002068;
+              --color-foreground-heading: #002068;
+              --color-foreground-subheading: #002068;
+              --color-background-subheading: rgba(8, 88, 240, 0.12);
+              --color-border-subheading-bg: rgba(0, 32, 104, 0.15);
+              --color-primary: #002068;
+              --color-primary-background: #002068;
+              --color-primary-hover: #0858f0;
+              --color-primary-background-hover: #0858f0;
+              --color-border: rgba(0, 32, 104, 0.15);
+              --color-border-hover: rgba(8, 88, 240, 0.55);
+              --color-shadow: rgba(0, 32, 104, 0.2);
+              --color-overlay: rgba(0, 32, 104, 0.55);
 
               /* Buttons */
               --font-button-size: 16px;
@@ -57,37 +57,37 @@ export default function HomePageStyles() {
 
               /* Colors - Primary Button */
               --color-primary-button-text: #ffffff;
-              --color-primary-button-background: #5e3123;
-              --color-primary-button-border: #5e3123;
-              --color-primary-button-icon: #5e3123;
+              --color-primary-button-background: #002068;
+              --color-primary-button-border: #002068;
+              --color-primary-button-icon: #002068;
               --color-primary-button-icon-background: #ffffff;
 
-              --color-primary-button-hover-text: #5e3123;
+              --color-primary-button-hover-text: #002068;
               --color-primary-button-hover-background: #ffffff;
-              --color-primary-button-hover-border: #5e3123;
+              --color-primary-button-hover-border: #002068;
               --color-primary-button-hover-icon: #ffffff;
-              --color-primary-button-hover-icon-background: #5e3123;
+              --color-primary-button-hover-icon-background: #002068;
 
               /* Colors - Secondary Button */
-              --color-secondary-button-text: #5e3123;
+              --color-secondary-button-text: #002068;
               --color-secondary-button-background: #ffffff;
               --color-secondary-button-border: #ffffff;
               --color-secondary-button-icon: #ffffff;
-              --color-secondary-button-icon-background: #5e3123;
+              --color-secondary-button-icon-background: #002068;
 
               --color-secondary-button-hover-text: #ffffff;
-              --color-secondary-button-hover-background: #bb9759;
-              --color-secondary-button-hover-border: #bb9759;
-              --color-secondary-button-hover-icon: #bb9759;
+              --color-secondary-button-hover-background: #0858f0;
+              --color-secondary-button-hover-border: #0858f0;
+              --color-secondary-button-hover-icon: #0858f0;
               --color-secondary-button-hover-icon-background: #ffffff;
 
               /* Colors - Input */
               --color-input-background: #ffffff;
-              --color-input-text: #5e3123;
-              --color-input-border: rgba(94, 49, 35, 0.2);
+              --color-input-text: #002068;
+              --color-input-border: rgba(0, 32, 104, 0.2);
               --color-input-hover-background: #ffffff;
-              --color-input-hover-text: #5e3123;
-              --color-input-hover-border: rgba(187, 151, 89, 0.55);
+              --color-input-hover-text: #002068;
+              --color-input-hover-border: rgba(8, 88, 240, 0.55);
 
               /* Borders */
               --style-border-width-buttons-primary: 1px;
@@ -105,21 +105,21 @@ export default function HomePageStyles() {
 
               /* Pagination */
               --style-pagination-border-width: 1px;
-              --pagination-item-foreground: #5e3123;
-              --pagination-item-background: rgba(187, 151, 89, 0.15);
-              --pagination-item-border: rgba(187, 151, 89, 0.15);
+              --pagination-item-foreground: #002068;
+              --pagination-item-background: rgba(8, 88, 240, 0.15);
+              --pagination-item-border: rgba(8, 88, 240, 0.15);
               --pagination-item-active-foreground: #ffffff;
-              --pagination-item-active-background: #5e3123;
-              --pagination-item-active-border: #5e3123;
+              --pagination-item-active-background: #002068;
+              --pagination-item-active-border: #002068;
 
               /* Swiper */
               --swiper-navigation-size: 16px;
               --swiper-navigation-color: #ffffff;
               --swiper-navigation-background-color: transparent;
               --swiper-navigation-hover-color: #ffffff;
-              --swiper-navigation-hover-background-color: rgba(187, 151, 89, 0.35);
+              --swiper-navigation-hover-background-color: rgba(8, 88, 240, 0.35);
               --swiper-pagination-bullet-inactive-color: rgba(242, 242, 242);
-              --swiper-pagination-color: #5e3123;
+              --swiper-pagination-color: #002068;
               --swiper-pagination-bullet-inactive-opacity: 1;
             }
 

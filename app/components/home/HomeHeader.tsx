@@ -144,7 +144,7 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
     !previewMode;
   const logoSrc = overHero
     ? "/assets/img/vikasa/white_log_vikasa.jpg"
-    : "/assets/img/vikasa/vikasa_logo.png";
+    : "/assets/img/vikasa/vikasa_logo_blue.jpg";
 
   useEffect(() => {
     setMounted(true);
@@ -250,7 +250,7 @@ export default function HomeHeader({ previewMode = false }: HomeHeaderProps) {
               onClick={handleLogoClick}
             >
               <img
-                src="/assets/img/vikasa/vikasa_logo.png"
+                src="/assets/img/vikasa/vikasa_logo_blue.jpg"
                 alt="VIKASA"
                 width={146}
                 height={54}

@@ -64,7 +64,7 @@ export default function AdminLoginForm() {
     <div className="admin-login-card">
       <div className="admin-login-brand">
         <img
-          src="/assets/img/vikasa/vikasa_logo.png"
+          src="/assets/img/vikasa/vikasa_logo_blue.jpg"
           alt="VIKASA"
           width={108}
           height={40}
